@@ -10,7 +10,14 @@ import {
   type ProductFilter,
 } from "@shopify/hydrogen";
 import { useCollection, useCollectionForm } from "@shopify/hydrogen/react";
-import { useEffect, useId, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import {
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
 import { Link, useFetcher, useLocation } from "react-router";
 
 import { DEFAULT_MONEY_LOCALE, formatPrice } from "~/lib/money";
@@ -79,7 +86,8 @@ const PRICE_MAX_PARAM = "filter.v.price.lte";
 function supportsDialogCommands(): boolean {
   if (typeof HTMLButtonElement === "undefined") return false;
   return (
-    "command" in HTMLButtonElement.prototype && "commandForElement" in HTMLButtonElement.prototype
+    "command" in HTMLButtonElement.prototype &&
+    "commandForElement" in HTMLButtonElement.prototype
   );
 }
 
@@ -95,15 +103,21 @@ function closeDialog(id: string): void {
   if (dialog instanceof HTMLDialogElement) dialog.close();
 }
 
-function requestFormSubmit(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+function requestFormSubmit(
+  event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+) {
   event.currentTarget.form?.requestSubmit();
 }
 
 function currentSortValue(state: CollectionState): string | undefined {
-  return state.sortKey ? getSortByValue(state.sortKey, state.reverse) : undefined;
+  return state.sortKey
+    ? getSortByValue(state.sortKey, state.reverse)
+    : undefined;
 }
 
-function filterValueInputParamEntries(input: string): Array<{ name: string; value: string }> {
+function filterValueInputParamEntries(
+  input: string,
+): Array<{ name: string; value: string }> {
   let filter: ProductFilter;
   try {
     filter = JSON.parse(input) as ProductFilter;
@@ -112,20 +126,38 @@ function filterValueInputParamEntries(input: string): Array<{ name: string; valu
   }
 
   return Array.from(
-    serializeCollectionParams({ filters: [filter], sortKey: undefined, reverse: false }),
+    serializeCollectionParams({
+      filters: [filter],
+      sortKey: undefined,
+      reverse: false,
+    }),
     ([name, value]) => ({ name, value }),
   );
 }
 
-function hiddenInputsFromParams(params: URLSearchParams, exclude = new Set<string>()) {
+function hiddenInputsFromParams(
+  params: URLSearchParams,
+  exclude = new Set<string>(),
+) {
   return Array.from(params).flatMap(([name, value], index) => {
     if (exclude.has(name)) return [];
-    return <input key={`${name}-${value}-${index}`} type="hidden" name={name} value={value} />;
+    return (
+      <input
+        key={`${name}-${value}-${index}`}
+        type="hidden"
+        name={name}
+        value={value}
+      />
+    );
   });
 }
 
 function activeFilterParams(state: CollectionState) {
-  return serializeCollectionParams({ filters: state.filters, sortKey: undefined, reverse: false });
+  return serializeCollectionParams({
+    filters: state.filters,
+    sortKey: undefined,
+    reverse: false,
+  });
 }
 
 function buildPathWithRemoval(basePath: string, removal: string): string {
@@ -133,7 +165,9 @@ function buildPathWithRemoval(basePath: string, removal: string): string {
 
   const [pathname, existingSearch = ""] = basePath.split("?");
   const params = new URLSearchParams(existingSearch);
-  const removalParams = new URLSearchParams(removal.startsWith("?") ? removal.slice(1) : removal);
+  const removalParams = new URLSearchParams(
+    removal.startsWith("?") ? removal.slice(1) : removal,
+  );
 
   for (const [name, value] of removalParams) params.append(name, value);
 
@@ -150,13 +184,17 @@ function money(amount: number, currencyCode: string): MoneyV2 {
 }
 
 function describeFilter(filter: ProductFilter, currencyCode: string): string {
-  if (filter.available != null) return filter.available ? "In stock" : "Out of stock";
+  if (filter.available != null)
+    return filter.available ? "In stock" : "Out of stock";
   if (filter.productType) return filter.productType;
   if (filter.productVendor) return filter.productVendor;
   if (filter.tag) return filter.tag;
-  if (filter.variantOption) return filter.variantOption.value ?? filter.variantOption.name;
-  if (filter.productMetafield) return filter.productMetafield.value ?? filter.productMetafield.key;
-  if (filter.variantMetafield) return filter.variantMetafield.value ?? filter.variantMetafield.key;
+  if (filter.variantOption)
+    return filter.variantOption.value ?? filter.variantOption.name;
+  if (filter.productMetafield)
+    return filter.productMetafield.value ?? filter.productMetafield.key;
+  if (filter.variantMetafield)
+    return filter.variantMetafield.value ?? filter.variantMetafield.key;
   if (filter.taxonomyMetafield) return filter.taxonomyMetafield.value;
   if (filter.category) return filter.category.id;
   if (filter.price) {
@@ -171,7 +209,10 @@ function describeFilter(filter: ProductFilter, currencyCode: string): string {
   return "Filter";
 }
 
-function activeValueCount(filter: BrowseFilter, state: CollectionState): number {
+function activeValueCount(
+  filter: BrowseFilter,
+  state: CollectionState,
+): number {
   if (filter.type === "PRICE_RANGE") return priceFilter(state) ? 1 : 0;
   return filter.values.filter(
     (value) => value.input && isFilterInputActive(state.filters, value.input),
@@ -181,7 +222,9 @@ function activeValueCount(filter: BrowseFilter, state: CollectionState): number 
 function isSwatchFilter(filter: BrowseFilter): boolean {
   return (
     filter.presentation === "SWATCH" ||
-    filter.values.some((value) => value.swatch?.color || value.swatch?.image?.previewImage?.url)
+    filter.values.some(
+      (value) => value.swatch?.color || value.swatch?.image?.previewImage?.url,
+    )
   );
 }
 
@@ -192,8 +235,11 @@ function isMutuallyExclusive(filter: BrowseFilter, inputName: string): boolean {
 function uncheckSiblings(input: HTMLInputElement) {
   const form = input.form;
   if (!form) return;
-  for (const candidate of form.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')) {
-    if (candidate !== input && candidate.name === input.name) candidate.checked = false;
+  for (const candidate of form.querySelectorAll<HTMLInputElement>(
+    'input[type="checkbox"]',
+  )) {
+    if (candidate !== input && candidate.name === input.name)
+      candidate.checked = false;
   }
 }
 
@@ -245,7 +291,9 @@ function FacetGroup({
           ) : null}
         </span>
         <span className="sr-only">
-          {selectedCount > 0 ? `${filter.label}, ${selectedCount} selected` : filter.label}
+          {selectedCount > 0
+            ? `${filter.label}, ${selectedCount} selected`
+            : filter.label}
         </span>
         <span
           className="inline-flex size-4 shrink-0 items-center justify-center group-open:rotate-180 motion-safe:transition-transform motion-safe:duration-200"
@@ -255,7 +303,12 @@ function FacetGroup({
         </span>
       </summary>
       <div className="pb-4">
-        <FacetBody filter={filter} state={state} labelId={labelId} currencyCode={currencyCode} />
+        <FacetBody
+          filter={filter}
+          state={state}
+          labelId={labelId}
+          currencyCode={currencyCode}
+        />
       </div>
     </details>
   );
@@ -294,7 +347,10 @@ function ListFacet({
             aria-describedby={`${valueId}-count`}
             className="sr-only"
             onChange={(event) => {
-              if (event.currentTarget.checked && isMutuallyExclusive(filter, name)) {
+              if (
+                event.currentTarget.checked &&
+                isMutuallyExclusive(filter, name)
+              ) {
                 uncheckSiblings(event.currentTarget);
               }
               requestFormSubmit(event);
@@ -306,7 +362,10 @@ function ListFacet({
           <span id={`${valueId}-label`} className="flex-1">
             {value.label}
           </span>
-          <span className="text-on-surface-secondary text-xs" aria-hidden="true">
+          <span
+            className="text-on-surface-secondary text-xs"
+            aria-hidden="true"
+          >
             ({value.count})
           </span>
           <span id={`${valueId}-count`} className="sr-only" aria-hidden="true">
@@ -354,7 +413,9 @@ function PriceRangeFacet({
     ] as const) {
       if (!input) continue;
       const matches =
-        value === "" ? input.value === "" : input.value !== "" && Number(input.value) === value;
+        value === ""
+          ? input.value === ""
+          : input.value !== "" && Number(input.value) === value;
       if (!matches) {
         if (timer.current) clearTimeout(timer.current);
         timer.current = null;
@@ -368,7 +429,9 @@ function PriceRangeFacet({
       // Cancel the draft before the history loader settles, even when the price is unchanged.
       if (timer.current) clearTimeout(timer.current);
       timer.current = null;
-      const { filters } = parseCollectionParams(new URLSearchParams(window.location.search));
+      const { filters } = parseCollectionParams(
+        new URLSearchParams(window.location.search),
+      );
       const price = filters.find((filter) => filter.price != null)?.price;
       if (minInput.current) minInput.current.value = String(price?.min ?? "");
       if (maxInput.current) maxInput.current.value = String(price?.max ?? "");
@@ -394,7 +457,10 @@ function PriceRangeFacet({
           htmlFor={minId}
           className="border-border rounded-input bg-surface has-[input:focus-visible]:outline-interactive flex min-w-0 items-center gap-1 border px-2 py-2 has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2"
         >
-          <span className="text-on-surface-secondary shrink-0 text-sm" aria-hidden="true">
+          <span
+            className="text-on-surface-secondary shrink-0 text-sm"
+            aria-hidden="true"
+          >
             {currencySymbol}
           </span>
           <input
@@ -411,12 +477,17 @@ function PriceRangeFacet({
             onChange={submitAfterTyping}
           />
         </label>
-        <span className="text-on-surface-secondary text-center text-sm">to</span>
+        <span className="text-on-surface-secondary text-center text-sm">
+          to
+        </span>
         <label
           htmlFor={maxId}
           className="border-border rounded-input bg-surface has-[input:focus-visible]:outline-interactive flex min-w-0 items-center gap-1 border px-2 py-2 has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2"
         >
-          <span className="text-on-surface-secondary shrink-0 text-sm" aria-hidden="true">
+          <span
+            className="text-on-surface-secondary shrink-0 text-sm"
+            aria-hidden="true"
+          >
             {currencySymbol}
           </span>
           <input
@@ -523,7 +594,9 @@ export function Toolbar({
   sortOptions,
   extraHiddenInputs,
   filterDrawerId = FILTER_DRAWER_ID,
+  showFilters = true,
 }: {
+  showFilters?: boolean;
   countText: string;
   defaultSortValue: string;
   sortOptions: SortOption[];
@@ -538,28 +611,37 @@ export function Toolbar({
   return (
     <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
       <div className="flex min-w-0 flex-wrap items-center gap-4">
-        <button
-          type="button"
-          commandfor={filterDrawerId}
-          command="show-modal"
-          className="button-outline rounded-button focus-visible:outline-accent min-h-touch-target inline-flex cursor-pointer items-center gap-2 px-3 py-1.5 text-sm font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 motion-safe:transition-[color,background-color,border-color,transform] motion-safe:active:scale-[0.97] lg:hidden"
-          aria-controls={filterDrawerId}
-          aria-haspopup="dialog"
-          onClick={() => openDialogFallback(filterDrawerId)}
-        >
-          <span
-            className="inline-flex size-5 shrink-0 items-center justify-center"
-            aria-hidden="true"
+        {showFilters ? (
+          <button
+            type="button"
+            commandfor={filterDrawerId}
+            command="show-modal"
+            className="button-outline rounded-button focus-visible:outline-accent min-h-touch-target inline-flex cursor-pointer items-center gap-2 px-3 py-1.5 text-sm font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 motion-safe:transition-[color,background-color,border-color,transform] motion-safe:active:scale-[0.97] lg:hidden"
+            aria-controls={filterDrawerId}
+            aria-haspopup="dialog"
+            onClick={() => openDialogFallback(filterDrawerId)}
           >
-            <img src="/icons/icon-filter.svg" alt="" className="size-5" />
-          </span>
-          Filters
-        </button>
-        <span className="text-on-surface-secondary min-w-0 text-sm break-words" aria-live="polite">
+            <span
+              className="inline-flex size-5 shrink-0 items-center justify-center"
+              aria-hidden="true"
+            >
+              <img src="/icons/icon-filter.svg" alt="" className="size-5" />
+            </span>
+            Filters
+          </button>
+        ) : null}
+        <span
+          className="text-on-surface-secondary min-w-0 text-sm break-words"
+          aria-live="polite"
+        >
           {countText}
         </span>
       </div>
-      <form {...formProps()} method="get" className="flex min-w-0 items-center gap-2">
+      <form
+        {...formProps()}
+        method="get"
+        className="flex min-w-0 items-center gap-2"
+      >
         {hiddenInputsFromParams(hiddenParams)}
         {extraHiddenInputs}
         <label
@@ -613,7 +695,12 @@ export function FacetForm({
       {extraHiddenInputs}
       <div key={state.handle} className="divide-border divide-y">
         {availableFilters.map((filter) => (
-          <FacetGroup key={filter.id} filter={filter} state={state} currencyCode={currencyCode} />
+          <FacetGroup
+            key={filter.id}
+            filter={filter}
+            state={state}
+            currencyCode={currencyCode}
+          />
         ))}
       </div>
       <noscript>
@@ -648,7 +735,10 @@ export function FilterDrawer({
     >
       <div className="flex h-full flex-col">
         <div className="flex shrink-0 items-center py-2 ps-4">
-          <h2 id="filter-drawer-title" className="text-on-surface flex-1 text-lg font-medium">
+          <h2
+            id="filter-drawer-title"
+            className="text-on-surface flex-1 text-lg font-medium"
+          >
             Filters
           </h2>
           <button
@@ -659,7 +749,12 @@ export function FilterDrawer({
             aria-label="Close"
             onClick={() => closeDialog(id)}
           >
-            <img src="/icons/icon-x.svg" alt="" className="size-5" aria-hidden="true" />
+            <img
+              src="/icons/icon-x.svg"
+              alt=""
+              className="size-5"
+              aria-hidden="true"
+            />
           </button>
         </div>
         <div className="flex-1 overflow-y-auto p-4">
@@ -717,7 +812,11 @@ export function ActiveFilterChips({
           </Link>
         );
       })}
-      <Link to={clearAllTo} preventScrollReset className="text-accent text-sm hover:underline">
+      <Link
+        to={clearAllTo}
+        preventScrollReset
+        className="text-accent text-sm hover:underline"
+      >
         Clear all
       </Link>
     </div>

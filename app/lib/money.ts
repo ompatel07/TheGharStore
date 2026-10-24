@@ -1,9 +1,10 @@
 import { formatMoney, type MoneyV2 } from "@shopify/hydrogen";
 
-export const DEFAULT_MONEY_LOCALE = "en-US";
+// India: en-IN grouping (₹1,299 / ₹1,29,999).
+export const DEFAULT_MONEY_LOCALE = "en-IN";
 
 export function formatPrice(money: MoneyV2, locale = DEFAULT_MONEY_LOCALE): string {
-  return formatMoney(money, { locale }).toString();
+  return formatMoney(money, { locale, withoutTrailingZeros: true }).toString();
 }
 
 export function compareMoney(a: MoneyV2 | null | undefined, b: MoneyV2 | null | undefined): number {

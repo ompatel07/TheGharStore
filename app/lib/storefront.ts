@@ -2,8 +2,6 @@ import {
   type CacheInstance,
   createShopifyRequestContext,
   createStorefrontClient,
-  type PublicStorefrontClient,
-  type RequestScopedPrivateStorefrontClient,
   type ShopifyRequestContext,
 } from "@shopify/hydrogen";
 import { createContext } from "react-router";
@@ -20,14 +18,15 @@ import {
 
 // Real store: private token + trusted buyer IP. mock.shop: tokenless public
 // access (it is auth-free and rejects any private token, even a placeholder).
-export type RequestStorefrontClient = RequestScopedPrivateStorefrontClient | PublicStorefrontClient;
+// The type is inferred so per-query `cache` strategies stay available.
+export type RequestStorefrontClient = ReturnType<typeof createRequestStorefrontClient>;
 
 export function createRequestStorefrontClient(
   request: Request,
   env: Env,
   cache: CacheInstance,
   waitUntil: ExecutionContext["waitUntil"],
-): RequestStorefrontClient {
+) {
   const { i18n } = storefrontConfig;
 
   if (shouldUseMockShop(env)) {

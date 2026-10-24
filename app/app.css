@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "./tokens.css";
+@import "./styles/brand.css";
 
 /* App-only CSS the frozen core (tokens.css) does not own.
  *
@@ -8,8 +9,7 @@
  * It does NOT own the open/close MOTION or the body scroll lock — those are
  * app-owned and live here.
  *
- * Do NOT add web fonts or @theme font overrides here: the core tokens lock the
- * example typography to system-ui.
+ * Brand tokens, fonts and signature effects live in styles/brand.css.
  */
 
 /* Drawer slide-in animation.
