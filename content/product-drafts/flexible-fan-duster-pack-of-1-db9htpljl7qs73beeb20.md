@@ -3,7 +3,7 @@
 - **Handle:** `flexible-fan-duster-pack-of-1-db9htpljl7qs73beeb20`
 - **Current title:** Flexible Fan Duster (Pack of 1)
 - **SEO title:** Bendable Microfiber Ceiling Fan Duster
-- **SEO description:** Clean ceiling fan blades without a ladder. A soft microfiber duster head that bends to wrap around each blade. _(110 chars)_
+- **SEO description:** Dust ceiling fan blades more easily. A soft microfiber duster head that bends to wrap around each blade. _(104 chars)_
 
 ## Description
 

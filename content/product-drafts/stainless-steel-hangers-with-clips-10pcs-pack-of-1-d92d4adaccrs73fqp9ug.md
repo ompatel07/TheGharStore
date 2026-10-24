@@ -3,7 +3,7 @@
 - **Handle:** `stainless-steel-hangers-with-clips-10pcs-pack-of-1-d92d4adaccrs73fqp9ug`
 - **Current title:** Stainless Steel Hangers with Clips 10pcs (Pack of 1)
 - **SEO title:** Stainless Steel Clip Hangers (Set of 10)
-- **SEO description:** Rust-resistant stainless steel hangers with clips for drying socks, small clothes and towels. _(93 chars)_
+- **SEO description:** Stainless steel hangers with clips for drying socks, small clothes and towels. Set of 10. _(89 chars)_
 
 ## Description
 

@@ -22,7 +22,7 @@ Facts we could not confirm. Until confirmed they are **not** shown on the site a
 - [ ] Country of origin
 
 ## Peacock 3D Floor Mat – Non-Slip
-`colorful-non-slip-3d-peacock-bathroom-mat-30-31-inches-pack-of-1-dbcu5ipf68`
+`colorful-non-slip-3d-peacock-bathroom-mat-30-31-inches-pack-of-1-dbcu5ipf681c73e1kv7g`
 
 - [ ] Size: Listed as 30 × 31 inches; supplier image shows 24 inches (60 cm)
 - [ ] Back: Non-slip

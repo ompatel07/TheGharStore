@@ -57,6 +57,22 @@ export function list(value: string | null | undefined): string[] {
 
 export type LinkValue = { text: string; url: string };
 
+/**
+ * Shopify link fields require absolute URLs. Links that point at the store's own
+ * myshopify domain become on-site paths so they route inside the storefront.
+ */
+export function toSitePath(url: string): string {
+  try {
+    const parsed = new URL(url);
+    if (parsed.hostname.endsWith(".myshopify.com")) {
+      return `${parsed.pathname}${parsed.search}${parsed.hash}` || "/";
+    }
+    return url;
+  } catch {
+    return url;
+  }
+}
+
 /** Parses a `link` field (`{"text": "...", "url": "..."}`). */
 export function link(value: string | null | undefined): LinkValue | null {
   if (!value) return null;
@@ -64,7 +80,7 @@ export function link(value: string | null | undefined): LinkValue | null {
     const parsed = JSON.parse(value) as Partial<LinkValue>;
     const url = text(parsed.url);
     if (!url) return null;
-    return { text: text(parsed.text) ?? "", url };
+    return { text: text(parsed.text) ?? "", url: toSitePath(url) };
   } catch {
     return null;
   }

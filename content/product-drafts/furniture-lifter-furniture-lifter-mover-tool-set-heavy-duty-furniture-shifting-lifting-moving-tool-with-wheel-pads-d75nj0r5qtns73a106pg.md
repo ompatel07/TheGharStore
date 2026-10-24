@@ -2,7 +2,7 @@
 
 - **Handle:** `furniture-lifter-furniture-lifter-mover-tool-set-heavy-duty-furniture-shifting-lifting-moving-tool-with-wheel-pads-d75nj0r5qtns73a106pg`
 - **Current title:** Furniture Lifter -Furniture Lifter Mover Tool Set Heavy Duty Furniture Shifting Lifting Moving Tool with Wheel Pads
-- **SEO title:** Furniture Lifter & Mover Set – Move Heavy Furniture Alone
+- **SEO title:** Furniture Lifter & Mover Set (1 Lifter + 4 Sliders)
 - **SEO description:** Lift a corner, slide in a wheeled pad, and roll heavy furniture across the room. 1 lifter bar + 4 wheeled sliders. _(114 chars)_
 
 ## Description

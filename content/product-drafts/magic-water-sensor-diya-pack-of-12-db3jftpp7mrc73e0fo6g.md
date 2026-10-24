@@ -3,7 +3,7 @@
 - **Handle:** `magic-water-sensor-diya-pack-of-12-db3jftpp7mrc73e0fo6g`
 - **Current title:** Magic Water Sensor Diya. – Pack of 12
 - **SEO title:** Water-Sensor LED Diyas (Pack of 12) – No Oil, No Flame
-- **SEO description:** LED diyas that glow when you pour in water. No oil, no flame, no smoke — safe around kids, curtains and rangoli. _(112 chars)_
+- **SEO description:** LED diyas that glow when you pour in water. No oil, no flame, no smoke. Pack of 12. _(83 chars)_
 
 ## Description
 
