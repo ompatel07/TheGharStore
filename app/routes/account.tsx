@@ -1,6 +1,7 @@
 import { gql } from "@shopify/hydrogen/customer-account";
 import { Link, useNavigation } from "react-router";
 
+import { BRAND_NAME } from "~/components/Logo";
 import { customerAccountContext } from "~/lib/customer-account";
 import { formatPrice } from "~/lib/money";
 
@@ -46,13 +47,19 @@ const ACCOUNT_QUERY = gql(`
   }
 `);
 
-const dateFormat = new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeZone: "UTC" });
+const dateFormat = new Intl.DateTimeFormat("en-IN", {
+  dateStyle: "medium",
+  timeZone: "Asia/Kolkata",
+});
 
 const buttonClass =
-  "rounded-button focus-visible:outline-accent inline-flex h-11 items-center justify-center px-5 text-sm font-medium no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 motion-safe:transition-[color,background-color,border-color,transform] motion-safe:active:scale-[0.97]";
+  "inline-flex min-h-12 items-center justify-center rounded-full px-6 font-bold";
 
-export function meta({}: Route.MetaArgs) {
-  return [{ title: "Account · CORE" }];
+export function meta() {
+  return [
+    { title: `My account · ${BRAND_NAME}` },
+    { name: "robots", content: "noindex" },
+  ];
 }
 
 export async function loader({ context, request }: Route.LoaderArgs) {
@@ -61,10 +68,16 @@ export async function loader({ context, request }: Route.LoaderArgs) {
 
   const { client, session, sessionManager, requestContext } = customerAccount;
   // Reading the token marks the response as personalized, so it is never cached.
-  const accessToken = await session.getOrRefreshAccessToken(sessionManager, requestContext);
+  const accessToken = await session.getOrRefreshAccessToken(
+    sessionManager,
+    requestContext,
+  );
   const searchParams = new URL(request.url).searchParams;
   if (!accessToken) {
-    return { status: "signed-out", loginFailed: searchParams.get("login") === "failed" } as const;
+    return {
+      status: "signed-out",
+      loginFailed: searchParams.get("login") === "failed",
+    } as const;
   }
 
   const before = searchParams.get("before");
@@ -73,9 +86,15 @@ export async function loader({ context, request }: Route.LoaderArgs) {
     : { first: ORDERS_PAGE_SIZE, after: searchParams.get("after") };
 
   try {
-    const { data, errors } = await client.graphql(ACCOUNT_QUERY, { accessToken, variables });
+    const { data, errors } = await client.graphql(ACCOUNT_QUERY, {
+      accessToken,
+      variables,
+    });
     if (errors || !data.customer) {
-      return { status: "error", message: errors?.[0]?.message ?? "Customer not found." } as const;
+      return {
+        status: "error",
+        message: errors?.[0]?.message ?? "Customer not found.",
+      } as const;
     }
     return { status: "signed-in", customer: data.customer } as const;
   } catch {
@@ -93,51 +112,75 @@ export default function AccountRoute({ loaderData }: Route.ComponentProps) {
       tabIndex={-1}
       className="max-w-page px-margin mx-auto w-full flex-1 py-12"
     >
-      <h1 className="type-display text-on-surface mb-8">Account</h1>
+      <h1 className="type-heading-xl text-on-surface mb-8">My account</h1>
       {loaderData.status === "unavailable" ? <Unavailable /> : null}
-      {loaderData.status === "signed-out" ? <SignIn loginFailed={loaderData.loginFailed} /> : null}
+      {loaderData.status === "signed-out" ? (
+        <SignIn loginFailed={loaderData.loginFailed} />
+      ) : null}
       {loaderData.status === "error" ? (
         <>
-          <p role="alert" className="border-border bg-surface-secondary rounded border p-4">
+          <p
+            role="alert"
+            className="bg-peach-soft text-critical rounded-2xl p-4"
+          >
             {loaderData.message}
           </p>
           <LogoutForm />
         </>
       ) : null}
-      {loaderData.status === "signed-in" ? <Customer customer={loaderData.customer} /> : null}
+      {loaderData.status === "signed-in" ? (
+        <Customer customer={loaderData.customer} />
+      ) : null}
     </main>
   );
 }
 
 function Unavailable() {
   return (
-    <section className="border-border rounded border p-8" aria-labelledby="unavailable-heading">
-      <h2 id="unavailable-heading" className="type-heading-md text-on-surface mb-3">
-        Customer Accounts aren&apos;t set up
+    <section
+      className="rounded-[var(--radius-xl)] bg-white p-8 shadow-[var(--shadow-sm)]"
+      aria-labelledby="unavailable-heading"
+    >
+      <h2
+        id="unavailable-heading"
+        className="type-heading-md text-on-surface mb-3"
+      >
+        Sign-in is taking a short break
       </h2>
       <p className="text-on-surface-secondary max-w-xl">
-        Customer Accounts need a real store, <code>SHOP_ID</code>,{" "}
-        <code>PUBLIC_CUSTOMER_ACCOUNT_API_CLIENT_ID</code>, <code>SESSION_SECRET</code>, and HTTPS
-        (use <code>npm run dev:https</code> locally).
+        You can still shop and check out as a guest. Your order confirmation
+        email has a link to track your order.
       </p>
+      <Link to="/collections" className={`button-cta mt-6 ${buttonClass}`}>
+        Continue shopping
+      </Link>
     </section>
   );
 }
 
 function SignIn({ loginFailed }: { loginFailed: boolean }) {
   return (
-    <section className="border-border rounded border p-8" aria-labelledby="sign-in-heading">
+    <section
+      className="rounded-[var(--radius-xl)] bg-white p-8 shadow-[var(--shadow-sm)]"
+      aria-labelledby="sign-in-heading"
+    >
       <h2 id="sign-in-heading" className="type-heading-md text-on-surface mb-3">
         Sign in
       </h2>
-      <p className="text-on-surface-secondary mb-6 max-w-xl">Sign in to see your orders.</p>
+      <p className="text-on-surface-secondary mb-6 max-w-xl">
+        Sign in with your email to see your orders and track deliveries. No
+        password needed — we’ll send you a one-time code.
+      </p>
       {loginFailed ? (
-        <p role="alert" className="border-border bg-surface-secondary mb-6 rounded border p-4">
+        <p
+          role="alert"
+          className="bg-peach-soft text-critical mb-6 rounded-2xl p-4"
+        >
           We couldn&apos;t sign you in. Try again.
         </p>
       ) : null}
       {/* A plain <a>: the OAuth redirect needs a full page navigation. */}
-      <a href="/account/login" className={`button-primary ${buttonClass}`}>
+      <a href="/account/login" className={`button-cta ${buttonClass}`}>
         Sign in
       </a>
     </section>
@@ -148,26 +191,39 @@ function LogoutForm() {
   // A plain <form>: the logout redirect needs a full page navigation.
   return (
     <form method="post" action="/account/logout" className="mt-6">
-      <button type="submit" className={`button-outline cursor-pointer ${buttonClass}`}>
+      <button
+        type="submit"
+        className={`border-burgundy text-burgundy hover:bg-peach-soft cursor-pointer border-2 ${buttonClass}`}
+      >
         Log out
       </button>
     </form>
   );
 }
 
-type Customer = Extract<Route.ComponentProps["loaderData"], { status: "signed-in" }>["customer"];
+type Customer = Extract<
+  Route.ComponentProps["loaderData"],
+  { status: "signed-in" }
+>["customer"];
 
 function Customer({ customer }: { customer: Customer }) {
-  const name = [customer.firstName, customer.lastName].filter(Boolean).join(" ");
+  const name = [customer.firstName, customer.lastName]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <div className="grid gap-12 lg:grid-cols-[1fr_2fr]">
       <section aria-labelledby="profile-heading">
-        <h2 id="profile-heading" className="type-heading-md text-on-surface mb-3">
+        <h2
+          id="profile-heading"
+          className="type-heading-md text-on-surface mb-3"
+        >
           {name || "Your account"}
         </h2>
         {customer.emailAddress?.emailAddress ? (
-          <p className="text-on-surface-secondary">{customer.emailAddress.emailAddress}</p>
+          <p className="text-on-surface-secondary">
+            {customer.emailAddress.emailAddress}
+          </p>
         ) : null}
         <LogoutForm />
       </section>
@@ -178,7 +234,9 @@ function Customer({ customer }: { customer: Customer }) {
 
 function Orders({ orders }: { orders: Customer["orders"] }) {
   const navigation = useNavigation();
-  const isPaging = navigation.state === "loading" && navigation.location?.pathname === "/account";
+  const isPaging =
+    navigation.state === "loading" &&
+    navigation.location?.pathname === "/account";
   const { pageInfo } = orders;
 
   return (
@@ -188,8 +246,10 @@ function Orders({ orders }: { orders: Customer["orders"] }) {
       </h2>
       {orders.nodes.length === 0 ? (
         <div>
-          <p className="text-on-surface font-medium">You haven&apos;t placed any orders yet.</p>
-          <Link to="/collections" className={`button-primary mt-6 ${buttonClass}`}>
+          <p className="text-on-surface font-medium">
+            You haven&apos;t placed any orders yet.
+          </p>
+          <Link to="/collections" className={`button-cta mt-6 ${buttonClass}`}>
             Start shopping
           </Link>
         </div>
@@ -197,17 +257,23 @@ function Orders({ orders }: { orders: Customer["orders"] }) {
         <ul
           role="list"
           aria-busy={isPaging}
-          className={`divide-border divide-y ${isPaging ? "opacity-50" : ""}`}
+          className={`divide-y divide-[color-mix(in_oklab,var(--color-gold)_35%,transparent)] rounded-[var(--radius-xl)] bg-white px-5 shadow-[var(--shadow-sm)] ${isPaging ? "opacity-50" : ""}`}
         >
           {orders.nodes.map((order) => (
-            <li key={order.id} className="flex flex-wrap items-baseline gap-x-6 gap-y-1 py-4">
-              <a
-                href={order.statusPageUrl}
-                className="text-on-surface font-medium underline-offset-4 hover:underline"
+            <li
+              key={order.id}
+              className="flex flex-wrap items-baseline gap-x-6 gap-y-1 py-4"
+            >
+              <Link
+                to={`/account/orders/${order.id.split("/").pop()}`}
+                className="text-burgundy font-bold underline-offset-4 hover:underline"
               >
                 Order {order.name}
-              </a>
-              <time dateTime={order.processedAt} className="text-on-surface-secondary text-sm">
+              </Link>
+              <time
+                dateTime={order.processedAt}
+                className="text-on-surface-secondary text-sm"
+              >
                 {dateFormat.format(new Date(order.processedAt))}
               </time>
               <span className="text-on-surface-secondary text-sm">
@@ -221,12 +287,15 @@ function Orders({ orders }: { orders: Customer["orders"] }) {
         </ul>
       )}
       {pageInfo.hasPreviousPage || pageInfo.hasNextPage ? (
-        <nav aria-label="Orders pagination" className="mt-6 flex justify-between gap-4">
+        <nav
+          aria-label="Orders pagination"
+          className="mt-6 flex justify-between gap-4"
+        >
           {pageInfo.hasPreviousPage && pageInfo.startCursor ? (
             <Link
               to={`?before=${encodeURIComponent(pageInfo.startCursor)}`}
               preventScrollReset
-              className={`button-outline ${buttonClass}`}
+              className={`border-burgundy text-burgundy hover:bg-peach-soft border-2 ${buttonClass}`}
             >
               Newer orders
             </Link>
@@ -237,7 +306,7 @@ function Orders({ orders }: { orders: Customer["orders"] }) {
             <Link
               to={`?after=${encodeURIComponent(pageInfo.endCursor)}`}
               preventScrollReset
-              className={`button-outline ${buttonClass}`}
+              className={`border-burgundy text-burgundy hover:bg-peach-soft border-2 ${buttonClass}`}
             >
               Older orders
             </Link>

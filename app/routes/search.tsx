@@ -5,7 +5,13 @@ import {
 } from "@shopify/hydrogen";
 import { CollectionProvider } from "@shopify/hydrogen/react";
 import { useEffect } from "react";
-import { Link, useLocation, useNavigate, useNavigation, useSearchParams } from "react-router";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useNavigation,
+  useSearchParams,
+} from "react-router";
 
 import {
   ActiveFilterChips,
@@ -19,18 +25,24 @@ import {
 import { ProductCard } from "~/components/ProductCard";
 import { loadSearchPage, type SearchPageData } from "~/lib/search";
 import { storefrontClientContext } from "~/lib/storefront";
-import { formatPageTitle, getShopNameFromRootMatch } from "~/lib/storefront-shop";
+import { BRAND_NAME } from "~/components/Logo";
+import { Icon } from "~/components/ui/Icon";
 
 import type { Route } from "./+types/search";
 
-export function meta({ matches }: Route.MetaArgs) {
-  const shopName = getShopNameFromRootMatch(matches[0]);
+export function meta({ data }: Route.MetaArgs) {
+  const term = data?.searchTerm;
   return [
-    { title: formatPageTitle("Search", shopName) },
+    {
+      title: term
+        ? `“${term}” — search · ${BRAND_NAME}`
+        : `Search · ${BRAND_NAME}`,
+    },
     {
       name: "description",
-      content: `Search products at ${shopName}.`,
+      content: `Search décor, lighting, kitchen helpers and more at ${BRAND_NAME}.`,
     },
+    { name: "robots", content: "noindex, follow" },
   ];
 }
 
@@ -86,23 +98,18 @@ function BreadcrumbJsonLd({ origin }: { origin: string }) {
 
 function Breadcrumb() {
   return (
-    <nav aria-label="Breadcrumb" className="mb-6">
+    <nav aria-label="Breadcrumb" className="mb-4">
       <ol className="text-on-surface-secondary flex items-center gap-1.5 text-sm">
         <li>
-          <Link
-            to="/"
-            className="hover:text-on-surface rounded-sm py-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current motion-safe:transition-colors"
-          >
+          <Link to="/" className="hover:text-burgundy">
             Home
           </Link>
         </li>
-        <li aria-hidden="true" className="text-on-surface-secondary">
-          /
+        <li aria-hidden="true">
+          <Icon name="chevron-right" size={14} />
         </li>
-        <li>
-          <span aria-current="page" className="text-on-surface font-medium">
-            Search
-          </span>
+        <li aria-current="page" className="text-on-surface font-medium">
+          Search
         </li>
       </ol>
     </nav>
@@ -113,42 +120,47 @@ const registerSearchForm = createPredictiveSearchFormRegister();
 
 function SearchHeader({ term }: { term: string }) {
   return (
-    <div className="mb-8">
-      <h1 className="type-display text-on-surface mb-6">Search</h1>
+    <div className="bg-cream-deep curve-bottom mb-8 rounded-t-[var(--radius-xl)] px-6 pt-8 pb-12 md:px-10">
+      <h1 className="type-heading-xl text-on-surface mb-5 text-[clamp(1.8rem,1.3rem+1.6vw,2.6rem)]">
+        {term ? (
+          <>
+            Results for <span className="text-terracotta-deep">“{term}”</span>
+          </>
+        ) : (
+          "What are you looking for?"
+        )}
+      </h1>
       <form
         action="/search"
         method="get"
         role="search"
         aria-label="Search"
-        className="mb-8 max-w-lg"
+        className="max-w-xl"
       >
-        <label htmlFor="search-q" className="text-on-surface mb-1.5 block text-sm font-medium">
-          Search
+        <label htmlFor="search-q" className="sr-only">
+          Search products
         </label>
         <div className="relative">
           <span
-            className="text-on-surface-secondary pointer-events-none absolute start-3 top-1/2 inline-flex size-5 -translate-y-1/2 items-center justify-center"
+            className="text-on-surface-secondary pointer-events-none absolute start-4 top-1/2 inline-flex -translate-y-1/2"
             aria-hidden="true"
           >
-            <img src="/icons/icon-search.svg" alt="" className="size-5" />
+            <Icon name="search" size={20} />
           </span>
           <input
             key={term}
             {...registerSearchForm("query")}
             id="search-q"
             defaultValue={term}
-            placeholder="Search"
-            className="peer h-11 w-full ps-10 pe-14"
+            placeholder="Try “diya”, “lights” or “kitchen”"
+            className="peer h-13 w-full bg-white ps-12 pe-28 text-base shadow-sm"
           />
-          {term ? (
-            <Link
-              to="/search"
-              aria-label="Clear search"
-              className="text-on-surface-secondary hover:text-on-surface focus-visible:outline-accent min-h-touch-target min-w-touch-target absolute end-1 top-1/2 inline-flex -translate-y-1/2 cursor-pointer items-center justify-center rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 motion-safe:transition-colors"
-            >
-              <img src="/icons/icon-x.svg" alt="" className="size-4" aria-hidden="true" />
-            </Link>
-          ) : null}
+          <button
+            type="submit"
+            className="bg-cta hover:bg-cta-hover text-cta-text absolute end-1.5 top-1/2 inline-flex h-10 -translate-y-1/2 items-center rounded-full px-5 font-bold"
+          >
+            Search
+          </button>
         </div>
       </form>
     </div>
@@ -166,11 +178,11 @@ function ProductGrid({ products }: { products: readonly ProductNode[] }) {
         id="product-grid"
         data-testid="product-grid"
         role="list"
-        className="grid grid-cols-2 gap-x-1 gap-y-10 lg:grid-cols-3"
+        className="grid grid-cols-2 gap-3 md:gap-5 lg:grid-cols-3"
       >
         {products.map((product, index) => (
           <li key={`${product.handle}-${index}`}>
-            <ProductCard product={product} priority={index < 3} />
+            <ProductCard product={product} priority={index < 2} compact />
           </li>
         ))}
       </ul>
@@ -180,11 +192,23 @@ function ProductGrid({ products }: { products: readonly ProductNode[] }) {
 
 function NoResults({ term }: { term: string }) {
   return (
-    <div aria-live="polite">
-      <p className="type-body text-on-surface-secondary">No results for “{term}”</p>
-      <p className="text-on-surface-secondary mt-2 text-sm">
-        Check your spelling or try a more general term.
+    <div
+      aria-live="polite"
+      className="rounded-[var(--radius-xl)] bg-white p-10 text-center shadow-[var(--shadow-sm)]"
+    >
+      <span className="icon-chip mx-auto [--chip-size:4rem]">
+        <Icon name="search" size={28} />
+      </span>
+      <h2 className="type-heading-lg text-on-surface mt-4">
+        No matches for “{term}”
+      </h2>
+      <p className="text-on-surface-secondary mt-2">
+        Check the spelling or try a simpler word, like “lights”, “diya” or
+        “cleaner”.
       </p>
+      <Link to="/collections" className="button-cta mt-6">
+        Browse categories
+      </Link>
     </div>
   );
 }
@@ -264,10 +288,15 @@ export default function SearchRoute({ loaderData }: Route.ComponentProps) {
 
   return (
     <CollectionProvider
-      data={{ handle: `search:${loaderData.searchTerm}`, dataSearch: loaderData.dataSearch }}
+      data={{
+        handle: `search:${loaderData.searchTerm}`,
+        dataSearch: loaderData.dataSearch,
+      }}
       urlSearch={searchParams.toString()}
       onChange={(search) => {
-        const nextParams = new URLSearchParams(search.startsWith("?") ? search.slice(1) : search);
+        const nextParams = new URLSearchParams(
+          search.startsWith("?") ? search.slice(1) : search,
+        );
         if (loaderData.searchTerm && !nextParams.has("q"))
           nextParams.set("q", loaderData.searchTerm);
         nextParams.delete("after");
@@ -292,7 +321,9 @@ export default function SearchRoute({ loaderData }: Route.ComponentProps) {
           <BreadcrumbJsonLd origin={loaderData.origin} />
           <Breadcrumb />
           <SearchHeader term={loaderData.searchTerm} />
-          {loaderData.performed ? <SearchResults loaderData={loaderData} /> : null}
+          {loaderData.performed ? (
+            <SearchResults loaderData={loaderData} />
+          ) : null}
         </div>
       </main>
     </CollectionProvider>
