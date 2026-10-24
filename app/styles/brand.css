@@ -400,6 +400,36 @@
   }
 }
 
+/* Category icons: small playful moves on hover / focus / tap (transform only). */
+.category-icon {
+  transition: transform 450ms var(--ease-spring);
+  transform-origin: 50% 80%;
+}
+.category-link:hover .category-icon-0,
+.category-link:focus-visible .category-icon-0,
+.category-link:active .category-icon-0 {
+  transform: rotate(-12deg) scale(1.08);
+}
+.category-link:hover .category-icon-1,
+.category-link:focus-visible .category-icon-1,
+.category-link:active .category-icon-1 {
+  transform: translateY(-4px) scale(1.1);
+}
+.category-link:hover .category-icon-2,
+.category-link:focus-visible .category-icon-2,
+.category-link:active .category-icon-2 {
+  transform: rotate(10deg) scale(1.08);
+}
+.category-link .icon-chip {
+  transition:
+    background-color 250ms var(--ease-ui),
+    box-shadow 250ms var(--ease-ui);
+}
+.category-link:hover .icon-chip {
+  background: var(--color-peach);
+  box-shadow: inset 0 0 0 1px var(--color-gold);
+}
+
 /* Cart count ticks up with a small spring pop (re-keyed on every change). */
 .cart-count-pop {
   animation: ghar-pop 420ms var(--ease-spring) both;
@@ -467,7 +497,13 @@
     transform: none;
   }
   .reveal,
-  .button-cta {
+  .button-cta,
+  .category-icon {
     transition: none;
+  }
+  .category-link:hover .category-icon-0,
+  .category-link:hover .category-icon-1,
+  .category-link:hover .category-icon-2 {
+    transform: none;
   }
 }
