@@ -18,7 +18,6 @@ import {
   Toolbar,
   useLoadMore,
 } from "~/components/CollectionBrowse";
-import { collectionIcon } from "~/components/home/CategoryStrip";
 import { BRAND_NAME } from "~/components/Logo";
 import { ProductCard } from "~/components/ProductCard";
 import { Icon } from "~/components/ui/Icon";
@@ -135,39 +134,68 @@ function Breadcrumb({ collection }: { collection: CollectionData }) {
   );
 }
 
-function CollectionHeader({ collection }: { collection: CollectionData }) {
+function CollectionHeader({
+  collection,
+  products,
+}: {
+  collection: CollectionData;
+  products: readonly ProductNode[];
+}) {
+  // Collage: the collection image if set, then distinct product photos.
+  const images = [
+    ...(collection.image ? [collection.image] : []),
+    ...products.flatMap((product) =>
+      product.featuredImage ? [product.featuredImage] : [],
+    ),
+  ]
+    .filter(
+      (image, index, all) =>
+        all.findIndex((other) => other.url === image.url) === index,
+    )
+    .slice(0, 3);
+
   return (
-    <header className="bg-cream-deep curve-bottom relative mb-8 overflow-hidden rounded-t-[var(--radius-xl)] px-6 pt-8 pb-12 md:px-10 md:pt-10 md:pb-16">
-      <div className="relative grid items-center gap-6 md:grid-cols-[1fr_auto]">
-        <div className="flex items-start gap-4">
-          <span className="icon-chip bg-white [--chip-size:3.5rem] max-md:hidden">
-            <Icon
-              name={collectionIcon({ handle: collection.handle, icon: null })}
-              size={28}
-            />
-          </span>
-          <div>
-            <h1 className="type-heading-xl text-on-surface text-[clamp(2rem,1.4rem+2vw,3rem)]">
-              {collection.title}
-            </h1>
-            {collection.description ? (
-              <p className="text-on-surface-secondary mt-2 max-w-2xl text-lg">
-                {collection.description}
-              </p>
-            ) : null}
-          </div>
+    <header className="bg-night text-cream relative mb-12 overflow-hidden rounded-[2rem] px-6 pt-10 pb-12 md:px-12 md:pt-14 md:pb-16">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(55%_70%_at_85%_40%,rgb(239_119_86/0.3),transparent_70%)]"
+      />
+      <div className="relative grid items-center gap-10 lg:grid-cols-[1.2fr_1fr]">
+        <div>
+          <p className="eyebrow text-peach">The collection</p>
+          <h1 className="ed-display ed-xl mt-5">{collection.title}</h1>
+          {collection.description ? (
+            <p className="text-cream/80 mt-5 max-w-xl text-lg md:text-xl">
+              {collection.description}
+            </p>
+          ) : null}
         </div>
-        {collection.image ? (
-          <div className="aspect-[16/10] w-full overflow-hidden rounded-[var(--radius-lg)] shadow-[var(--shadow)] md:w-72">
-            <img
-              src={shopifyImageUrl(collection.image.url, { width: 640 })}
-              alt={collection.image.altText ?? collection.title}
-              width={collection.image.width ?? undefined}
-              height={collection.image.height ?? undefined}
-              className="h-full w-full object-cover"
-              loading="eager"
-              fetchPriority="high"
-            />
+        {images.length > 0 ? (
+          <div
+            aria-hidden="true"
+            className="relative mx-auto flex h-56 w-full max-w-md items-end justify-center md:h-72"
+          >
+            {images.map((image, index) => (
+              <div
+                key={image.url}
+                className={`absolute w-[42%] overflow-hidden rounded-[1.5rem] shadow-[0_30px_60px_-24px_rgb(0_0_0/0.7)] ring-1 ring-white/15 ${
+                  index === 0
+                    ? "left-1/2 z-10 h-full -translate-x-1/2"
+                    : index === 1
+                      ? "left-[4%] h-[78%] -rotate-6"
+                      : "right-[4%] h-[78%] rotate-6"
+                }`}
+              >
+                <div className="h-full bg-white">
+                  <img
+                    src={shopifyImageUrl(image.url, { width: 400 })}
+                    alt=""
+                    className="h-full w-full object-cover"
+                    loading={index === 0 ? "eager" : "lazy"}
+                  />
+                </div>
+              </div>
+            ))}
           </div>
         ) : null}
       </div>
@@ -307,7 +335,10 @@ export default function CollectionRoute({ loaderData }: Route.ComponentProps) {
             origin={loaderData.origin}
           />
           <Breadcrumb collection={loaderData.collection} />
-          <CollectionHeader collection={loaderData.collection} />
+          <CollectionHeader
+            collection={loaderData.collection}
+            products={loaderData.products}
+          />
           <div
             className={
               loaderData.availableFilters.length > 0

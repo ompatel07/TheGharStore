@@ -25,16 +25,18 @@ export function ProductSpotlight({ spotlight }: { spotlight: Spotlight }) {
   return (
     <section
       aria-labelledby="spotlight-title"
-      className="bg-cream-deep curve-top curve-bottom relative my-10 overflow-clip md:my-16"
+      className="bg-surface relative overflow-clip"
     >
-      <div className="max-w-page px-margin mx-auto py-16 md:py-24">
-        <div className="mb-10 max-w-2xl">
-          <p className="type-overline text-burgundy">Featured find</p>
-          <h2 id="spotlight-title" className="type-heading-xl text-on-surface mt-2">
+      <div className="max-w-page px-margin mx-auto py-20 md:py-28">
+        <div className="mb-12 max-w-3xl">
+          <p className="eyebrow text-terracotta-deep">Featured find</p>
+          <h2 id="spotlight-title" className="ed-display ed-lg text-on-surface mt-4">
             {heading}
           </h2>
           {spotlight.intro ? (
-            <p className="text-on-surface-secondary mt-3 text-lg">{spotlight.intro}</p>
+            <p className="text-on-surface-secondary mt-3 text-lg">
+              {spotlight.intro}
+            </p>
           ) : null}
         </div>
 
@@ -46,7 +48,11 @@ export function ProductSpotlight({ spotlight }: { spotlight: Spotlight }) {
               <Reveal className="surface-card mx-auto w-full max-w-md overflow-hidden p-3">
                 <img
                   src={shopifyImageUrl(image.url, { width: 640 })}
-                  srcSet={responsiveSrcSet(image.url, [360, 520, 640], image.width)}
+                  srcSet={responsiveSrcSet(
+                    image.url,
+                    [360, 520, 640],
+                    image.width,
+                  )}
                   sizes="(min-width: 768px) 40vw, 90vw"
                   alt={image.altText || product.title}
                   width={image.width ?? 640}
@@ -64,7 +70,9 @@ export function ProductSpotlight({ spotlight }: { spotlight: Spotlight }) {
                       <span className="icon-chip bg-white [--chip-size:2.25rem]">
                         <Icon name="check" size={18} strokeWidth={2.25} />
                       </span>
-                      <span className="text-on-surface pt-1.5 font-medium">{highlight}</span>
+                      <span className="text-on-surface pt-1.5 font-medium">
+                        {highlight}
+                      </span>
                     </li>
                   ))}
                 </ul>
@@ -73,7 +81,10 @@ export function ProductSpotlight({ spotlight }: { spotlight: Spotlight }) {
                   {product.description}
                 </p>
               ) : null}
-              <SpotlightBuy handle={product.handle} price={formatPrice(price)} />
+              <SpotlightBuy
+                handle={product.handle}
+                price={formatPrice(price)}
+              />
             </Reveal>
           </div>
         )}
@@ -95,11 +106,13 @@ export function ProductSpotlight({ spotlight }: { spotlight: Spotlight }) {
 function SpotlightBuy({ handle, price }: { handle: string; price: string }) {
   return (
     <div className="mt-8 flex flex-wrap items-center gap-5">
-      <Link to={`/products/${handle}`} className="button-cta !px-7 !py-3.5" prefetch="intent">
+      <Link to={`/products/${handle}`} className="btn btn-dark" prefetch="intent">
         See how it works
-        <Icon name="arrow-right" size={20} strokeWidth={2.25} />
+        <span className="btn-arrow" aria-hidden="true">
+          <Icon name="arrow-right" size={16} strokeWidth={2.5} />
+        </span>
       </Link>
-      <p className="text-on-surface text-2xl font-bold">{price}</p>
+      <p className="text-on-surface ed-display text-3xl">{price}</p>
     </div>
   );
 }
@@ -108,7 +121,11 @@ function SpotlightStory({ spotlight }: { spotlight: Spotlight }) {
   const { product, steps } = spotlight;
   const sectionRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<HTMLSpanElement>(null);
-  const fallbackImage = product.featuredImage ?? product.images.nodes[0] ?? null;
+  const fallbackImage =
+    product.featuredImage ?? product.images.nodes[0] ?? null;
+  // Each step gets its own photo: the step's image, else the product's nth photo.
+  const stepImage = (step: Spotlight["steps"][number], index: number) =>
+    step.image ?? product.images.nodes[index] ?? fallbackImage;
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -139,11 +156,17 @@ function SpotlightStory({ spotlight }: { spotlight: Spotlight }) {
             {
               scaleY: 1,
               ease: "none",
-              scrollTrigger: { trigger: section, start: "top 60%", end: "bottom 70%", scrub: true },
+              scrollTrigger: {
+                trigger: section,
+                start: "top 60%",
+                end: "bottom 70%",
+                scrub: true,
+              },
             },
           );
           const stepEls = section.querySelectorAll<HTMLElement>("[data-step]");
-          const images = section.querySelectorAll<HTMLElement>("[data-step-image]");
+          const images =
+            section.querySelectorAll<HTMLElement>("[data-step-image]");
           stepEls.forEach((step, index) => {
             ScrollTrigger.create({
               trigger: step,
@@ -180,19 +203,21 @@ function SpotlightStory({ spotlight }: { spotlight: Spotlight }) {
 
   return (
     <div ref={sectionRef} className="grid gap-10 lg:grid-cols-2 lg:gap-16">
-      <div className="lg:sticky lg:top-24 lg:h-[min(36rem,calc(100vh-8rem))] lg:self-start">
-        <div className="surface-card relative aspect-square overflow-hidden p-3 lg:aspect-auto lg:h-full">
+      <div className="lg:sticky lg:top-24 lg:h-[min(40rem,calc(100vh-8rem))] lg:self-start">
+        <div className="relative mx-auto aspect-square max-w-md overflow-hidden rounded-[2rem] bg-white shadow-[var(--shadow-xl)] lg:aspect-auto lg:h-full lg:max-w-none">
           {steps.map((step, index) => {
-            const image = step.image ?? fallbackImage;
+            const image = stepImage(step, index);
             if (!image) return null;
             return (
               <img
                 key={step.title}
                 data-step-image
-                src={shopifyImageUrl(image.url, { width: 720 })}
+                src={shopifyImageUrl(image.url, { width: 900 })}
+                srcSet={responsiveSrcSet(image.url, [600, 900, 1200], image.width)}
+                sizes="(min-width: 1024px) 42vw, 90vw"
                 alt={index === 0 ? image.altText || product.title : ""}
                 aria-hidden={index === 0 ? undefined : true}
-                className={`absolute inset-3 h-[calc(100%-1.5rem)] w-[calc(100%-1.5rem)] rounded-[1.25rem] object-cover ${
+                className={`absolute inset-0 h-full w-full object-contain ${
                   index === 0 ? "" : "max-lg:hidden lg:opacity-0"
                 }`}
                 loading="lazy"
@@ -219,28 +244,42 @@ function SpotlightStory({ spotlight }: { spotlight: Spotlight }) {
               data-step
               className="spotlight-step flex gap-5 lg:opacity-55 lg:transition-opacity lg:duration-500 lg:[&.is-active]:opacity-100"
             >
-              <span className="bg-burgundy relative z-10 inline-grid size-11 shrink-0 place-items-center rounded-full text-lg font-bold text-white ring-4 ring-[var(--color-cream-deep)]">
-                {index + 1}
+              <span className="bg-surface relative z-10 shrink-0 py-1">
+                <span className="ed-display ed-italic text-burgundy/35 block w-12 text-5xl leading-none transition-colors duration-500 lg:[.is-active_&]:text-[var(--color-burgundy)]">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
               </span>
               <div className="pt-1.5">
-                <h3 className="type-heading-lg text-on-surface">{step.title}</h3>
+                <h3 className="ed-display ed-sm text-on-surface">
+                  {step.title}
+                </h3>
                 {step.body ? (
-                  <p className="text-on-surface-secondary mt-2 text-lg leading-relaxed">{step.body}</p>
+                  <p className="text-on-surface-secondary mt-2 text-lg leading-relaxed">
+                    {step.body}
+                  </p>
                 ) : null}
-                {step.image ? (
-                  <img
-                    src={shopifyImageUrl(step.image.url, { width: 640 })}
-                    alt=""
-                    className="mt-4 aspect-[4/3] w-full rounded-2xl object-cover lg:hidden"
-                    loading="lazy"
-                  />
-                ) : null}
+                {index > 0 ? <StepPhoto image={stepImage(step, index)} /> : null}
               </div>
             </li>
           ))}
         </ol>
-        <SpotlightBuy handle={product.handle} price={formatPrice(product.priceRange.minVariantPrice)} />
+        <SpotlightBuy
+          handle={product.handle}
+          price={formatPrice(product.priceRange.minVariantPrice)}
+        />
       </div>
     </div>
+  );
+}
+
+function StepPhoto({ image }: { image: { url: string } | null }) {
+  if (!image) return null;
+  return (
+    <img
+      src={shopifyImageUrl(image.url, { width: 640 })}
+      alt=""
+      className="mt-4 aspect-square w-full rounded-2xl bg-white object-contain lg:hidden"
+      loading="lazy"
+    />
   );
 }

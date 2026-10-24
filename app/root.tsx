@@ -9,6 +9,7 @@ import {
   Scripts,
   ScrollRestoration,
   useNavigate,
+  useNavigation,
   useRouteLoaderData,
 } from "react-router";
 
@@ -44,6 +45,13 @@ export const links: Route.LinksFunction = () => [
   {
     rel: "preload",
     href: "/fonts/outfit-latin-var.woff2",
+    as: "font",
+    type: "font/woff2",
+    crossOrigin: "anonymous",
+  },
+  {
+    rel: "preload",
+    href: "/fonts/fraunces-latin-var.woff2",
     as: "font",
     type: "font/woff2",
     crossOrigin: "anonymous",
@@ -178,6 +186,13 @@ export default function App({ loaderData }: Route.ComponentProps) {
   );
 }
 
+/** Thin terracotta bar while the next page loads (no spinners on content). */
+function NavProgress() {
+  const navigation = useNavigation();
+  if (navigation.state === "idle") return null;
+  return <div className="nav-progress" role="progressbar" aria-label="Loading page" />;
+}
+
 function SiteShell({
   cartData,
   shopInfo,
@@ -191,6 +206,7 @@ function SiteShell({
 }) {
   return (
     <CartProvider initialData={cartData}>
+      <NavProgress />
       <PageViewedTracker />
       <CartAnalyticsTracker />
       <AnnouncementBar

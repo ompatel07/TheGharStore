@@ -25,12 +25,7 @@ import {
   type GalleryImage,
   type GalleryItem,
 } from "~/components/product/ProductGallery";
-import {
-  LegalDeclarations,
-  NeedHelp,
-  ProductBeforeAfter,
-  ProductDetails,
-} from "~/components/product/ProductDetails";
+import { ProductStory, StoryNav } from "~/components/product/ProductStory";
 import {
   hasRealOptions,
   VariantOptions,
@@ -378,12 +373,12 @@ function ProductPage({
               {collection ? (
                 <Link
                   to={`/collections/${collection.handle}`}
-                  className="type-overline text-burgundy hover:underline"
+                  className="type-hand text-terracotta-deep text-2xl hover:underline"
                 >
                   {collection.title}
                 </Link>
               ) : null}
-              <h1 className="type-heading-xl text-on-surface mt-2 text-[clamp(1.6rem,1.2rem+1.4vw,2.4rem)]">
+              <h1 className="ed-display text-on-surface mt-2 text-[clamp(2.1rem,1.4rem+2.2vw,3.4rem)] leading-[1.02]">
                 {product.title}
               </h1>
               {rating ? (
@@ -432,27 +427,26 @@ function ProductPage({
               />
             ) : null}
 
-            <ProductDetails
-              descriptionHtml={product.descriptionHtml}
+            <StoryNav
               content={content}
-              policies={site?.policies ?? []}
-            />
-
-            <LegalDeclarations
-              legal={content.legal}
-              mrp={mrp}
-              netQuantity={netQuantity}
-              profile={site?.storeProfile ?? null}
-            />
-            <NeedHelp
-              profile={site?.storeProfile ?? null}
-              productTitle={product.title}
+              hasDescription={
+                product.descriptionHtml.replace(/<[^>]*>/g, "").trim().length > 0
+              }
             />
           </div>
         </div>
       </div>
 
-      <ProductBeforeAfter content={content} />
+      <ProductStory
+        title={product.title}
+        descriptionHtml={product.descriptionHtml}
+        content={content}
+        policies={site?.policies ?? []}
+        profile={site?.storeProfile ?? null}
+        mrp={mrp}
+        netQuantity={netQuantity}
+        collection={collection ?? null}
+      />
 
       {related.length > 0 ? (
         <Reveal

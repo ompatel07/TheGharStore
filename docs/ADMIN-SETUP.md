@@ -200,3 +200,15 @@ The full list with reasons is in `content/VERIFY-WITH-SUPPLIER.md` and each `con
 - [ ] Wishlist approach (A / B / C, see PLAN §9)
 - [ ] Reviews app (Judge.me or Okendo, see PLAN §10). Install later, no rush.
 - [ ] Newsletter provider. The Storefront API's only option (`customerCreate`) needs a password per signup, which isn't suitable for a newsletter. Options: Shopify Email + Customer Account sign-up, Klaviyo, or Mailchimp. The newsletter block stays hidden until one is chosen.
+
+## Homepage hero (photo + shoppable dots)
+
+Shopify admin → Content → Metaobjects → **Home hero**:
+
+- **Background photo (full-bleed)**: a wide landscape photo, at least 1600 px wide. Keep the left third fairly calm; the headline sits there on desktop.
+- **Shoppable hotspots** (JSON): one entry per dot, placed on the photo by percentage:
+  ```json
+  [{ "handle": "product-handle", "x": 44, "y": 59, "label": "Floating lotus lights" }]
+  ```
+  `x` is % from the left edge of the photo and `y` is % from the top. Out-of-stock products are skipped automatically. On phones, the same products show as a "Shop this scene" strip.
+- Eyebrow, headline, headline accent (the italic word), subtext and button work as before.

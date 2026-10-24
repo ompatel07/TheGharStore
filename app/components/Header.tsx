@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router";
 
 import { Logo } from "~/components/Logo";
-import { HeaderSearch } from "~/components/search/HeaderSearch";
 import { Icon } from "~/components/ui/Icon";
 import { useCart } from "~/lib/cart";
 import { CART_DRAWER_ID, SEARCH_DRAWER_ID, openDialogFromLinkClick } from "~/lib/cart-drawer";
@@ -28,113 +27,61 @@ type HeaderProps = {
 };
 
 export function Header({ mainMenu, collections }: HeaderProps) {
-  const sentinelRef = useRef<HTMLDivElement>(null);
-  const [compact, setCompact] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-  // The compact bar slides in (transform only) once the full header scrolls away.
+  // One slim sticky bar; it frosts and the logo eases down once the page scrolls.
   useEffect(() => {
-    const sentinel = sentinelRef.current;
-    if (!sentinel || typeof IntersectionObserver === "undefined") return;
-    const observer = new IntersectionObserver(([entry]) => setCompact(!entry.isIntersecting), {
-      threshold: 0,
-    });
-    observer.observe(sentinel);
-    return () => observer.disconnect();
+    const update = () => setScrolled(window.scrollY > 12);
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => window.removeEventListener("scroll", update);
   }, []);
 
   return (
     <>
-      <header className="bg-surface curve-bottom relative z-30 shadow-[0_14px_30px_-24px_rgb(56_44_42/0.45)]">
-        {/* Mobile: menu · logo · account · cart, then the search pill */}
-        <div className="px-margin flex items-center gap-1 pt-2 lg:hidden">
-          <MobileNavTrigger />
-          <div className="flex flex-1 justify-center">
-            <Logo height={56} priority />
+      <header className="site-header bg-surface sticky top-0 z-40" data-scrolled={scrolled}>
+        <div className="max-w-page px-margin relative mx-auto flex h-16 items-center gap-1 lg:h-[5.5rem] lg:gap-8">
+          <div className="flex items-center lg:hidden">
+            <MobileNavTrigger />
+            <SearchButton />
           </div>
-          <AccountLink compact />
-          <CartButton />
-        </div>
-        <div className="px-margin pt-2 pb-5 lg:hidden">
-          <SearchPillButton />
-        </div>
 
-        {/* Desktop: logo spans two rows; search + actions, then the menu */}
-        <div className="max-w-page px-margin mx-auto hidden grid-cols-[auto_1fr] gap-x-10 pt-3 pb-5 lg:grid">
-          <div className="row-span-2 flex items-center">
-            <Logo height={112} priority />
+          <div className="header-logo max-lg:absolute max-lg:start-1/2 max-lg:-translate-x-1/2">
+            <Logo height={46} priority className="lg:hidden" />
+            <Logo height={68} priority className="max-lg:hidden" />
           </div>
-          <div className="flex items-center gap-6 pt-2">
-            <HeaderSearch className="max-w-2xl flex-1" />
-            <div className="ms-auto flex items-center gap-1">
-              <AccountLink />
-              <CartButton labelled />
-            </div>
-          </div>
+
           <PrimaryNav items={mainMenu} collections={collections} />
+
+          <div className="ms-auto flex items-center gap-0.5">
+            <span className="max-lg:hidden">
+              <SearchButton />
+            </span>
+            <span className="max-lg:hidden">
+              <AccountLink compact />
+            </span>
+            <CartButton />
+          </div>
         </div>
       </header>
-      <div ref={sentinelRef} aria-hidden="true" className="h-px" />
 
-      <CompactBar visible={compact} />
       <MobileNav mainMenu={mainMenu} collections={collections} />
     </>
   );
 }
 
-/** Thin sticky bar that slides down after scrolling past the header. */
-function CompactBar({ visible }: { visible: boolean }) {
-  return (
-    <div
-      className={`bg-surface/95 fixed inset-x-0 top-0 z-40 border-b border-[color-mix(in_oklab,var(--color-gold)_40%,transparent)] backdrop-blur-md motion-safe:transition-transform motion-safe:duration-300 ${
-        visible ? "translate-y-0" : "pointer-events-none -translate-y-full"
-      }`}
-      inert={!visible}
-      data-compact-header
-    >
-      <div className="max-w-page px-margin mx-auto flex h-14 items-center gap-2">
-        <div className="lg:hidden">
-          <MobileNavTrigger />
-        </div>
-        <Logo height={40} className="max-lg:mx-auto" />
-        <div className="ms-auto flex items-center gap-1">
-          <Link
-            to="/search"
-            className="hover:bg-peach-soft inline-flex size-11 items-center justify-center rounded-full"
-            aria-label="Search"
-            aria-controls={SEARCH_DRAWER_ID}
-            aria-haspopup="dialog"
-            onClick={(event) => openDialogFromLinkClick(event, SEARCH_DRAWER_ID)}
-          >
-            <Icon name="search" size={22} />
-          </Link>
-          <span className="max-lg:hidden">
-            <AccountLink compact />
-          </span>
-          <CartButton />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function SearchPillButton() {
+function SearchButton() {
   return (
     <Link
       to="/search"
-      className="border-border text-on-surface-secondary flex h-12 w-full items-center gap-3 rounded-full border bg-white ps-4 pe-1.5 text-[0.95rem] shadow-sm"
+      className="text-on-surface hover:bg-peach-soft inline-flex size-11 items-center justify-center rounded-full motion-safe:transition-colors"
+      aria-label="Search"
       aria-controls={SEARCH_DRAWER_ID}
       aria-haspopup="dialog"
       data-testid="search-trigger"
       onClick={(event) => openDialogFromLinkClick(event, SEARCH_DRAWER_ID)}
     >
-      <Icon name="search" size={20} />
-      <span className="flex-1 truncate">Search décor, lighting, kitchen…</span>
-      <span
-        className="bg-cta text-cta-text inline-flex h-9 w-11 items-center justify-center rounded-full"
-        aria-hidden="true"
-      >
-        <Icon name="search" size={18} strokeWidth={2.25} />
-      </span>
+      <Icon name="search" size={22} />
     </Link>
   );
 }
@@ -184,11 +131,9 @@ export function CartButton({ labelled = false }: { labelled?: boolean }) {
         </span>
         {labelled ? <span aria-hidden="true">Cart</span> : null}
       </Link>
-      {labelled ? (
-        <span aria-live="polite" aria-atomic="true" className="sr-only">
-          {liveCartCountLabel(totalQuantity)}
-        </span>
-      ) : null}
+      <span aria-live="polite" aria-atomic="true" className="sr-only">
+        {liveCartCountLabel(totalQuantity)}
+      </span>
     </>
   );
 }
@@ -216,13 +161,13 @@ function PrimaryNav({
   if (navItems.length === 0) return null;
 
   return (
-    <nav aria-label="Main" className="mt-3 -ms-3">
-      <ul role="list" className="flex flex-wrap items-center gap-1">
+    <nav aria-label="Main" className="hidden lg:block">
+      <ul role="list" className="flex items-center gap-1 xl:gap-3">
         {navItems.map((item) => {
           const active =
             item.to === "/" ? location.pathname === "/" : location.pathname.startsWith(item.to);
-          const pillClass = `inline-flex min-h-10 items-center gap-1 rounded-full px-4 text-[0.95rem] font-semibold whitespace-nowrap motion-safe:transition-colors ${
-            active ? "bg-peach-soft text-burgundy" : "text-on-surface hover:bg-peach-soft/70"
+          const pillClass = `inline-flex min-h-11 items-center gap-1 px-3 text-[0.95rem] font-semibold whitespace-nowrap motion-safe:transition-colors ${
+            active ? "text-burgundy" : "text-on-surface hover:text-burgundy"
           }`;
 
           if (item.items.length === 0) {
@@ -284,7 +229,7 @@ function NavItemLink({
       prefetch="intent"
       aria-current={active ? "page" : undefined}
     >
-      {item.title}
+      <span className="link-sweep">{item.title}</span>
       {children}
     </NavLink>
   );

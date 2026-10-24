@@ -99,6 +99,14 @@ export function Footer({ shopInfo, collections, footerMenu, policies, storeProfi
 
         <SellerDetails profile={storeProfile} />
 
+        <p
+          aria-hidden="true"
+          className="ed-display text-cream/90 mt-16 text-center text-[clamp(2.8rem,9vw,9.5rem)] leading-[0.92] select-none"
+        >
+          Smart finds.
+          <em className="text-terracotta block">Better homes.</em>
+        </p>
+
         <div className="mt-12 flex flex-col gap-6 border-t border-[color-mix(in_oklab,var(--color-gold)_45%,transparent)] pt-8 md:flex-row md:items-center md:justify-between">
           <div className="text-cream/75 flex flex-col gap-1 text-sm">
             <p>

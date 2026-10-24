@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "./tokens.css";
 @import "./styles/brand.css";
+@import "./styles/signature.css";
+@import "./styles/editorial.css";
 
 /* App-only CSS the frozen core (tokens.css) does not own.
  *

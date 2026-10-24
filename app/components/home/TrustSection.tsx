@@ -3,9 +3,13 @@ import { Link } from "react-router";
 import { Icon, type IconName } from "~/components/ui/Icon";
 import { Reveal } from "~/components/ui/Reveal";
 import { formatPrice } from "~/lib/money";
-import type { PolicyLink, StoreProfile, StorePromises } from "~/lib/site-content";
+import type {
+  PolicyLink,
+  StoreProfile,
+  StorePromises,
+} from "~/lib/site-content";
 
-type TrustItem = { icon: IconName; title: string; text: string; to?: string };
+export type TrustItem = { icon: IconName; title: string; text: string; to?: string };
 
 /**
  * Built only from real store content: Shopify's secure checkout (always true) plus
@@ -62,7 +66,11 @@ export function buildTrustItems(
     });
   }
 
-  if (profile?.supportPhone || profile?.whatsappNumber || profile?.supportEmail) {
+  if (
+    profile?.supportPhone ||
+    profile?.whatsappNumber ||
+    profile?.supportEmail
+  ) {
     items.push({
       icon: profile.whatsappNumber ? "whatsapp" : "phone",
       title: "Real people, real help",
@@ -88,63 +96,65 @@ export function TrustSection({
   const items = buildTrustItems(promises, policies, profile);
 
   return (
-    <Reveal as="section" aria-labelledby="trust-title" className="py-12 md:py-16">
-      <div className="max-w-page px-margin mx-auto">
-        <div className="relative overflow-hidden rounded-[var(--radius-xl)] bg-white px-6 py-10 shadow-[var(--shadow)] md:px-12 md:py-14">
-          <div className="gold-rule absolute inset-x-10 top-0" aria-hidden="true" />
-          <div className="grid gap-10 lg:grid-cols-[0.9fr_2fr] lg:items-center">
-            <div>
-              <p className="type-hand text-terracotta-deep text-2xl">bharosa matters</p>
-              <h2 id="trust-title" className="type-heading-xl text-on-surface mt-1">
-                Shop with confidence
-              </h2>
-              {policies.length > 0 ? (
-                <p className="text-on-surface-secondary mt-3">
-                  Read our{" "}
-                  {policies.map((policy, index) => (
-                    <span key={policy.handle}>
-                      {index > 0 ? (index === policies.length - 1 ? " and " : ", ") : null}
-                      <Link
-                        to={`/policies/${policy.handle}`}
-                        className="text-burgundy font-semibold underline underline-offset-4"
-                      >
-                        {policy.title.toLowerCase()}
-                      </Link>
-                    </span>
-                  ))}
-                  .
-                </p>
-              ) : null}
-            </div>
-            <ul
-              role="list"
-              className={`grid gap-6 sm:grid-cols-2 ${items.length >= 3 ? "xl:grid-cols-3" : ""}`}
-            >
-              {items.map((item) => (
-                <li key={item.title} className="flex gap-4">
-                  <span className="icon-chip [--chip-size:3.25rem]">
-                    <Icon name={item.icon} size={26} />
-                  </span>
-                  <div>
-                    <h3 className="text-on-surface font-bold">{item.title}</h3>
-                    <p className="text-on-surface-secondary mt-0.5 text-[0.95rem]">{item.text}</p>
-                    {item.to ? (
-                      <Link
-                        to={item.to}
-                        className="text-burgundy mt-1 inline-flex min-h-9 items-center gap-1 text-sm font-semibold underline-offset-4 hover:underline"
-                      >
-                        Details
-                        <span className="sr-only"> about {item.title.toLowerCase()}</span>
-                        <Icon name="arrow-right" size={16} />
-                      </Link>
-                    ) : null}
-                  </div>
-                </li>
-              ))}
-            </ul>
+    <section aria-labelledby="trust-title" className="bg-burgundy-deep text-cream relative overflow-hidden">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(50%_80%_at_100%_0%,rgb(239_119_86/0.25),transparent_70%)]"
+      />
+      <div className="max-w-page px-margin relative mx-auto py-20 md:py-24">
+        <Reveal className="grid gap-6 lg:grid-cols-[1fr_1.2fr] lg:items-end">
+          <div>
+            <p className="eyebrow text-peach">Bharosa matters</p>
+            <h2 id="trust-title" className="ed-display ed-lg mt-4">
+              Shop with <em className="text-peach">confidence</em>
+            </h2>
           </div>
-        </div>
+          {policies.length > 0 ? (
+            <p className="text-cream/75 max-w-xl text-lg lg:justify-self-end">
+              Read our{" "}
+              {policies.map((policy, index) => (
+                <span key={policy.handle}>
+                  {index > 0 ? (index === policies.length - 1 ? " and " : ", ") : null}
+                  <Link to={`/policies/${policy.handle}`} className="text-cream link-sweep font-semibold">
+                    {policy.title.toLowerCase()}
+                  </Link>
+                </span>
+              ))}
+              .
+            </p>
+          ) : null}
+        </Reveal>
+
+        <ul
+          role="list"
+          className={`mt-14 grid border-t border-white/15 sm:grid-cols-2 ${items.length >= 5 ? "lg:grid-cols-5" : items.length === 4 ? "lg:grid-cols-4" : items.length === 3 ? "lg:grid-cols-3" : ""}`}
+        >
+          {items.map((item, index) => (
+            <Reveal
+              as="li"
+              key={item.title}
+              delay={index * 90}
+              className="border-b border-white/15 py-8 sm:pe-8 lg:border-b-0 lg:border-s lg:px-8 lg:first:border-s-0 lg:first:ps-0"
+            >
+              <span className="bg-cream/10 text-peach grid size-14 place-items-center rounded-full">
+                <Icon name={item.icon} size={28} />
+              </span>
+              <h3 className="ed-display mt-6 text-2xl">{item.title}</h3>
+              <p className="text-cream/70 mt-2 text-[0.95rem] leading-relaxed">{item.text}</p>
+              {item.to ? (
+                <Link
+                  to={item.to}
+                  className="text-cream mt-3 inline-flex min-h-9 items-center gap-1.5 text-sm font-semibold"
+                >
+                  <span className="link-sweep">Details</span>
+                  <span className="sr-only"> about {item.title.toLowerCase()}</span>
+                  <Icon name="arrow-right" size={16} />
+                </Link>
+              ) : null}
+            </Reveal>
+          ))}
+        </ul>
       </div>
-    </Reveal>
+    </section>
   );
 }
