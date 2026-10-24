@@ -4,7 +4,14 @@
 import { gql } from "@shopify/hydrogen";
 
 import { PRODUCT_CARD_FRAGMENT } from "~/components/ProductCard";
-import { fieldMap, lines, list, money, text, type MoneyValue } from "~/lib/metaobject";
+import {
+  fieldMap,
+  lines,
+  list,
+  money,
+  text,
+  type MoneyValue,
+} from "~/lib/metaobject";
 
 export const PRODUCT_VARIANT_FRAGMENT = gql(`
   fragment ProductVariantFields on ProductVariant {
@@ -66,6 +73,12 @@ export const PRODUCT_QUERY = gql(
         description
         descriptionHtml
         requiresSellingPlan
+        rating: metafield(namespace: "reviews", key: "rating") {
+          value
+        }
+        ratingCount: metafield(namespace: "reviews", key: "rating_count") {
+          value
+        }
         encodedVariantExistence
         encodedVariantAvailability
         seo {
@@ -295,13 +308,19 @@ export const RECOMMENDATIONS_QUERY = gql(
 );
 
 type RawFields = readonly { key: string; value?: string | null }[];
-type RawRefs = { references?: { nodes: readonly unknown[] } | null } | null | undefined;
+type RawRefs =
+  { references?: { nodes: readonly unknown[] } | null } | null | undefined;
 
 export type SpecRow = { label: string; value: string };
 export type HowToStep = {
   title: string;
   body: string | null;
-  image: { url: string; altText: string | null; width: number | null; height: number | null } | null;
+  image: {
+    url: string;
+    altText: string | null;
+    width: number | null;
+    height: number | null;
+  } | null;
 };
 export type Faq = { question: string; answer: string };
 export type LegalEntity = {
@@ -312,9 +331,16 @@ export type LegalEntity = {
   phone: string | null;
 };
 
-function referenceFields(meta: RawRefs): { handle: string; fields: RawFields }[] {
+function referenceFields(
+  meta: RawRefs,
+): { handle: string; fields: RawFields }[] {
   return (meta?.references?.nodes ?? []).flatMap((node) => {
-    if (node && typeof node === "object" && "fields" in node && "handle" in node) {
+    if (
+      node &&
+      typeof node === "object" &&
+      "fields" in node &&
+      "handle" in node
+    ) {
       return [node as { handle: string; fields: RawFields }];
     }
     return [];
@@ -322,7 +348,9 @@ function referenceFields(meta: RawRefs): { handle: string; fields: RawFields }[]
 }
 
 /** "Label: Value" per line → table rows. Lines without a colon are skipped. */
-export function parseSpecifications(value: string | null | undefined): SpecRow[] {
+export function parseSpecifications(
+  value: string | null | undefined,
+): SpecRow[] {
   return lines(value).flatMap((line) => {
     const index = line.indexOf(":");
     if (index <= 0) return [];
@@ -359,15 +387,30 @@ function imageFromReference(reference: unknown): HowToStep["image"] {
 }
 
 export function normalizeProductContent(product: ProductContentSource) {
-  const howToUse: HowToStep[] = (product.howToUse?.references?.nodes ?? []).flatMap((node) => {
+  const howToUse: HowToStep[] = (
+    product.howToUse?.references?.nodes ?? []
+  ).flatMap((node) => {
     if (!node || typeof node !== "object" || !("fields" in node)) return [];
-    const fields = (node as { fields: readonly { key: string; value?: string | null; reference?: unknown }[] })
-      .fields;
+    const fields = (
+      node as {
+        fields: readonly {
+          key: string;
+          value?: string | null;
+          reference?: unknown;
+        }[];
+      }
+    ).fields;
     const map = fieldMap(fields);
     const title = text(map.title);
     if (!title) return [];
     const imageField = fields.find((field) => field.key === "image");
-    return [{ title, body: text(map.body), image: imageFromReference(imageField?.reference) }];
+    return [
+      {
+        title,
+        body: text(map.body),
+        image: imageFromReference(imageField?.reference),
+      },
+    ];
   });
 
   const faqs: Faq[] = referenceFields(product.faqs).flatMap(({ fields }) => {
@@ -377,7 +420,9 @@ export function normalizeProductContent(product: ProductContentSource) {
     return question && answer ? [{ question, answer }] : [];
   });
 
-  const legalEntities: LegalEntity[] = referenceFields(product.legalEntities).flatMap(({ fields }) => {
+  const legalEntities: LegalEntity[] = referenceFields(
+    product.legalEntities,
+  ).flatMap(({ fields }) => {
     const map = fieldMap(fields);
     const name = text(map.name);
     const address = text(map.address);
@@ -404,7 +449,10 @@ export function normalizeProductContent(product: ProductContentSource) {
     care: text(product.care?.value),
     shippingReturns: text(product.shippingReturns?.value),
     faqs,
-    beforeAfter: before && after ? { before, after, caption: text(product.beforeAfterCaption?.value) } : null,
+    beforeAfter:
+      before && after
+        ? { before, after, caption: text(product.beforeAfterCaption?.value) }
+        : null,
     legal: {
       countryOfOrigin: text(product.countryOfOrigin?.value),
       genericName: text(product.genericName?.value),
@@ -417,6 +465,8 @@ export function normalizeProductContent(product: ProductContentSource) {
 
 export type ProductContent = ReturnType<typeof normalizeProductContent>;
 
-export function variantMrp(variant: { mrp?: { value?: string | null } | null } | null | undefined): MoneyValue | null {
+export function variantMrp(
+  variant: { mrp?: { value?: string | null } | null } | null | undefined,
+): MoneyValue | null {
   return money(variant?.mrp?.value);
 }

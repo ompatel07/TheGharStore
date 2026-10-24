@@ -1,7 +1,8 @@
 import { AnimatePresence, LazyMotion, m } from "motion/react";
 import { useEffect, useMemo, useState, type SubmitEvent } from "react";
-import { Link, useRouteLoaderData } from "react-router";
+import { Link, useFetcher, useRouteLoaderData } from "react-router";
 
+import { ProductCard, type ProductCardData } from "~/components/ProductCard";
 import { Icon } from "~/components/ui/Icon";
 import { useCart, useCartForm } from "~/lib/cart";
 import { shopifyImageUrl } from "~/lib/image";
@@ -507,5 +508,65 @@ export function CartSummary() {
         </a>
       ) : null}
     </div>
+  );
+}
+
+/**
+ * "Pairs well with" — Shopify's complementary/related recommendations for the
+ * first item in the cart. Loads only when the cart has lines.
+ */
+export function CartRecommendations({
+  onNavigate,
+}: {
+  onNavigate?: () => void;
+}) {
+  const lines = useCart((state) => state.data.lines.nodes);
+  const fetcher = useFetcher<{ products: ProductCardData[] }>();
+  const productIds = lines
+    .map(
+      (line) =>
+        (line.merchandise as { product?: { id?: string } } | null)?.product?.id,
+    )
+    .filter((id): id is string => Boolean(id));
+  const anchor = productIds[0];
+  const key = productIds.join(",");
+
+  useEffect(() => {
+    if (!anchor) return;
+    const params = new URLSearchParams({ productId: anchor });
+    for (const id of productIds) params.append("exclude", id);
+    void fetcher.load(`/api/recommendations?${params.toString()}`);
+    // Refetch only when the set of products changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key]);
+
+  const products = fetcher.data?.products ?? [];
+  if (!anchor || products.length === 0) return null;
+
+  return (
+    <section
+      aria-labelledby="cart-recs-title"
+      className="py-4"
+      onClickCapture={(event) => {
+        if ((event.target as HTMLElement).closest("a")) onNavigate?.();
+      }}
+    >
+      <h3
+        id="cart-recs-title"
+        className="type-overline text-on-surface-secondary mb-3"
+      >
+        Pairs well with
+      </h3>
+      <ul
+        role="list"
+        className="scrollbar-none -mx-5 flex snap-x gap-3 overflow-x-auto px-5 pb-2"
+      >
+        {products.map((product) => (
+          <li key={product.id} className="w-40 shrink-0 snap-start">
+            <ProductCard product={product} compact />
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }

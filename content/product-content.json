@@ -1,0 +1,761 @@
+{
+  "_about": "Source of truth for product page content. Written 2026-10-24 from the store's real product data + images + general how-to research. Every number is marked: 'supplier' = shown in the supplier's images/listing (not independently verified), 'check' = must be confirmed against a physical sample before publishing as fact. Nothing here is copied from marketplace listings.",
+  "products": [
+    {
+      "handle": "wall-repair-roller-paint-white-wall-repair-painting-solution-d7foign37jks73d5755g",
+      "currentTitle": "Wall Repair Roller Paint -White Wall Repair Painting Solution",
+      "title": "Wall Repair Roller Paint – 2-in-1 Touch-Up Roller (White)",
+      "seoTitle": "Wall Repair Roller Paint – White Touch-Up Roller",
+      "seoDescription": "Cover small marks, scuffs and patches on white walls with a 2-in-1 roller and paint bottle. No tray, no open paint tin. Shop at The Ghar Store.",
+      "description": [
+        "Small marks on a white wall don’t need a full repaint. This touch-up roller keeps the paint and the roller together: squeeze the bottle, and paint flows to a small foam roller you can run straight over the mark.",
+        "It’s made for quick fixes — crayon lines, scuff marks near switches, small patches after removing a nail or hook — on walls that are already white. Because there’s no tray or open tin, it’s easy to do a two-minute fix and put it away.",
+        "The roller head comes off for rinsing, so you can use the same bottle again for the next touch-up."
+      ],
+      "highlights": ["Paint + roller in one", "No tray needed", "Removable, washable roller", "For white walls"],
+      "specifications": [
+        ["Colour", "White", "supplier"],
+        ["Net contents", "500 g (as printed on the bottle)", "check"],
+        ["Size (approx.)", "21 × 10.5 × 8.5 cm", "supplier"],
+        ["Roller", "Removable foam roller, rotates 360°", "supplier"],
+        ["Best for", "Small marks and patches on white interior walls", "check"]
+      ],
+      "howToUse": [
+        ["Clean the spot", "Wipe the area with a dry cloth so it’s free of dust and grease. Let it dry fully."],
+        ["Prime the roller", "Hold the bottle upright and squeeze gently until the roller is evenly wet. Roll it on a piece of paper first to spread the paint."],
+        ["Roll over the mark", "Roll back and forth over the mark with light pressure. Thin coats look better than one thick coat."],
+        ["Let it dry, then repeat", "Let the first coat dry completely (follow the drying time on the bottle) and add a second coat if the mark still shows."],
+        ["Rinse and close", "Pull off the roller, rinse it under running water, let it dry and close the cap tightly."]
+      ],
+      "inTheBox": ["1 × paint bottle with roller head"],
+      "care": "Close the cap tightly after every use so the paint doesn’t dry in the nozzle. Rinse the roller with water while the paint is still wet. Store upright, away from direct sun and out of reach of children.",
+      "faqs": [
+        ["Will it match my wall colour?", "Only if your wall is white. The paint is white, so on coloured or off-white walls the patch may show. Try it on a small hidden spot first."],
+        ["Can it fill deep cracks or holes?", "It’s for surface marks and small patches. Deep cracks or holes need wall putty or filler first; you can use this roller to paint over the dried filler."],
+        ["How many coats will I need?", "Light marks usually need one or two thin coats. Dark marks such as pen or crayon may need more. Let each coat dry before the next."],
+        ["Can I use it again later?", "Yes. Rinse the roller after use and close the cap tightly. Paint that’s left open will dry out."],
+        ["Does it smell strongly?", "Paints of this kind usually have a mild smell. Keep the room airy while it dries."]
+      ],
+      "legal": { "genericName": "Wall touch-up paint with roller applicator", "dimensions": ["21 × 10.5 × 8.5 cm", "supplier"], "netQuantity": ["500 g", "check"], "countryOfOrigin": [null, "check"] },
+      "imageAlts": [
+        "Wall repair roller paint bottle with orange roller head, next to a hand rolling it on a wall",
+        "Four steps: clean the wall, prepare the roller, apply coats, check the finish",
+        "Roller paint parts: removable foam roller, orange head and bottle",
+        "Close-up of the rotating roller head and rinsing the roller under water",
+        "Roller paint size diagram with height and width",
+        "Wall marks before and after a touch-up"
+      ],
+      "flags": [
+        "Images 2–6 are supplier infographics with machine-translated English (e.g. “superimpose smear”, “Strong Cover A Brush Is White”) and green branding. Replace with your own photos or clean edits.",
+        "Supplier images claim “Antibacterial and mildew proof” and “Resistant to water and moisture”. These claims are NOT repeated in the copy because they can’t be verified. Remove them from images or get proof from the supplier.",
+        "Not in the Ghar Jugaad (DIY) collection — add it.",
+        "Needed for the homepage hero: a high-resolution transparent cutout and real before/after photos."
+      ]
+    },
+    {
+      "handle": "magic-broom-sweeper-for-floor-cleaning-pack-of-1-d9i6ai0021qs73efa8f0",
+      "currentTitle": "Magic Broom Sweeper for Floor Cleaning (Pack of 1)",
+      "title": "Magic Floor Wiper with Rotating Head",
+      "seoTitle": "Magic Floor Wiper with Rotating Head & Steel Pole",
+      "seoDescription": "A floor wiper with a soft rubber blade, 180° rotating head and steel pole. Push water, dust and hair off tiles and marble in a few strokes.",
+      "description": [
+        "After you mop the floor or wash the bathroom, this wiper pushes the water away in long, clean strokes. The soft rubber blade sits flat on the floor, so it gathers water, hair and loose dust without scratching tiles or marble.",
+        "The head turns, which makes it easy to reach under the sofa, along walls and into corners. The steel pole is long enough to work standing up, and the loop at the top lets you hang it on a hook when you’re done."
+      ],
+      "highlights": ["Soft rubber blade", "Rotating head", "Steel pole", "Hanging loop"],
+      "specifications": [
+        ["Overall length (approx.)", "125 cm", "supplier"],
+        ["Blade width (approx.)", "50 cm", "supplier"],
+        ["Blade", "Soft rubber", "supplier"],
+        ["Head", "Rotates up to 180°", "supplier"],
+        ["Pole", "Stainless steel, adjustable height", "check"],
+        ["Best for", "Tiles, marble, kota and other smooth hard floors; bathroom and balcony floors", "check"]
+      ],
+      "howToUse": [
+        ["Set it up", "Fit the pole into the head (if packed separately) and set the height that’s comfortable for you."],
+        ["Angle the head", "Turn the head to the angle you need — flat for open floor, angled for corners and under furniture."],
+        ["Push in one direction", "Push water or dust in long strokes towards the drain, door or a dustpan. Lift the blade between strokes for a cleaner finish."],
+        ["Rinse and hang", "Rinse the blade, shake off the water and hang the wiper by its loop to dry."]
+      ],
+      "inTheBox": ["1 × floor wiper (head + pole)"],
+      "care": "Rinse the rubber blade after use and let it dry. Hang it up rather than leaving it standing on the blade, so the edge stays straight. Keep it away from sharp objects that could nick the rubber.",
+      "faqs": [
+        ["Does it work on dry floors?", "Yes, it can push loose hair, crumbs and dust into a pile. For fine dust on large areas a broom or vacuum may still be quicker."],
+        ["Is it safe for marble and wooden floors?", "The blade is soft rubber, which is gentle on smooth hard floors like marble and tiles. On wooden floors, avoid leaving standing water."],
+        ["Can I use it on glass?", "You can use the blade on large glass doors or windows. Use light pressure and a clean blade."],
+        ["Is it a broom?", "No — it’s a rubber-blade wiper (squeegee). It works best for pushing water and loose debris, not for sweeping rough surfaces."]
+      ],
+      "legal": { "genericName": "Floor wiper (rubber squeegee)", "dimensions": ["125 × 50 cm (approx.)", "supplier"], "netQuantity": ["1 unit", "supplier"], "countryOfOrigin": [null, "check"] },
+      "imageAlts": [
+        "Magic floor wiper with steel pole and rubber blade, with a close-up of the flexible blade",
+        "Floor wiper size diagram showing 125 cm height and 50 cm blade with key features",
+        "Woman using the floor wiper on a tiled living room floor"
+      ],
+      "flags": [
+        "Title says “Broom Sweeper” but the product is a rubber-blade floor wiper. New title fixes this; consider a matching handle later.",
+        "Also listed in Rasoi Saathi (kitchen) — fine if you want, but its main home is Ghar Sambhal (home care)."
+      ]
+    },
+    {
+      "handle": "colorful-non-slip-3d-peacock-bathroom-mat-30-31-inches-pack-of-1-dbcu5ipf68",
+      "currentTitle": "Colorful Non-Slip 3D Peacock Bathroom Mat (30*31 inches) (Pack of 1)",
+      "title": "Peacock 3D Floor Mat – Non-Slip",
+      "seoTitle": "Peacock 3D Non-Slip Floor Mat for Home & Puja Room",
+      "seoDescription": "A bright peacock-design floor mat with a raised 3D pattern and non-slip back. For the bathroom door, puja room or entrance.",
+      "description": [
+        "A peacock in full colour — blues, greens, yellows and pinks in a raised, textured pattern — that brightens a doorway the moment you walk in.",
+        "Use it outside the bathroom, in front of the puja corner, at the main door or beside the bed. The non-slip back helps it stay in place on smooth floors."
+      ],
+      "highlights": ["Raised 3D peacock design", "Non-slip back", "Festive colours"],
+      "specifications": [
+        ["Size", "Listed as 30 × 31 inches; supplier image shows 24 inches (60 cm)", "check"],
+        ["Shape", "Peacock outline", "supplier"],
+        ["Back", "Non-slip", "check"],
+        ["Material", "To be confirmed", "check"]
+      ],
+      "howToUse": [
+        ["Pick a dry, flat spot", "Place the mat on a clean, dry floor so the non-slip back can grip."],
+        ["Shake it out regularly", "Shake or vacuum the mat to remove dust and hair."]
+      ],
+      "inTheBox": ["1 × peacock floor mat"],
+      "care": "Shake out or vacuum regularly. Spot-clean with mild soap and water. If washing, hand-wash in cold water and dry flat in the shade — check the care label first. Don’t tumble dry or iron.",
+      "faqs": [
+        ["What size is it?", "We’re confirming the exact size with our supplier — the listing and the photos don’t match. We’ll update this before you order. Ask us on WhatsApp if you need it today."],
+        ["Is it suitable for the bathroom floor itself?", "It’s best just outside the bathroom. Like most fabric mats, it shouldn’t stay soaked; let it dry fully between uses."],
+        ["Will the colours fade?", "Keep it out of strong direct sunlight and wash gently to keep the colours bright."]
+      ],
+      "legal": { "genericName": "Floor mat", "dimensions": [null, "check"], "netQuantity": ["1 unit", "supplier"], "countryOfOrigin": [null, "check"] },
+      "imageAlts": [
+        "Colourful peacock-shaped 3D floor mat on a light floor",
+        "Peacock mat with feature callouts and room ideas",
+        "Close-up of the raised peacock feather pattern",
+        "Woman placing the peacock mat on the floor near a doorway"
+      ],
+      "flags": [
+        "SIZE CONFLICT: title says 30×31 inches, supplier image says 24 inches (60 cm). Confirm before publishing; the new title leaves size out until confirmed.",
+        "Images carry a “Quality Assured” badge — a supplier claim. Remove or verify."
+      ]
+    },
+    {
+      "handle": "rechargeable-cordless-screwdriver-db9hv2ljl7qs73beeb30",
+      "currentTitle": "Rechargeable Cordless Screwdriver",
+      "title": "Cordless Screwdriver Kit with Folding Handle",
+      "seoTitle": "Rechargeable Cordless Screwdriver Kit with Bits & Case",
+      "seoDescription": "A rechargeable screwdriver with a folding handle, bits and a carry case — for curtain rods, furniture assembly and small fixes at home.",
+      "description": [
+        "Curtain rods, wall shelves, flat-pack furniture, loose cupboard hinges — this rechargeable screwdriver handles the small jobs that come up every month at home.",
+        "The handle folds: keep it straight for tight spaces, or turn it into a pistol grip for more control. Everything — bits, sockets and the charging cable — packs into one hard case, so nothing goes missing."
+      ],
+      "highlights": ["Rechargeable", "Folding handle", "Bits + carry case", "Forward & reverse"],
+      "specifications": [
+        ["Power", "Rechargeable battery (voltage to be confirmed)", "check"],
+        ["Charging", "USB cable (included as shown)", "check"],
+        ["Handle", "Folds between straight and pistol grip", "supplier"],
+        ["Accessories", "Assorted bits, sockets and extension (count to be confirmed)", "check"],
+        ["Storage", "Hard carry case", "supplier"]
+      ],
+      "howToUse": [
+        ["Charge it fully", "Charge the screwdriver with the cable before first use."],
+        ["Fit a bit", "Push the right bit firmly into the chuck."],
+        ["Choose the direction", "Use the switch to set forward (tighten) or reverse (loosen)."],
+        ["Drive the screw", "Hold the screwdriver straight in line with the screw and press the trigger. Finish the last turn gently so you don’t strip the screw head."]
+      ],
+      "inTheBox": ["1 × cordless screwdriver", "Bits and accessories (as shown)", "1 × charging cable", "1 × carry case"],
+      "care": "Store in its case in a dry place. Recharge every few months if not in use. Don’t use it as a drill on concrete or metal. Keep away from water and children.",
+      "faqs": [
+        ["Can it drill holes in walls?", "No. It’s a screwdriver for driving and removing screws. For concrete or brick walls you need a drill machine."],
+        ["How long does a charge last?", "It depends on the job. We’re confirming the battery details with our supplier and will add them here."],
+        ["Can I use it manually if the battery runs out?", "Many screwdrivers of this type can be turned by hand for a final tightening. We’ll confirm for this model."]
+      ],
+      "legal": { "genericName": "Cordless electric screwdriver", "dimensions": [null, "check"], "netQuantity": ["1 kit", "check"], "countryOfOrigin": [null, "check"] },
+      "imageAlts": ["Cordless screwdriver with folding handle, shown in its carry case with bits"],
+      "flags": [
+        "Only one image. Add photos of the case contents, the folding handle and the charging port.",
+        "Battery voltage, charging time and number of bits are unknown — get them from the supplier."
+      ]
+    },
+    {
+      "handle": "flexible-fan-duster-pack-of-1-db9htpljl7qs73beeb20",
+      "currentTitle": "Flexible Fan Duster (Pack of 1)",
+      "title": "Bendable Microfiber Fan Duster",
+      "seoTitle": "Bendable Microfiber Ceiling Fan Duster",
+      "seoDescription": "Clean ceiling fan blades without a ladder. A soft microfiber duster head that bends to wrap around each blade.",
+      "description": [
+        "Dusting ceiling fans is one of those jobs everyone puts off. This duster has a soft, chenille-style microfiber head that bends to wrap around the blade, so it catches dust from the top and bottom in one pass.",
+        "Use it on fan blades, top of cupboards, AC vents and other high places that are hard to reach."
+      ],
+      "highlights": ["Bends around fan blades", "Soft microfiber head", "For high places"],
+      "specifications": [
+        ["Head", "Microfiber (chenille-style), bendable", "supplier"],
+        ["Handle length", "To be confirmed", "check"],
+        ["Head washable", "To be confirmed", "check"]
+      ],
+      "howToUse": [
+        ["Switch the fan off", "Make sure the fan has fully stopped."],
+        ["Shape the head", "Bend the duster head into a curve that fits over the blade."],
+        ["Slide along each blade", "Hook it over the blade and pull it gently towards you."],
+        ["Shake off the dust", "Shake the head outdoors or over a bin."]
+      ],
+      "inTheBox": ["1 × fan duster"],
+      "care": "Shake out after each use. If the head is removable, wash it in mild soapy water and let it air dry before the next use.",
+      "faqs": [
+        ["Do I need a ladder?", "For most homes with standard ceiling height you can reach the fan standing on the floor. We’re confirming the exact handle length."],
+        ["Can I use it wet?", "Use it dry for dust. For sticky grime, wipe the blades with a damp cloth afterwards."]
+      ],
+      "legal": { "genericName": "Microfiber duster", "dimensions": [null, "check"], "netQuantity": ["1 unit", "supplier"], "countryOfOrigin": [null, "check"] },
+      "imageAlts": ["Blue bendable microfiber duster wrapped around a white ceiling fan blade"],
+      "flags": ["Only one image. Add photos of the full length and the head close-up."]
+    },
+    {
+      "handle": "magic-rangoli-kit-pack-of-1-db7kcubp7c8c738eddg0",
+      "currentTitle": "Magic Rangoli Kit (Pack of 1)",
+      "title": "Magic Rangoli Stencil Kit",
+      "seoTitle": "Magic Rangoli Stencil Kit for Diwali & Festivals",
+      "seoDescription": "Make neat, symmetrical rangoli designs in minutes with reusable stencils. Easy for beginners and kids. Perfect for Diwali.",
+      "description": [
+        "Love rangoli but short on time — or steady hands? Place the stencil, sprinkle colour, lift. You get a neat, symmetrical design in a few minutes.",
+        "It’s a lovely way to get children involved in festival decorating, and the stencils can be reused for the next festival."
+      ],
+      "highlights": ["Reusable stencils", "Beginner-friendly", "Great for Diwali"],
+      "specifications": [
+        ["Stencils", "Assorted designs (count to be confirmed)", "check"],
+        ["Rangoli colours", "Included / not included — to be confirmed", "check"],
+        ["Material", "Plastic", "check"]
+      ],
+      "howToUse": [
+        ["Place the stencil", "Put the stencil on a clean, dry, flat floor."],
+        ["Add colour", "Sprinkle rangoli colour evenly over the open parts of the stencil."],
+        ["Lift straight up", "Lift the stencil straight up so the edges stay sharp."],
+        ["Finish your way", "Add a border, diyas or flowers around the design."]
+      ],
+      "inTheBox": ["Rangoli stencils and frames (as shown)"],
+      "care": "Tap off loose colour and wipe the stencils with a dry cloth. Store flat so they don’t bend.",
+      "faqs": [
+        ["Are colours included?", "We’re confirming with our supplier. If not included, any dry rangoli colour works."],
+        ["Can children use it?", "Yes, with an adult nearby. Keep rangoli colour away from eyes and mouth."]
+      ],
+      "legal": { "genericName": "Rangoli stencil kit", "dimensions": [null, "check"], "netQuantity": ["1 kit", "supplier"], "countryOfOrigin": [null, "check"] },
+      "imageAlts": ["Magic rangoli kit box with stencils, frames and finished rangoli designs"],
+      "flags": ["Only one image (a supplier collage). Add a photo of the actual box contents."]
+    },
+    {
+      "handle": "magic-water-sensor-diya-pack-of-12-db3jftpp7mrc73e0fo6g",
+      "currentTitle": "Magic Water Sensor Diya. – Pack of 12",
+      "title": "Water-Sensor LED Diyas – Pack of 12",
+      "seoTitle": "Water-Sensor LED Diyas (Pack of 12) – No Oil, No Flame",
+      "seoDescription": "LED diyas that glow when you pour in water. No oil, no flame, no smoke — safe around kids, curtains and rangoli.",
+      "description": [
+        "Pour a little water in and the diya lights up — no oil, no matchstick, no smoke. Pour it out and the light goes off.",
+        "Because there’s no open flame, they’re easy to place near curtains, on shelves and around rangoli, and safer around children and pets. Their red terracotta-style colour keeps the traditional diya look."
+      ],
+      "highlights": ["Lights up with water", "No oil, no flame", "Traditional look", "12 diyas"],
+      "specifications": [
+        ["Pieces", "12", "supplier"],
+        ["Light", "LED, warm glow", "supplier"],
+        ["Activation", "Lights up when water is added", "supplier"],
+        ["Battery", "Built-in (type and replaceability to be confirmed)", "check"]
+      ],
+      "howToUse": [
+        ["Place the diya", "Set the diya on a flat surface."],
+        ["Add water", "Pour clean water into the diya up to the marked level. It lights up."],
+        ["Switch off", "Pour the water out to turn it off. Wipe it dry before storing."]
+      ],
+      "inTheBox": ["12 × water-sensor LED diyas"],
+      "care": "Use clean water only. Empty and dry each diya after use and store in a dry box — leaving water inside can shorten battery life. Don’t submerge the diya.",
+      "faqs": [
+        ["Do I need oil or a wick?", "No. Only water. There is no flame."],
+        ["How long does the battery last?", "We’re confirming battery details with our supplier. Emptying the water when not in use saves the battery."],
+        ["Can I use them outdoors?", "Yes, on a covered balcony or entrance. Keep them out of heavy rain."],
+        ["Are they safe for kids?", "There’s no flame or heat, which makes them a safer choice. They contain small batteries — keep them away from very young children."]
+      ],
+      "legal": { "genericName": "LED diya (water-activated)", "dimensions": [null, "check"], "netQuantity": ["12 pieces", "supplier"], "countryOfOrigin": [null, "check"] },
+      "imageAlts": [
+        "Twelve red water-sensor LED diyas glowing on a white tray",
+        "Water being poured into a red LED diya, which lights up"
+      ],
+      "flags": ["Battery type and whether it’s replaceable are unknown — required for an honest FAQ."]
+    },
+    {
+      "handle": "magic-water-sensor-diya-pack-of-6-db1qfhi29o0s73fn378g",
+      "currentTitle": "Magic Water Sensor Diya – Pack of 6",
+      "title": "Water-Sensor LED Diyas – Pack of 6",
+      "seoTitle": "Water-Sensor LED Diyas (Pack of 6) – No Oil, No Flame",
+      "seoDescription": "LED diyas that glow when you pour in water. No oil, no flame, no smoke. Pack of 6.",
+      "description": [
+        "Pour a little water in and the diya lights up — no oil, no matchstick, no smoke. Pour it out and the light goes off.",
+        "Because there’s no open flame, they’re easy to place near curtains, on shelves and around rangoli, and safer around children and pets."
+      ],
+      "highlights": ["Lights up with water", "No oil, no flame", "6 diyas"],
+      "specifications": [
+        ["Pieces", "6", "supplier"],
+        ["Light", "LED, warm glow", "supplier"],
+        ["Activation", "Lights up when water is added", "supplier"],
+        ["Battery", "Built-in (type and replaceability to be confirmed)", "check"]
+      ],
+      "howToUse": [
+        ["Place the diya", "Set the diya on a flat surface."],
+        ["Add water", "Pour clean water into the diya. It lights up."],
+        ["Switch off", "Pour the water out to turn it off. Wipe it dry before storing."]
+      ],
+      "inTheBox": ["6 × water-sensor LED diyas"],
+      "care": "Use clean water only. Empty and dry each diya after use and store in a dry box. Don’t submerge the diya.",
+      "faqs": [
+        ["Do I need oil or a wick?", "No. Only water. There is no flame."],
+        ["What’s the difference from the pack of 12?", "Same diya, six pieces instead of twelve."]
+      ],
+      "legal": { "genericName": "LED diya (water-activated)", "dimensions": [null, "check"], "netQuantity": ["6 pieces", "supplier"], "countryOfOrigin": [null, "check"] },
+      "imageAlts": ["Red water-sensor LED diyas glowing", "Water being poured into a red LED diya, which lights up"],
+      "flags": [
+        "MISLEADING IMAGE: this pack of 6 uses the pack-of-12 photo with a “Pack of 12” banner. Replace with a photo showing 6 diyas.",
+        "Consider merging the two packs into one product with a “Pack size: 6 / 12” option — one page, more reviews later, less confusion."
+      ]
+    },
+    {
+      "handle": "rods-clips-hook-self-adhesive-pack-of-10-db34469p7mrc73e0fho0",
+      "currentTitle": "Rods Clips Hook Self Adhesive ( Pack of 10 )",
+      "title": "Self-Adhesive Rod Holder Hooks – Pack of 10",
+      "seoTitle": "Self-Adhesive Rod Holder Hooks (Pack of 10) – No Drilling",
+      "seoDescription": "Clear stick-on holders for curtain and shower rods, with a hook for small items. No drilling needed.",
+      "description": [
+        "Put up a light curtain rod, shower rod or a hanging bar without drilling the wall. These clear holders stick on, clip around the rod and also have a small hook for things like a toilet brush, keys or a towel loop.",
+        "Clear plastic blends in on tiles, glass and painted walls. Good for rented homes where you can’t drill."
+      ],
+      "highlights": ["No drilling", "Clear, low-profile", "Holds rods + small items", "10 pieces"],
+      "specifications": [
+        ["Pieces", "10", "supplier"],
+        ["Material", "Clear plastic with adhesive pad", "supplier"],
+        ["Rod size", "To be confirmed", "check"],
+        ["Weight per hook", "To be confirmed", "check"],
+        ["Surfaces", "Smooth surfaces such as tiles, glass and smooth painted walls", "check"]
+      ],
+      "howToUse": [
+        ["Clean the surface", "Wipe the spot clean and let it dry completely. Adhesive won’t hold on dust, oil or damp walls."],
+        ["Stick and press", "Peel the backing, place the holder and press firmly for about 30 seconds."],
+        ["Wait before loading", "Give the adhesive time to set (ideally overnight) before hanging anything."],
+        ["Fit the rod", "Clip the rod into the holder. Keep loads light."]
+      ],
+      "inTheBox": ["10 × self-adhesive rod holders"],
+      "care": "Don’t hang heavy items. Avoid rough, textured or freshly painted walls. To remove, peel slowly from one corner; a hair-dryer on low heat can soften the adhesive.",
+      "faqs": [
+        ["Will it hold a heavy curtain?", "These are for light rods and light curtains. For heavy curtains, use screwed brackets."],
+        ["Does it work in the bathroom?", "Yes, on smooth tiles. Stick it when the wall is completely dry and wait before using the shower."],
+        ["Will it damage my wall?", "On tiles and glass it usually peels off cleanly. On painted walls, removal can lift paint."]
+      ],
+      "legal": { "genericName": "Adhesive rod holder / hook", "dimensions": [null, "check"], "netQuantity": ["10 pieces", "supplier"], "countryOfOrigin": [null, "check"] },
+      "imageAlts": [
+        "Clear adhesive rod holder holding a steel rod on a wet tile wall",
+        "Clear adhesive hook holding a toilet brush beside a commode",
+        "Clear adhesive holder clipped around a black curtain rod, with four holders shown",
+        "Pack of clear adhesive rod holders in a plastic bag"
+      ],
+      "flags": ["Image 4 is a dim photo of the bulk packet — replace with a clean product photo."]
+    },
+    {
+      "handle": "3d-colorful-reflection-diyas-pack-of-10-dapp3ocjc3as73aok6j0",
+      "currentTitle": "3D Colorful Reflection Diyas (Pack of 10)",
+      "title": "Colourful Reflection Diyas with Wick Holders – Pack of 10",
+      "seoTitle": "Colourful Reflection Diyas (Pack of 10) with Wick Holders",
+      "seoDescription": "Flower-shaped coloured diyas that throw a glowing pattern around the flame. Use with oil and wick. Pack of 10.",
+      "description": [
+        "These flower-shaped diyas are made of tinted, see-through material, so when the wick is lit the colour glows and spreads a pattern of light around each diya.",
+        "They use oil and a wick like a traditional diya — with a small metal holder that keeps the wick upright in the centre."
+      ],
+      "highlights": ["Glowing colour pattern", "Metal wick holders", "10 diyas"],
+      "specifications": [
+        ["Pieces", "10 diyas", "supplier"],
+        ["Fuel", "Oil with cotton wick", "supplier"],
+        ["Wick holder", "Metal", "supplier"],
+        ["Material", "Tinted transparent material (to be confirmed)", "check"],
+        ["Wicks included", "To be confirmed", "check"]
+      ],
+      "howToUse": [
+        ["Fit the wick", "Push a cotton wick through the metal holder."],
+        ["Centre the holder", "Place the holder in the centre of the diya and check the metal tube stands straight."],
+        ["Add water, then oil", "Pour about one spoon of water first, then oil on top. The water layer keeps the base cooler."],
+        ["Light it", "Light the wick and place the diya on a stable, heat-safe surface."]
+      ],
+      "inTheBox": ["10 × reflection diyas", "Metal wick holders (as shown)"],
+      "care": "Let diyas cool completely before touching or moving them. Wipe off oil with a soft cloth and warm soapy water. Store in the box so they don’t scratch.",
+      "safety": "This is an open flame. Never leave a lit diya unattended. Keep it away from curtains, paper and rangoli powder, and out of reach of children and pets. Always add water before oil.",
+      "faqs": [
+        ["Are these LED?", "No — they use oil and a wick, like a traditional diya. If you want flame-free diyas, see our water-sensor LED diyas."],
+        ["Why add water?", "A spoon of water under the oil keeps the base cooler and helps the diya last longer."],
+        ["Can I reuse them?", "Yes. Clean them after they cool and replace the wick next time."]
+      ],
+      "legal": { "genericName": "Decorative oil diya", "dimensions": [null, "check"], "netQuantity": ["10 pieces", "supplier"], "countryOfOrigin": [null, "check"] },
+      "imageAlts": [
+        "Ten coloured flower-shaped diyas lit on a marble floor",
+        "A red reflection diya glowing, and four steps to fit the wick and add oil"
+      ],
+      "flags": ["Confirm the diya material can sit near a flame (supplier instructions say add water first). Add the safety note to the product page as written."]
+    },
+    {
+      "handle": "fabric-stain-cleanner-spray-200ml-pack-of-2-d931vbdaccrs73fqpa9g",
+      "currentTitle": "Fabric Stain Cleanner Spray 200ml (Pack of 2)",
+      "title": "Fabric & Upholstery Cleaner Spray – 200 ml (Pack of 2)",
+      "seoTitle": "Fabric & Upholstery Cleaner Spray 200 ml (Pack of 2)",
+      "seoDescription": "A spray cleaner for sofas, carpets and fabric chairs. Spray, gently work in and blot away everyday marks.",
+      "description": [
+        "Tea spills on the sofa, muddy footprints on the rug, marks on fabric chairs — this spray cleaner is for everyday marks on upholstery and carpets.",
+        "Spray, work it in gently with a cloth or soft brush, and blot the mark away. Two bottles, so you can keep one in the living room and one for the car."
+      ],
+      "highlights": ["For sofas, carpets & chairs", "Spray-and-blot", "2 × 200 ml"],
+      "specifications": [
+        ["Volume", "200 ml × 2 bottles", "check"],
+        ["Use on", "Fabric sofas, carpets, rugs, fabric chairs, car seats", "check"],
+        ["Ingredients", "To be confirmed from the label", "check"]
+      ],
+      "howToUse": [
+        ["Test first", "Spray a small hidden area and blot with a white cloth to check the colour doesn’t run."],
+        ["Spray the mark", "Spray lightly from about 15–20 cm."],
+        ["Work it in", "Gently rub with a soft brush or cloth from the outside of the mark inwards."],
+        ["Blot dry", "Blot with a clean, dry cloth. Let the fabric air-dry completely."]
+      ],
+      "inTheBox": ["2 × fabric cleaner spray bottles (200 ml each)"],
+      "care": "Store upright, tightly closed, away from heat and direct sun. Keep out of reach of children. Don’t use on leather, silk or dry-clean-only fabrics.",
+      "faqs": [
+        ["Will it remove old stains?", "Fresh marks come off most easily. Old or set-in stains may lighten but not disappear fully."],
+        ["Can I use it on leather?", "No. Use it on fabric only."]
+      ],
+      "legal": { "genericName": "Fabric cleaner", "dimensions": [null, "check"], "netQuantity": ["2 × 200 ml", "check"], "countryOfOrigin": [null, "check"] },
+      "imageAlts": ["Fabric cleaner spray bottle", "Two fabric cleaner spray bottles"],
+      "flags": [
+        "DO NOT USE CURRENT IMAGES: they show another company’s product — a Spanish-language “TEXTIL CLEANER – Tapiz y Alfombras” bottle from protectortextil.cl, labelled 500 ml and “anti-bacterial”. This is foreign-brand marketplace content and doesn’t match a 200 ml product.",
+        "Get the real product label (ingredients, warnings, manufacturer) from the supplier before selling a chemical product."
+      ]
+    },
+    {
+      "handle": "stainless-steel-hangers-with-clips-10pcs-pack-of-1-d92d4adaccrs73fqp9ug",
+      "currentTitle": "Stainless Steel Hangers with Clips 10pcs (Pack of 1)",
+      "title": "Stainless Steel Clip Hangers – Set of 10",
+      "seoTitle": "Stainless Steel Clip Hangers (Set of 10)",
+      "seoDescription": "Rust-resistant stainless steel hangers with clips for drying socks, small clothes and towels.",
+      "description": [
+        "Stainless steel clip hangers for drying socks, handkerchiefs, baby clothes and small towels on the balcony or in the bathroom.",
+        "Steel stays sturdy in the sun and resists rust better than plastic clips that crack over time."
+      ],
+      "highlights": ["Stainless steel", "Set of 10"],
+      "specifications": [
+        ["Pieces", "10", "supplier"],
+        ["Material", "Stainless steel", "supplier"],
+        ["Length", "4.52 inches (about 11.5 cm) per item", "supplier"]
+      ],
+      "howToUse": [["Clip and hang", "Clip clothes by the edge and hang on a line or rod."]],
+      "inTheBox": ["10 × stainless steel clip hangers"],
+      "care": "Wipe dry after use in wet areas.",
+      "faqs": [],
+      "legal": { "genericName": "Clothes clip hanger", "dimensions": ["11.5 cm (length)", "supplier"], "netQuantity": ["10 pieces", "supplier"], "countryOfOrigin": [null, "check"] },
+      "imageAlts": [],
+      "flags": [
+        "BROKEN IMAGES: both product images are “image expired” placeholders. Unpublish until real photos are added.",
+        "Product type is unclear (hangers vs clips; 11.5 cm length). Confirm what the customer actually receives before writing more."
+      ]
+    },
+    {
+      "handle": "furniture-lifter-furniture-lifter-mover-tool-set-heavy-duty-furniture-shifting-lifting-moving-tool-with-wheel-pads-d75nj0r5qtns73a106pg",
+      "currentTitle": "Furniture Lifter -Furniture Lifter Mover Tool Set Heavy Duty Furniture Shifting Lifting Moving Tool with Wheel Pads",
+      "title": "Furniture Lifter & Mover Set (1 Lifter + 4 Sliders)",
+      "seoTitle": "Furniture Lifter & Mover Set – Move Heavy Furniture Alone",
+      "seoDescription": "Lift a corner, slide in a wheeled pad, and roll heavy furniture across the room. 1 lifter bar + 4 wheeled sliders.",
+      "description": [
+        "Moving the almirah, sofa or fridge to clean behind it usually needs two or three people. With this set, one person lifts a corner with the lever bar, slips a wheeled slider underneath, and repeats on each corner. Then the furniture rolls.",
+        "It’s handy for deep-cleaning before festivals, rearranging a room, or making space when guests come."
+      ],
+      "highlights": ["1 lifter + 4 sliders", "Wheeled pads", "One person can do it"],
+      "specifications": [
+        ["Set", "1 lifter bar + 4 wheeled sliders", "supplier"],
+        ["Lifter length (approx.)", "34.5 cm", "supplier"],
+        ["Slider size (approx.)", "10 × 7.8 cm", "supplier"],
+        ["Load", "Supplier states up to 100 kg — to be confirmed whether per slider or per set", "check"],
+        ["Best for", "Smooth hard floors (tiles, marble, wood)", "check"]
+      ],
+      "howToUse": [
+        ["Lift one corner", "Slide the lifter’s lip under the furniture edge and press the handle down to raise the corner slightly."],
+        ["Place a slider", "Slip a wheeled slider under the raised corner, then lower it."],
+        ["Repeat on all corners", "Do the same for each corner so the furniture rests on all four sliders."],
+        ["Roll it gently", "Push slowly from the lower part of the furniture. Remove the sliders the same way at the new spot."]
+      ],
+      "inTheBox": ["1 × lifter bar", "4 × wheeled sliders"],
+      "care": "Empty drawers and shelves before moving. Push, don’t pull, and keep hands and feet clear of the edges. Use on flat floors — not on stairs or slopes.",
+      "faqs": [
+        ["Can it move a fridge or washing machine?", "We’re confirming the load rating with our supplier. Always empty and unplug appliances first, and go slowly."],
+        ["Will it scratch my floor?", "The sliders have wheels and pads designed for hard floors. Sweep the floor first so grit doesn’t get trapped."],
+        ["Does it work on carpet?", "It works best on smooth hard floors."]
+      ],
+      "legal": { "genericName": "Furniture moving tool set", "dimensions": ["Lifter 34.5 cm; sliders 10 × 7.8 cm", "supplier"], "netQuantity": ["1 set (5 pieces)", "supplier"], "countryOfOrigin": [null, "check"] },
+      "imageAlts": [
+        "Red furniture lifter bar with four wheeled sliders on a grey floor",
+        "Furniture mover set showing the lever lifting a cabinet corner and 360° slider pads",
+        "Furniture mover size diagram: 34.5 cm lifter and 10 × 7.8 cm sliders"
+      ],
+      "flags": ["Supplier image says “All sliders can bear up to 100kg/220lbs” — ambiguous. Confirm before stating any load figure."]
+    },
+    {
+      "handle": "360-degree-sprayer-head-water-saving-device-d70coae3iibs73dpd7v0",
+      "currentTitle": "360 Degree Sprayer Head Water Saving Device",
+      "title": "360° Rotating Garden Sprinkler (3-Arm)",
+      "seoTitle": "360° Rotating 3-Arm Garden Sprinkler for Lawns & Plants",
+      "seoDescription": "Connect to your garden hose and water the lawn or plant beds evenly while you do something else. Adjustable spray angle.",
+      "description": [
+        "Set it on the lawn, connect your hose and turn on the tap. The three arms spin to spread water in a full circle, so plants get an even soak while you do something else.",
+        "Turn the nozzles to change the spray: a lower angle spins faster and sprays wider; an upright angle spins slower and waters a smaller area."
+      ],
+      "highlights": ["Waters in a full circle", "Adjustable nozzle angle", "Hose connector"],
+      "specifications": [
+        ["Arms", "3 rotating arms", "supplier"],
+        ["Material", "ABS plastic", "supplier"],
+        ["Size (approx.)", "17.5 × 9 cm", "supplier"],
+        ["Spray reach", "Depends on water pressure; supplier states up to 8–10 m diameter", "check"],
+        ["Hose connector", "About 16.8 mm (to be confirmed for Indian garden hoses)", "check"],
+        ["Weight (approx.)", "300 g", "supplier"]
+      ],
+      "howToUse": [
+        ["Connect the hose", "Attach your garden hose to the connector and check it’s tight."],
+        ["Set the angle", "Turn the nozzles: lower for wider spray, upright for a smaller area."],
+        ["Place and turn on", "Set the sprinkler on level ground and open the tap slowly."],
+        ["Move as needed", "Move it around the garden to cover all beds."]
+      ],
+      "inTheBox": ["1 × garden sprinkler"],
+      "care": "Drain and store indoors when not in use. Clean the nozzles if the spray becomes uneven.",
+      "faqs": [
+        ["Will it work with low water pressure?", "Spray reach depends on your water pressure. With low pressure it will cover a smaller circle."],
+        ["Does it fit my hose?", "It has a standard push-fit connector. We’re confirming the size against common Indian garden hoses."]
+      ],
+      "legal": { "genericName": "Garden sprinkler", "dimensions": ["17.5 × 9 cm", "supplier"], "netQuantity": ["1 unit", "supplier"], "countryOfOrigin": [null, "check"] },
+      "imageAlts": [
+        "Green 3-arm garden sprinkler spraying water on a lawn",
+        "Sprinkler size diagram with 175 mm width and 90 mm height",
+        "Sprinkler showing fast rotation at 45° and slow rotation at 90° nozzle angles",
+        "Close-up of nozzle settings for wide and narrow spray",
+        "Sprinkler used on lawns and garden beds"
+      ],
+      "flags": ["Current title “Water Saving Device” is a performance claim with no proof — removed in the new title."]
+    },
+    {
+      "handle": "crack-filler-d70coae3iibs73dpd7tg",
+      "currentTitle": "Crack Filler",
+      "title": "Tile Gap & Crack Filler – 180 ml",
+      "seoTitle": "Tile Gap & Crack Filler Sealant (180 ml)",
+      "seoDescription": "Fill gaps around wash basins, kitchen tops and tiles. Ready-to-use tube with a fine nozzle. 180 ml.",
+      "description": [
+        "Dark, dirty gaps along the wash basin, kitchen platform or tile joints make a clean home look tired. This ready-to-use filler comes in a tube with a fine nozzle, so you can run a neat line straight into the gap.",
+        "No mixing, no tools — cut the nozzle, squeeze gently, smooth and let it set."
+      ],
+      "highlights": ["Ready to use", "Fine nozzle", "For basins, tiles & kitchen tops"],
+      "specifications": [
+        ["Net contents", "180 ml", "supplier"],
+        ["Colour", "White", "check"],
+        ["Use on", "Tile joints, gaps around wash basins, sinks, bathtubs and kitchen platforms", "supplier"],
+        ["Water resistance", "Supplier says waterproof once fully set — to be confirmed", "check"],
+        ["Setting time", "To be confirmed from the label", "check"]
+      ],
+      "howToUse": [
+        ["Clean and dry", "Remove old grout, dirt and soap scum from the gap. Let it dry fully."],
+        ["Cut the nozzle", "Cut the tip at an angle — a smaller cut gives a thinner line."],
+        ["Fill the gap", "Squeeze gently and move steadily along the gap."],
+        ["Smooth and wipe", "Smooth the line with a damp finger or spatula and wipe off extra right away."],
+        ["Let it set", "Keep the area dry until fully set (check the time on the tube; usually about a day)."]
+      ],
+      "inTheBox": ["1 × gap filler tube (180 ml)"],
+      "care": "Close the cap after use. Store in a cool, dry place. Keep away from children, eyes and skin; wash hands after use.",
+      "faqs": [
+        ["Can I use it in the shower area?", "Yes, once it has fully set. Keep it dry until then."],
+        ["Can I paint over it?", "We’re confirming with the supplier; many sealants can’t be painted."],
+        ["Will it fix a cracked tile?", "It fills gaps and thin cracks. A broken or loose tile needs replacing."]
+      ],
+      "legal": { "genericName": "Tile gap sealant", "dimensions": [null, "check"], "netQuantity": ["180 ml", "supplier"], "countryOfOrigin": [null, "check"] },
+      "imageAlts": [
+        "Tile gap filler tube with nozzle being cut",
+        "Filling the gap between floor tiles with the sealant tube",
+        "Applying gap filler along the base of a toilet",
+        "Using the filler around a wash basin and tile edges",
+        "Tile gap filler tube, 180 ml"
+      ],
+      "flags": [
+        "Images show Chinese-language packaging (美缝剂 / “Seam Beauty Agent”). Foreign marketplace packaging — confirm what Indian customers receive and replace images.",
+        "Supplier listing text contains HTML junk and the wrong product type (“Decorative Pebbles & Vase Fillers”). New copy replaces it.",
+        "Chemical product: get ingredients/warnings from the label."
+      ]
+    },
+    {
+      "handle": "2-in-1-knife-sharpener-with-holder-d6c46e90sodc73c0epng",
+      "currentTitle": "2 in 1 Knife Sharpener with Holder",
+      "title": "Wall-Mounted Knife Holder with Built-in Sharpener",
+      "seoTitle": "Wall-Mounted Knife Holder with Built-in Sharpener",
+      "seoDescription": "Keep knives off the counter and sharpen them in the same place. Stick-on wall holder with a built-in sharpening stone.",
+      "description": [
+        "Knives lying in the drawer get blunt and are risky to reach for. This holder sticks to the wall and keeps knives upright and within reach — with a sharpening wheel built right in.",
+        "Draw the blade through the sharpener before you put it back, and your knife stays ready for chopping onions and vegetables."
+      ],
+      "highlights": ["Wall-mounted", "Built-in sharpener", "Frees counter space"],
+      "specifications": [
+        ["Size (approx.)", "15 × 7 × 7 cm", "supplier"],
+        ["Weight (approx.)", "147 g", "supplier"],
+        ["Material", "Plastic with sharpening stone", "supplier"],
+        ["Mounting", "Adhesive pad (no drilling)", "check"],
+        ["Colour", "Assorted", "supplier"]
+      ],
+      "howToUse": [
+        ["Mount it", "Stick it on a clean, dry, smooth wall or tile. Wait before loading knives (ideally overnight)."],
+        ["Sharpen", "Hold the handle and draw the blade through the sharpener from heel to tip, 5–6 times, with light pressure."],
+        ["Store", "Wipe the blade and slide the knife into the holder."]
+      ],
+      "inTheBox": ["1 × knife holder with sharpener"],
+      "care": "Wipe with a damp cloth. Don’t sharpen serrated knives. Keep out of children’s reach.",
+      "faqs": [
+        ["Can I sharpen serrated knives?", "No. Use it for plain-edge kitchen knives."],
+        ["How many knives does it hold?", "It holds a few kitchen knives; we’re confirming the exact number."]
+      ],
+      "legal": { "genericName": "Knife holder with sharpener", "dimensions": ["15 × 7 × 7 cm", "supplier"], "netQuantity": ["1 unit", "supplier"], "countryOfOrigin": [null, "check"] },
+      "imageAlts": [
+        "Green wall knife holder with built-in sharpening wheel",
+        "Knife being placed into a wall-mounted holder in a kitchen",
+        "Lilac knife holder with sharpener mounted on a kitchen wall",
+        "Knife holder unit on a table"
+      ],
+      "flags": ["Title says “Sharpener with Holder”; it’s mainly a wall holder — new title reflects that.", "Image 4 is a dim phone photo; replace."]
+    },
+    {
+      "handle": "floor-essential-wax-120-ml-each-pack-of-2-d6678ulb6hvc73f0c2s0",
+      "currentTitle": "Floor Essential Wax 120 ml each Pack of 2",
+      "title": "Beeswax Wood Polish – 120 ml (Pack of 2)",
+      "seoTitle": "Beeswax Wood Polish for Furniture & Wooden Floors (2 × 120 ml)",
+      "seoDescription": "Bring back the warm shine on wooden furniture, doors and wooden floors. Wipe on, wait, buff. 2 × 120 ml.",
+      "description": [
+        "Wooden furniture, doors and wooden floors lose their glow with daily use. This beeswax polish adds a warm sheen back to dull, dry-looking wood.",
+        "Wipe a little on with a soft cloth, give it a few minutes, then buff. It’s an easy way to refresh a teak table or a wooden door before the festive season."
+      ],
+      "highlights": ["For wood surfaces", "Wipe on, buff off", "2 × 120 ml"],
+      "specifications": [
+        ["Net contents", "120 ml × 2 bottles", "supplier"],
+        ["Type", "Beeswax-based wood polish", "check"],
+        ["Use on", "Wooden furniture, doors, wooden and laminate floors (test first)", "check"],
+        ["Not for", "Tiles, marble, stone", "check"]
+      ],
+      "howToUse": [
+        ["Clean and dry", "Dust the surface and let it dry completely."],
+        ["Test first", "Try a small hidden spot to check the finish."],
+        ["Apply thinly", "Put a little polish on a soft, lint-free cloth and wipe along the grain of the wood."],
+        ["Wait, then buff", "Leave it for a few minutes, then buff with a clean dry cloth until no residue remains."]
+      ],
+      "inTheBox": ["2 × beeswax polish bottles (120 ml each)"],
+      "care": "Close the cap tightly. Store away from heat and sunlight, out of reach of children.",
+      "safety": "Buff floors well — leftover wax can make floors slippery. Don’t use on tiles, marble or stone.",
+      "faqs": [
+        ["Can I use it on tiles or marble?", "No. It’s made for wood. On tiles or marble it can leave a slippery film."],
+        ["How often should I polish?", "Every few weeks for furniture you use daily, or whenever the wood looks dull."],
+        ["Will it fix scratches?", "It can make light surface scratches less visible. Deep scratches need a wood filler or touch-up."]
+      ],
+      "legal": { "genericName": "Wood polish", "dimensions": [null, "check"], "netQuantity": ["2 × 120 ml", "supplier"], "countryOfOrigin": [null, "check"] },
+      "imageAlts": [
+        "Two bottles of floor essential beeswax polish, 120 ml each, with wood before and after",
+        "Wooden plank half polished, showing before and after",
+        "Wooden floor and dining table before and after polishing",
+        "Wooden staircase and floor before and after polishing",
+        "Mop polishing a wooden floor next to a beeswax polish bottle"
+      ],
+      "flags": [
+        "Title says “Floor Essential Wax” — keep the brand name only if the bottle really says it; the new title describes what it is.",
+        "Image 4 headline “BEESWAX CAN CHANGE YOUR LIFE” is hype; replace.",
+        "Before/after images are supplier marketing, not photos of this product. Don’t use them for the before/after slider."
+      ]
+    },
+    {
+      "handle": "white-home-string-lights-cv85s2q59o3h4p4k7mg0",
+      "currentTitle": "White Home String Lights",
+      "title": "Little Houses LED String Lights (Warm White)",
+      "seoTitle": "Little Houses LED String Lights – Warm White Décor Lights",
+      "seoDescription": "A string of tiny white houses that glow warm through their windows. Lovely on shelves, windowsills and festive tables.",
+      "description": [
+        "A string of tiny white houses, each with cut-out windows that glow warm when the lights are on. Lay them along a shelf or windowsill, wrap them around a mirror, or line the dining table for a festive dinner.",
+        "Soft, warm light makes them easy to keep on through the evening — in a child’s room, on a bookshelf or as Diwali décor that isn’t too bright."
+      ],
+      "highlights": ["Warm white glow", "Cute house shapes", "For shelves & windows"],
+      "specifications": [
+        ["House size (approx.)", "6.5 × 5.5 × 4 cm", "supplier"],
+        ["Light colour", "Warm white", "supplier"],
+        ["Number of houses", "To be confirmed", "check"],
+        ["Power", "Battery / USB / plug — to be confirmed", "check"],
+        ["String length", "To be confirmed", "check"]
+      ],
+      "howToUse": [
+        ["Arrange first", "Lay out the string where you want it before switching on."],
+        ["Power on", "Connect the power source and switch on."],
+        ["Keep it airy", "Don’t cover the lights with cloth or paper."]
+      ],
+      "inTheBox": ["1 × house LED string light"],
+      "care": "Use indoors in a dry place. Switch off when you leave the house. Store loosely coiled so the wire doesn’t kink.",
+      "faqs": [
+        ["Are they battery-operated?", "We’re confirming the power source with our supplier and will update this."],
+        ["Can I use them outdoors?", "We recommend indoor use only."]
+      ],
+      "legal": { "genericName": "Decorative LED string light", "dimensions": ["House 6.5 × 5.5 × 4 cm", "supplier"], "netQuantity": ["1 set", "supplier"], "countryOfOrigin": [null, "check"] },
+      "imageAlts": [
+        "White house-shaped LED string lights on a windowsill beside pink vases",
+        "Close-up of little white houses glowing warm",
+        "House string lights glowing on a shelf",
+        "Row of glowing house lights on a windowsill",
+        "House string lights arranged on a white surface",
+        "Glowing house lights in front of a window",
+        "House string lights at night",
+        "House light size diagram: 6.5 cm tall, 5.5 cm wide",
+        "House string lights hanging on a wall",
+        "Bunch of glowing house lights",
+        "Three white house lights close up"
+      ],
+      "flags": ["Power source, number of houses and string length unknown — essential for buyers. Get from supplier.", "Collection: add to Roshan Ghar (lighting) once created."]
+    },
+    {
+      "handle": "flameless-lotus-flower-water-sensor-led-diyas-pack-of-6-cv85s2q59o3h4p4k7mi0",
+      "currentTitle": "Flameless Lotus Flower Water Sensor Led Diyas (Pack of 6)",
+      "title": "Floating Lotus LED Diyas – Pack of 6",
+      "seoTitle": "Floating Lotus LED Diyas (Pack of 6) – Flameless",
+      "seoDescription": "Lotus-shaped LED diyas that float on water and glow softly. Flameless and pretty in an urli, bowl or garden pond.",
+      "description": [
+        "Float them in an urli, a glass bowl or a small pond and watch them glow — six lotus flowers with a soft LED light in the centre and a green leaf base that keeps them floating.",
+        "No flame, no oil and no wax, so you can set them near flowers, curtains and rangoli without worry."
+      ],
+      "highlights": ["Floats on water", "Flameless LED", "6 lotus diyas"],
+      "specifications": [
+        ["Pieces", "6", "supplier"],
+        ["Light", "LED", "supplier"],
+        ["Base", "Foam leaf base that floats", "supplier"],
+        ["Colours", "Assorted", "supplier"],
+        ["Battery", "Type and replaceability to be confirmed", "check"]
+      ],
+      "howToUse": [
+        ["Switch on", "Turn on the light (or activate it as described on the pack)."],
+        ["Float", "Place each lotus gently on still water in a bowl, urli or pond."],
+        ["Dry and store", "Take them out, dry them and switch off after use."]
+      ],
+      "inTheBox": ["6 × floating lotus LED diyas"],
+      "care": "Dry fully before storing. Don’t submerge the light unit. Store in a dry box.",
+      "faqs": [
+        ["How do they switch on?", "We’re confirming with our supplier whether they light up on contact with water or with a small switch, and will update this."],
+        ["Are the colours fixed?", "Colours are assorted and may vary from the photos."]
+      ],
+      "legal": { "genericName": "Floating LED decorative light", "dimensions": [null, "check"], "netQuantity": ["6 pieces", "supplier"], "countryOfOrigin": [null, "check"] },
+      "imageAlts": [
+        "Six glowing lotus LED diyas floating in a glass bowl",
+        "Floating foam base underneath a lotus LED diya",
+        "Lotus LED diyas in pink, beige, red, purple, orange and blue",
+        "Green leaf base and blue lotus diya",
+        "Lotus LED diyas floating in a garden pond",
+        "Close-up of glowing lotus diyas",
+        "Lotus LED diyas glowing in the dark",
+        "Six lotus LED diyas on a white surface"
+      ],
+      "flags": ["Image 2 caption and image 3 headline (“Bow your head piously and make your wish”) are machine-translated supplier text; crop or replace.", "Title says “Water Sensor” — confirm whether they are water-activated or switch-operated."]
+    }
+  ],
+  "notSellable": [
+    {
+      "handle": "7-color-changing-led-outdoor-projector-lamp",
+      "issue": "Price ₹0, no images, no description, vendor “Shipeaso”, tagged best_seller/new_arrival. It's hidden on the site but anyone with the link or the checkout could still buy it at ₹0. Set to Draft until you have price, photos and supplier details. Earlier the store also showed copies with handles ending in -1 and -2. Those no longer appear on the storefront (likely draft or archived), but check Products in admin and delete duplicates."
+    },
+    {
+      "handle": "14-led-rain-drop-fairy-lights-waterproof-indoor-outdoor-for-home-decoration",
+      "issue": "Price ₹0, no images, no description, vendor “Shipeaso”. Set to Draft. The title claims “Waterproof” — verify before publishing."
+    }
+  ]
+}

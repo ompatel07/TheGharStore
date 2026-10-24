@@ -38,6 +38,7 @@ import {
 } from "~/components/product/VariantOptions";
 import { isSellable, ProductCard } from "~/components/ProductCard";
 import { Icon } from "~/components/ui/Icon";
+import { parseRating, Rating } from "~/components/ui/Rating";
 import { Reveal } from "~/components/ui/Reveal";
 import { text } from "~/lib/metaobject";
 import { formatPrice } from "~/lib/money";
@@ -234,6 +235,7 @@ function ProductJsonLd({
 }) {
   const price = variant?.price ?? product.priceRange.minVariantPrice;
   const url = `${origin}/products/${product.handle}`;
+  const rating = parseRating(product.rating, product.ratingCount);
   const collection = product.collections.nodes[0];
   const data = [
     {
@@ -254,6 +256,17 @@ function ProductJsonLd({
         itemCondition: "https://schema.org/NewCondition",
         seller: { "@type": "Organization", name: BRAND_NAME },
       },
+      // Only from a connected reviews app's real data.
+      ...(rating
+        ? {
+            aggregateRating: {
+              "@type": "AggregateRating",
+              ratingValue: rating.value,
+              bestRating: rating.max,
+              reviewCount: rating.count,
+            },
+          }
+        : {}),
     },
     {
       "@context": "https://schema.org",
@@ -309,6 +322,7 @@ function ProductPage({
   const mrp = variantMrp(selectedVariant);
   const netQuantity = text(selectedVariant?.netQuantity?.value);
   const price = selectedVariant?.price ?? product.priceRange.minVariantPrice;
+  const rating = parseRating(product.rating, product.ratingCount);
 
   return (
     <main className="flex-1 pb-24 lg:pb-0" id="main-content" tabIndex={-1}>
@@ -372,6 +386,11 @@ function ProductPage({
               <h1 className="type-heading-xl text-on-surface mt-2 text-[clamp(1.6rem,1.2rem+1.4vw,2.4rem)]">
                 {product.title}
               </h1>
+              {rating ? (
+                <a href="#reviews" className="mt-2 inline-block">
+                  <Rating rating={rating} size="md" />
+                </a>
+              ) : null}
             </div>
 
             {content.highlights.length > 0 ? (

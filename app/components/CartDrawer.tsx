@@ -4,6 +4,7 @@ import {
   CartEmpty,
   CartErrorBanner,
   CartLineList,
+  CartRecommendations,
   CartSummary,
   hasPendingCost,
 } from "~/components/cart/CartParts";
@@ -115,10 +116,13 @@ export function CartDrawer() {
                 ))}
               </div>
             ) : hasLines ? (
-              <CartLineList
-                emptyCartFocusId="cart-drawer-title"
-                onNavigate={() => closeCartDrawer()}
-              />
+              <>
+                <CartLineList
+                  emptyCartFocusId="cart-drawer-title"
+                  onNavigate={() => closeCartDrawer()}
+                />
+                <CartRecommendations onNavigate={() => closeCartDrawer()} />
+              </>
             ) : (
               <CartEmpty onNavigate={() => closeCartDrawer()} />
             )}

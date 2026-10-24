@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { Link } from "react-router";
 
 import { Icon } from "~/components/ui/Icon";
+import { parseRating, Rating } from "~/components/ui/Rating";
 import {
   beginAddedToCart,
   finishAddedToCart,
@@ -50,6 +51,12 @@ export const PRODUCT_CARD_FRAGMENT = gql(
       title
       availableForSale
       requiresSellingPlan
+      rating: metafield(namespace: "reviews", key: "rating") {
+        value
+      }
+      ratingCount: metafield(namespace: "reviews", key: "rating_count") {
+        value
+      }
       encodedVariantExistence
       encodedVariantAvailability
       featuredImage {
@@ -155,6 +162,7 @@ export function ProductCard({
   const percent = onSale ? salePercent(price, compareAt) : null;
   const href = `/products/${product.handle}`;
   const altText = primaryImage?.altText?.trim() || product.title;
+  const rating = parseRating(product.rating, product.ratingCount);
 
   return (
     <article
@@ -216,6 +224,7 @@ export function ProductCard({
             {product.title}
           </Link>
         </h3>
+        {rating ? <Rating rating={rating} /> : null}
         <div className="mt-auto flex items-end justify-between gap-2">
           <p className="flex flex-wrap items-baseline gap-x-2">
             {onSale ? (
