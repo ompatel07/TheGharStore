@@ -143,7 +143,59 @@ Set each entry to **Active**. Draft entries are invisible on the site.
 - [ ] 🟢 **Production visibility:** Hydrogen → The Ghar Store → Environments → Production → make the production URL public when you're ready to launch (today it may be private).
 - [ ] 🟢 **Custom domain:** Hydrogen → The Ghar Store → Storefront settings → Domains, e.g. `theghar.store` (if purchased).
 
-## 11. Decisions waiting on you
+## 11. Let the setup scripts write to Shopify (one-time)
+
+The content model, product content and homepage entries are written by scripts in
+`scripts/shopify-admin/`. They need ONE of these:
+
+- [ ] **Option A (easiest):** reconnect the Shopify connector — claude.ai → Settings → Connectors → Shopify → sign in. Claude can then run the same writes for you.
+- [ ] **Option B:** create an app at https://dev.shopify.com (Dev Dashboard) in the same organization as the store.
+  - Scopes: `write_products`, `write_metaobjects`, `write_metaobject_definitions`, `write_files`.
+  - Install it on the store.
+  - Put `SHOPIFY_CLIENT_ID=` and `SHOPIFY_CLIENT_SECRET=` in `.env`. Never commit them; `.env` is git-ignored.
+
+Then, in order:
+
+```
+node scripts/shopify-admin/define-content-model.mjs          # dry run
+node scripts/shopify-admin/define-content-model.mjs --apply
+node scripts/shopify-admin/push-product-content.mjs          # dry run — review
+node scripts/shopify-admin/push-product-content.mjs --apply   # backs up first
+node scripts/shopify-admin/seed-store-content.mjs --apply
+```
+
+## 12. Reviews (Judge.me)
+
+- [ ] Install **Judge.me Product Reviews** from the Shopify App Store (free plan is fine).
+- [ ] In Judge.me → Settings → Integrations, turn on syncing review data to Shopify product metafields (`reviews.rating`, `reviews.rating_count`).
+- [ ] Settings → Custom data → Products → find **Product rating** and **Product rating count** → turn on **Storefront access**.
+- [ ] Turn on Judge.me's review-request emails after delivery. Real reviews start arriving with your first orders.
+
+Stars then appear on product cards and pages, and in Google results via structured data, automatically. Nothing shows until a product has a real review.
+
+## 13. Pairs-well-with (more items per order)
+
+- [ ] Install Shopify's free **Search & Discovery** app → Product recommendations.
+- [ ] Add complementary products, for example:
+  - Wall Repair Roller → Crack Filler, Floor Wiper
+  - Water-Sensor Diyas → Floating Lotus Diyas, Rangoli Kit
+  - Beeswax Polish → Fan Duster
+
+These appear first in the cart drawer's "Pairs well with" row.
+
+## 14. Images to replace (hurts trust today)
+
+The full list with reasons is in `content/VERIFY-WITH-SUPPLIER.md` and each `content/product-drafts/*.md`. The most urgent:
+
+- [ ] **Fabric Stain Cleaner:** current photos are another company's Spanish-language product (500 ml). Replace them all.
+- [ ] **Stainless Steel Hangers:** both images are broken placeholders. Unpublish until fixed.
+- [ ] **Water-Sensor Diya Pack of 6:** shows the "Pack of 12" photo. Replace it.
+- [ ] **Crack Filler:** Chinese-language packaging.
+- [ ] **Roller Paint:** supplier infographics with machine-translated text and unverified claims.
+- [ ] Ask your supplier for original product videos. Upload them as product media; the gallery plays them inline, muted and looping.
+- [ ] Better still, photograph one sample of each bestseller at home in daylight. That's what makes a store look like a brand.
+
+## 15. Decisions waiting on you
 
 - [ ] Wishlist approach (A / B / C, see PLAN §9)
 - [ ] Reviews app (Judge.me or Okendo, see PLAN §10). Install later, no rush.
