@@ -1,6 +1,6 @@
 import { handleShopifyRedirects, handleShopifyRoutes } from "@shopify/hydrogen";
 import { ShopifyScripts } from "@shopify/hydrogen/react";
-import type { ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import {
   isRouteErrorResponse,
   Links,
@@ -15,6 +15,7 @@ import {
 import { CartAnalyticsTracker, PageViewedTracker } from "~/components/AnalyticsTrackers";
 import { AnnouncementBar } from "~/components/AnnouncementBar";
 import { CartDrawer } from "~/components/CartDrawer";
+import { ErrorScreen } from "~/components/ErrorScreen";
 import { Footer } from "~/components/Footer";
 import { Header } from "~/components/Header";
 import { SearchDrawer } from "~/components/SearchDrawer";
@@ -24,9 +25,11 @@ import { createRequestCustomerAccount, customerAccountContext } from "~/lib/cust
 import { envContext } from "~/lib/env";
 import { predictiveSearchHandlers } from "~/lib/predictive-search-handlers";
 import { loadRootLayout } from "~/lib/root-layout";
+import { loadSiteContent, type SiteContent } from "~/lib/site-content";
 import { routeTemplates } from "~/lib/route-templates";
 import { createEphemeralSessionManager } from "~/lib/session";
 import { analyticsConsent, resolveShopIdentity, storefrontConfig } from "~/lib/shop";
+import type { StorefrontShop } from "~/lib/storefront-shop";
 import {
   createRequestStorefrontClient,
   storefrontClientContext,
@@ -38,6 +41,20 @@ import type { Route } from "./+types/root";
 import appStylesHref from "./app.css?url";
 
 export const links: Route.LinksFunction = () => [
+  {
+    rel: "preload",
+    href: "/fonts/outfit-latin-var.woff2",
+    as: "font",
+    type: "font/woff2",
+    crossOrigin: "anonymous",
+  },
+  {
+    rel: "preload",
+    href: "/fonts/dmsans-latin-var.woff2",
+    as: "font",
+    type: "font/woff2",
+    crossOrigin: "anonymous",
+  },
   { rel: "stylesheet", href: appStylesHref },
   { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
 ];
@@ -94,9 +111,10 @@ export const middleware: Route.MiddlewareFunction[] = [
 export async function loader({ context, request }: Route.LoaderArgs) {
   const env = context.get(envContext);
   const storefrontClient = context.get(storefrontClientContext);
-  const [cartResult, layout] = await Promise.all([
+  const [cartResult, layout, siteContent] = await Promise.all([
     cartHandlers.get({ storefrontClient, request }),
     loadRootLayout(storefrontClient),
+    loadSiteContent(storefrontClient, env.PUBLIC_STORE_DOMAIN),
   ]);
 
   return {
@@ -104,6 +122,7 @@ export async function loader({ context, request }: Route.LoaderArgs) {
     shopInfo: layout.shopInfo,
     shopIdentity: resolveShopIdentity(env, layout.shopId),
     currency: layout.currency,
+    siteContent,
   };
 }
 
@@ -113,10 +132,11 @@ export function Layout({ children }: { children: ReactNode }) {
   const rootData = useRouteLoaderData<typeof loader>("root");
 
   return (
-    <html lang="en">
+    <html lang="en-IN">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#FFF8EF" />
         {rootData ? (
           <ShopifyScripts
             i18n={{ ...storefrontConfig.i18n, currency: rootData.currency }}
@@ -148,13 +168,44 @@ export function Layout({ children }: { children: ReactNode }) {
 
 export default function App({ loaderData }: Route.ComponentProps) {
   return (
-    <CartProvider initialData={loaderData.cartData}>
+    <SiteShell
+      cartData={loaderData.cartData}
+      shopInfo={loaderData.shopInfo}
+      siteContent={loaderData.siteContent}
+    >
+      <Outlet />
+    </SiteShell>
+  );
+}
+
+function SiteShell({
+  cartData,
+  shopInfo,
+  siteContent,
+  children,
+}: {
+  cartData: ComponentProps<typeof CartProvider>["initialData"];
+  shopInfo: StorefrontShop;
+  siteContent: SiteContent;
+  children: ReactNode;
+}) {
+  return (
+    <CartProvider initialData={cartData}>
       <PageViewedTracker />
       <CartAnalyticsTracker />
-      <AnnouncementBar />
-      <Header shopInfo={loaderData.shopInfo} />
-      <Outlet />
-      <Footer shopInfo={loaderData.shopInfo} />
+      <AnnouncementBar
+        announcements={siteContent.announcements}
+        festive={siteContent.festiveMode}
+      />
+      <Header mainMenu={siteContent.mainMenu} collections={siteContent.collections} />
+      {children}
+      <Footer
+        shopInfo={shopInfo}
+        collections={siteContent.collections}
+        footerMenu={siteContent.footerMenu}
+        policies={siteContent.policies}
+        storeProfile={siteContent.storeProfile}
+      />
       <CartDrawer />
       <SearchDrawer />
     </CartProvider>
@@ -162,32 +213,32 @@ export default function App({ loaderData }: Route.ComponentProps) {
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-  let message = "Oops!";
-  let details = "An unexpected error occurred.";
+  // Present when only a child route failed (e.g. a missing product); then the
+  // error page keeps the full header and footer.
+  const rootData = useRouteLoaderData<typeof loader>("root");
+
+  let status = 500;
+  let details: string | undefined;
   let stack: string | undefined;
 
   if (isRouteErrorResponse(error)) {
-    message = error.status === 404 ? "404" : "Error";
-    details =
-      error.status === 404 ? "The requested page could not be found." : error.statusText || details;
-  } else if (import.meta.env.DEV && error && error instanceof Error) {
+    status = error.status;
+  } else if (import.meta.env.DEV && error instanceof Error) {
     details = error.message;
     stack = error.stack;
   }
 
+  if (!rootData) {
+    return <ErrorScreen status={status} details={details} stack={stack} standalone />;
+  }
+
   return (
-    <main
-      id="main-content"
-      tabIndex={-1}
-      className="max-w-page px-margin mx-auto w-full flex-1 py-12"
+    <SiteShell
+      cartData={rootData.cartData}
+      shopInfo={rootData.shopInfo}
+      siteContent={rootData.siteContent}
     >
-      <h1 className="type-display text-on-surface">{message}</h1>
-      <p className="text-on-surface-secondary mt-4">{details}</p>
-      {stack ? (
-        <pre className="border-border mt-6 w-full overflow-x-auto rounded border p-4 text-sm">
-          <code>{stack}</code>
-        </pre>
-      ) : null}
-    </main>
+      <ErrorScreen status={status} details={details} stack={stack} />
+    </SiteShell>
   );
 }
