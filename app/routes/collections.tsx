@@ -3,17 +3,17 @@ import { Link } from "react-router";
 import { CollectionCard } from "~/components/CollectionCard";
 import { loadCollectionsPage } from "~/lib/collections";
 import { storefrontClientContext } from "~/lib/storefront";
-import { formatPageTitle, getShopNameFromRootMatch } from "~/lib/storefront-shop";
+import { BRAND_NAME } from "~/components/Logo";
+import { Icon } from "~/components/ui/Icon";
 
 import type { Route } from "./+types/collections";
 
-export function meta({ matches }: Route.MetaArgs) {
-  const shopName = getShopNameFromRootMatch(matches[0]);
+export function meta() {
   return [
-    { title: formatPageTitle("Collections", shopName) },
+    { title: `Shop by category · ${BRAND_NAME}` },
     {
       name: "description",
-      content: `Browse all ${shopName} collections.`,
+      content: `Browse every ${BRAND_NAME} category: décor, lighting, kitchen helpers, DIY fixes, garden care and festive specials.`,
     },
   ];
 }
@@ -23,7 +23,8 @@ export async function loader({ context, request }: Route.LoaderArgs) {
   return loadCollectionsPage({ storefrontClient, request });
 }
 
-type CollectionNode = Route.ComponentProps["loaderData"]["collections"]["nodes"][number];
+type CollectionNode =
+  Route.ComponentProps["loaderData"]["collections"]["nodes"][number];
 
 function BreadcrumbJsonLd({ origin }: { origin: string }) {
   const jsonLd = {
@@ -50,35 +51,41 @@ function BreadcrumbJsonLd({ origin }: { origin: string }) {
 
 function Breadcrumb() {
   return (
-    <nav aria-label="Breadcrumb" className="mb-6">
+    <nav aria-label="Breadcrumb" className="mb-4">
       <ol className="text-on-surface-secondary flex items-center gap-1.5 text-sm">
         <li>
-          <Link
-            to="/"
-            className="hover:text-on-surface rounded-sm py-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current motion-safe:transition-colors"
-          >
+          <Link to="/" className="hover:text-burgundy">
             Home
           </Link>
         </li>
-        <li aria-hidden="true" className="text-on-surface-secondary">
-          /
+        <li aria-hidden="true">
+          <Icon name="chevron-right" size={14} />
         </li>
-        <li>
-          <span aria-current="page" className="text-on-surface font-medium">
-            Collections
-          </span>
+        <li aria-current="page" className="text-on-surface font-medium">
+          Categories
         </li>
       </ol>
     </nav>
   );
 }
 
-function CollectionsGrid({ collections }: { collections: readonly CollectionNode[] }) {
+function CollectionsGrid({
+  collections,
+}: {
+  collections: readonly CollectionNode[];
+}) {
   if (collections.length === 0) {
     return (
-      <div className="border-border bg-surface-secondary rounded-card border p-8 text-center">
-        <h2 className="type-heading-md text-on-surface">No collections found</h2>
-        <p className="text-on-surface-secondary mt-2 text-sm">No collections available.</p>
+      <div className="rounded-[var(--radius-xl)] bg-white p-10 text-center shadow-[var(--shadow-sm)]">
+        <h2 className="type-heading-lg text-on-surface">
+          Categories are coming soon
+        </h2>
+        <p className="text-on-surface-secondary mt-2">
+          Meanwhile, search for what you need.
+        </p>
+        <Link to="/search" className="button-cta mt-6">
+          Search the store
+        </Link>
       </div>
     );
   }
@@ -87,12 +94,22 @@ function CollectionsGrid({ collections }: { collections: readonly CollectionNode
     <>
       <h2 className="sr-only">Browse collections</h2>
       <div>
-        <ul role="list" className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {collections.map((collection, index) => (
-            <li key={collection.handle}>
-              <CollectionCard collection={collection} priority={index === 0} />
-            </li>
-          ))}
+        <ul
+          role="list"
+          className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
+        >
+          {collections
+            .filter(
+              (collection) => collection.productCountProbe.nodes.length > 0,
+            )
+            .map((collection, index) => (
+              <li key={collection.handle}>
+                <CollectionCard
+                  collection={collection}
+                  priority={index === 0}
+                />
+              </li>
+            ))}
         </ul>
       </div>
     </>
@@ -105,9 +122,21 @@ export default function CollectionsRoute({ loaderData }: Route.ComponentProps) {
       <div className="max-w-page px-margin mx-auto w-full py-8 md:py-12">
         <BreadcrumbJsonLd origin={loaderData.origin} />
         <Breadcrumb />
-        <div className="mb-8">
-          <h1 className="type-display text-on-surface">Collections</h1>
-        </div>
+        <header className="mb-8">
+          <p className="type-hand text-terracotta-deep text-2xl">
+            ghar ke liye sab kuch
+          </p>
+          <h1 className="type-heading-xl text-on-surface text-[clamp(2rem,1.4rem+2vw,3rem)]">
+            Shop by category
+          </h1>
+          <Link
+            to="/collections/all"
+            className="text-burgundy mt-2 inline-flex min-h-11 items-center gap-1.5 font-semibold underline-offset-4 hover:underline"
+          >
+            Or browse all products
+            <Icon name="arrow-right" size={18} />
+          </Link>
+        </header>
         <CollectionsGrid collections={loaderData.collections.nodes} />
       </div>
     </main>
