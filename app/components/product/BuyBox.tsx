@@ -3,7 +3,11 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 
 import { Icon, type IconName } from "~/components/ui/Icon";
-import { playAddedToCart } from "~/lib/fly-to-cart";
+import {
+  beginAddedToCart,
+  finishAddedToCart,
+  preloadAddToCartMotion,
+} from "~/lib/fly-to-cart";
 import { shopifyImageUrl } from "~/lib/image";
 import type { MoneyValue } from "~/lib/metaobject";
 import { formatPrice, salePercent } from "~/lib/money";
@@ -202,12 +206,21 @@ export function AddToCartForm({
     ...errors.networkErrors,
   ];
 
+  useEffect(() => {
+    // The PDP's main action is adding to cart: warm the animation once idle.
+    const idle =
+      window.requestIdleCallback ??
+      ((callback: () => void) => window.setTimeout(callback, 1500));
+    idle(() => preloadAddToCartMotion());
+  }, []);
+
   return (
     <div>
       <form
         id={PRODUCT_FORM_ID}
         {...formProps({
-          afterSubmit: () => void playAddedToCart(gallerySource()),
+          beforeSubmit: () => beginAddedToCart(gallerySource()),
+          afterSubmit: () => void finishAddedToCart(),
         })}
       >
         <input type="hidden" {...register("merchandiseId", {})} />

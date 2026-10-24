@@ -13,26 +13,43 @@ function prefersReducedMotion() {
 }
 
 function findVisibleCartTarget(): HTMLElement | null {
-  const targets = Array.from(document.querySelectorAll<HTMLElement>("[data-cart-target]"));
+  const targets = Array.from(
+    document.querySelectorAll<HTMLElement>("[data-cart-target]"),
+  );
   return (
     targets.find((target) => {
       const rect = target.getBoundingClientRect();
-      if (rect.width === 0 || rect.bottom <= 0 || rect.top >= window.innerHeight) return false;
+      if (
+        rect.width === 0 ||
+        rect.bottom <= 0 ||
+        rect.top >= window.innerHeight
+      )
+        return false;
       // Skip the compact bar while it is hidden off-screen.
       return !target.closest("[inert]");
     }) ?? null
   );
 }
 
+let motionModule: Promise<typeof import("motion")> | null = null;
+
+/** Warm the animation chunk (call on hover/focus/touch of an add button). */
+export function preloadAddToCartMotion() {
+  if (typeof window === "undefined") return;
+  motionModule ??= import("motion");
+}
+
 async function fly(source: HTMLElement, target: HTMLElement) {
-  const { animate } = await import("motion");
+  preloadAddToCartMotion();
+  const { animate } = await (motionModule as Promise<typeof import("motion")>);
   const from = source.getBoundingClientRect();
   const to = target.getBoundingClientRect();
   if (from.width === 0) return;
 
   const size = Math.min(from.width, from.height, 220);
   const clone = document.createElement("img");
-  const sourceImage = source instanceof HTMLImageElement ? source : source.querySelector("img");
+  const sourceImage =
+    source instanceof HTMLImageElement ? source : source.querySelector("img");
   if (!sourceImage) return;
   clone.src = sourceImage.currentSrc || sourceImage.src;
   clone.alt = "";
@@ -71,27 +88,38 @@ async function fly(source: HTMLElement, target: HTMLElement) {
     clone.remove();
   }
 
-  void animate(target, { scale: [1, 1.3, 0.92, 1.06, 1] }, { duration: 0.55, ease: "easeOut" });
+  void animate(
+    target,
+    { scale: [1, 1.3, 0.92, 1.06, 1] },
+    { duration: 0.55, ease: "easeOut" },
+  );
 }
 
+let pendingFlight: Promise<void> | null = null;
+
 /**
- * Plays the add-to-cart moment from `source` (an image or an element containing
- * one), then opens the cart drawer. Never throws — the cart update itself is
- * handled by Hydrogen's form; this is only feedback.
+ * Starts the flight the moment the shopper taps Add (before the cart request
+ * resolves), so the feedback feels instant. Pair with `finishAddedToCart`.
  */
-export async function playAddedToCart(source: HTMLElement | null) {
+export function beginAddedToCart(source: HTMLElement | null) {
   if (typeof document === "undefined") return;
   const target = findVisibleCartTarget();
-
-  if (source && target && !prefersReducedMotion()) {
-    try {
-      await fly(source, target);
-      // Let the bounce and count tick register before the drawer covers them.
-      await new Promise((resolve) => setTimeout(resolve, 260));
-    } catch {
-      // Animation is decorative; fall through to opening the drawer.
-    }
+  if (!source || !target || prefersReducedMotion()) {
+    pendingFlight = null;
+    return;
   }
+  pendingFlight = fly(source, target).catch(() => {
+    // Decorative only.
+  });
+}
 
+/** After the cart confirms: let the flight land, then open the drawer. */
+export async function finishAddedToCart() {
+  if (pendingFlight) {
+    await pendingFlight;
+    pendingFlight = null;
+    // Let the bounce and count tick register before the drawer covers them.
+    await new Promise((resolve) => setTimeout(resolve, 220));
+  }
   openCartDrawer();
 }

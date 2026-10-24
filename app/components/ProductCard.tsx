@@ -4,7 +4,11 @@ import { useRef } from "react";
 import { Link } from "react-router";
 
 import { Icon } from "~/components/ui/Icon";
-import { playAddedToCart } from "~/lib/fly-to-cart";
+import {
+  beginAddedToCart,
+  finishAddedToCart,
+  preloadAddToCartMotion,
+} from "~/lib/fly-to-cart";
 import { responsiveSrcSet, shopifyImageUrl } from "~/lib/image";
 import { compareMoney, formatPrice, salePercent } from "~/lib/money";
 
@@ -103,14 +107,18 @@ export type ProductCardData = StorefrontApi.ResultOf<
   typeof _PRODUCT_CARD_SHAPE_QUERY
 >["products"]["nodes"][number];
 
-const { ProductProvider: CardProductProvider, useProductForm: useCardProductForm } =
-  createProductComponents<ProductCardData>();
+const {
+  ProductProvider: CardProductProvider,
+  useProductForm: useCardProductForm,
+} = createProductComponents<ProductCardData>();
 
 /**
  * Sellable = has a real price and at least one image. Supplier placeholders
  * (₹0, no photos) never reach listings.
  */
-export function isSellable(product: Pick<ProductCardData, "priceRange" | "featuredImage" | "images">) {
+export function isSellable(
+  product: Pick<ProductCardData, "priceRange" | "featuredImage" | "images">,
+) {
   const price = Number.parseFloat(product.priceRange.minVariantPrice.amount);
   const hasImage = Boolean(product.featuredImage ?? product.images.nodes[0]);
   return Number.isFinite(price) && price > 0 && hasImage;
@@ -131,11 +139,16 @@ type ProductCardProps = {
   compact?: boolean;
 };
 
-export function ProductCard({ product, priority = false, compact = false }: ProductCardProps) {
+export function ProductCard({
+  product,
+  priority = false,
+  compact = false,
+}: ProductCardProps) {
   const imageRef = useRef<HTMLImageElement>(null);
   const primaryImage = product.featuredImage ?? product.images.nodes[0] ?? null;
   const hoverImage =
-    product.images.nodes.find((image) => image.url !== primaryImage?.url) ?? null;
+    product.images.nodes.find((image) => image.url !== primaryImage?.url) ??
+    null;
   const price = product.priceRange.minVariantPrice;
   const compareAt = product.compareAtPriceRange.minVariantPrice;
   const onSale = compareMoney(compareAt, price) > 0;
@@ -154,7 +167,11 @@ export function ProductCard({ product, priority = false, compact = false }: Prod
           <img
             ref={imageRef}
             src={shopifyImageUrl(primaryImage.url, { width: 520 })}
-            srcSet={responsiveSrcSet(primaryImage.url, CARD_WIDTHS, primaryImage.width)}
+            srcSet={responsiveSrcSet(
+              primaryImage.url,
+              CARD_WIDTHS,
+              primaryImage.width,
+            )}
             sizes={CARD_SIZES}
             alt={altText}
             width={primaryImage.width ?? 520}
@@ -167,7 +184,11 @@ export function ProductCard({ product, priority = false, compact = false }: Prod
         {hoverImage ? (
           <img
             src={shopifyImageUrl(hoverImage.url, { width: 520 })}
-            srcSet={responsiveSrcSet(hoverImage.url, CARD_WIDTHS, hoverImage.width)}
+            srcSet={responsiveSrcSet(
+              hoverImage.url,
+              CARD_WIDTHS,
+              hoverImage.width,
+            )}
             sizes={CARD_SIZES}
             alt=""
             aria-hidden="true"
@@ -217,7 +238,11 @@ export function ProductCard({ product, priority = false, compact = false }: Prod
           </p>
           {product.availableForSale && isSingleChoice(product) ? (
             <CardProductProvider product={product}>
-              <QuickAdd product={product} imageRef={imageRef} compact={compact} />
+              <QuickAdd
+                product={product}
+                imageRef={imageRef}
+                compact={compact}
+              />
             </CardProductProvider>
           ) : product.availableForSale ? (
             <Link
@@ -249,7 +274,13 @@ function QuickAdd({
 
   return (
     <form
-      {...formProps({ afterSubmit: () => void playAddedToCart(imageRef.current) })}
+      {...formProps({
+        beforeSubmit: () => beginAddedToCart(imageRef.current),
+        afterSubmit: () => void finishAddedToCart(),
+      })}
+      onPointerEnter={preloadAddToCartMotion}
+      onTouchStart={preloadAddToCartMotion}
+      onFocus={preloadAddToCartMotion}
       className="relative z-10 shrink-0"
     >
       <input type="hidden" {...register("merchandiseId", {})} />

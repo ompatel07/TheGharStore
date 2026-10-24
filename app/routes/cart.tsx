@@ -1,22 +1,27 @@
-import { ShopPayButton } from "@shopify/hydrogen/react";
 import { useEffect } from "react";
 
 import { publishCartViewed } from "~/components/AnalyticsTrackers";
-import { CartLineItem } from "~/components/CartDrawer";
+import {
+  CartEmpty,
+  CartErrorBanner,
+  CartLineList,
+  CartSummary,
+} from "~/components/cart/CartParts";
+import { BRAND_NAME } from "~/components/Logo";
 import { useCart } from "~/lib/cart";
-import { formatPrice } from "~/lib/money";
-import { formatPageTitle, getShopNameFromRootMatch } from "~/lib/storefront-shop";
 
-import type { Route } from "./+types/cart";
-
-export function meta({ matches }: Route.MetaArgs) {
-  return [{ title: formatPageTitle("Cart", getShopNameFromRootMatch(matches[0])) }];
+export function meta() {
+  return [
+    { title: `Your cart · ${BRAND_NAME}` },
+    { name: "robots", content: "noindex" },
+  ];
 }
 
+/** Full-page cart (no-JS fallback for the drawer, and a direct /cart link). */
 export default function CartRoute() {
   const cart = useCart((state) => state.data);
   const loading = useCart((state) => state.loading);
-  const lines = cart.lines.nodes;
+  const hasLines = cart.lines.nodes.length > 0;
 
   useEffect(() => {
     publishCartViewed(cart);
@@ -26,51 +31,41 @@ export default function CartRoute() {
     <main
       id="main-content"
       tabIndex={-1}
-      className="max-w-page px-margin mx-auto w-full flex-1 py-12"
+      className="max-w-page px-margin mx-auto w-full flex-1 py-10"
     >
-      <h1 id="cart-page-title" tabIndex={-1} className="type-display text-on-surface mb-8">
-        Cart
+      <h1
+        id="cart-page-title"
+        tabIndex={-1}
+        className="type-heading-xl text-on-surface mb-8"
+      >
+        Your cart
       </h1>
-      {loading ? <p className="text-on-surface-secondary">Loading cart…</p> : null}
-      {!loading && lines.length === 0 ? (
-        <div>
-          <p className="text-on-surface font-medium">Your cart is empty.</p>
-          <p className="text-on-surface-secondary mt-2 text-sm">
-            Looks like you haven&apos;t added anything to your cart yet.
-          </p>
+      <CartErrorBanner />
+      {loading ? (
+        <div className="grid gap-4" aria-label="Loading cart">
+          <span className="skeleton h-24" />
+          <span className="skeleton h-24" />
         </div>
-      ) : null}
-      {lines.length > 0 ? (
-        <div className="grid gap-8 lg:grid-cols-[2fr_1fr]">
-          <ul role="list" className="divide-border divide-y">
-            {lines.map((line) => (
-              <CartLineItem key={line.id} line={line} emptyCartFocusId="cart-page-title" />
-            ))}
-          </ul>
-          <aside className="border-border h-fit rounded border p-4" aria-label="Cart summary">
-            <div className="flex items-center justify-between">
-              <span className="text-on-surface text-sm font-medium">Estimated total</span>
-              <span className="text-on-surface text-base font-medium">
-                {formatPrice(cart.cost.totalAmount)}
-              </span>
-            </div>
-            <p className="text-on-surface-secondary mt-3 text-xs">
-              Taxes and shipping calculated at checkout
-            </p>
-            {cart.checkoutUrl ? (
-              <div className="mt-4 grid gap-3">
-                <ShopPayButton width="100%" borderRadius="8px" />
-                <a
-                  href={cart.checkoutUrl}
-                  className="rounded-button button-primary focus-visible:outline-accent inline-flex h-11 w-full items-center justify-center gap-2 px-4 text-sm font-medium no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 motion-safe:transition-[color,background-color,border-color,transform] motion-safe:active:scale-[0.97]"
-                >
-                  Checkout
-                </a>
-              </div>
-            ) : null}
+      ) : hasLines ? (
+        <div className="grid gap-8 lg:grid-cols-[1.6fr_1fr] lg:items-start">
+          <div className="rounded-[var(--radius-xl)] bg-white px-5 py-2 shadow-[var(--shadow-sm)]">
+            <CartLineList emptyCartFocusId="cart-page-title" />
+          </div>
+          <aside
+            className="bg-cream-deep rounded-[var(--radius-xl)] p-6 lg:sticky lg:top-20"
+            aria-label="Order summary"
+          >
+            <h2 className="type-heading-md text-on-surface mb-4">
+              Order summary
+            </h2>
+            <CartSummary />
           </aside>
         </div>
-      ) : null}
+      ) : (
+        <div className="rounded-[var(--radius-xl)] bg-white shadow-[var(--shadow-sm)]">
+          <CartEmpty />
+        </div>
+      )}
     </main>
   );
 }
