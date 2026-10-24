@@ -3,7 +3,11 @@ import { Link } from "react-router";
 import { Icon, type IconName } from "~/components/ui/Icon";
 import { Reveal } from "~/components/ui/Reveal";
 import { formatPrice } from "~/lib/money";
-import type { PolicyLink, StoreProfile, StorePromises } from "~/lib/site-content";
+import type {
+  PolicyLink,
+  StoreProfile,
+  StorePromises,
+} from "~/lib/site-content";
 
 type TrustItem = { icon: IconName; title: string; text: string; to?: string };
 
@@ -62,7 +66,11 @@ export function buildTrustItems(
     });
   }
 
-  if (profile?.supportPhone || profile?.whatsappNumber || profile?.supportEmail) {
+  if (
+    profile?.supportPhone ||
+    profile?.whatsappNumber ||
+    profile?.supportEmail
+  ) {
     items.push({
       icon: profile.whatsappNumber ? "whatsapp" : "phone",
       title: "Real people, real help",
@@ -88,14 +96,26 @@ export function TrustSection({
   const items = buildTrustItems(promises, policies, profile);
 
   return (
-    <Reveal as="section" aria-labelledby="trust-title" className="py-12 md:py-16">
+    <Reveal
+      as="section"
+      aria-labelledby="trust-title"
+      className="py-12 md:py-16"
+    >
       <div className="max-w-page px-margin mx-auto">
         <div className="relative overflow-hidden rounded-[var(--radius-xl)] bg-white px-6 py-10 shadow-[var(--shadow)] md:px-12 md:py-14">
-          <div className="gold-rule absolute inset-x-10 top-0" aria-hidden="true" />
+          <div
+            className="gold-rule absolute inset-x-10 top-0"
+            aria-hidden="true"
+          />
           <div className="grid gap-10 lg:grid-cols-[0.9fr_2fr] lg:items-center">
             <div>
-              <p className="type-hand text-terracotta-deep text-2xl">bharosa matters</p>
-              <h2 id="trust-title" className="type-heading-xl text-on-surface mt-1">
+              <p className="type-hand text-terracotta-deep text-2xl">
+                bharosa matters
+              </p>
+              <h2
+                id="trust-title"
+                className="type-heading-xl text-on-surface mt-1"
+              >
                 Shop with confidence
               </h2>
               {policies.length > 0 ? (
@@ -103,7 +123,11 @@ export function TrustSection({
                   Read our{" "}
                   {policies.map((policy, index) => (
                     <span key={policy.handle}>
-                      {index > 0 ? (index === policies.length - 1 ? " and " : ", ") : null}
+                      {index > 0
+                        ? index === policies.length - 1
+                          ? " and "
+                          : ", "
+                        : null}
                       <Link
                         to={`/policies/${policy.handle}`}
                         className="text-burgundy font-semibold underline underline-offset-4"
@@ -127,14 +151,19 @@ export function TrustSection({
                   </span>
                   <div>
                     <h3 className="text-on-surface font-bold">{item.title}</h3>
-                    <p className="text-on-surface-secondary mt-0.5 text-[0.95rem]">{item.text}</p>
+                    <p className="text-on-surface-secondary mt-0.5 text-[0.95rem]">
+                      {item.text}
+                    </p>
                     {item.to ? (
                       <Link
                         to={item.to}
                         className="text-burgundy mt-1 inline-flex min-h-9 items-center gap-1 text-sm font-semibold underline-offset-4 hover:underline"
                       >
                         Details
-                        <span className="sr-only"> about {item.title.toLowerCase()}</span>
+                        <span className="sr-only">
+                          {" "}
+                          about {item.title.toLowerCase()}
+                        </span>
                         <Icon name="arrow-right" size={16} />
                       </Link>
                     ) : null}

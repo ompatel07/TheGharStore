@@ -19,13 +19,21 @@ const ICON_BY_KEYWORD: [RegExp, IconName][] = [
   [/gift/, "gift"],
 ];
 
-export function collectionIcon(collection: Pick<HomeCollection, "handle" | "icon">): IconName {
+export function collectionIcon(
+  collection: Pick<HomeCollection, "handle" | "icon">,
+): IconName {
   if (isIconName(collection.icon)) return collection.icon;
-  const match = ICON_BY_KEYWORD.find(([pattern]) => pattern.test(collection.handle));
+  const match = ICON_BY_KEYWORD.find(([pattern]) =>
+    pattern.test(collection.handle),
+  );
   return match?.[1] ?? "grid";
 }
 
-export function CategoryStrip({ categories }: { categories: HomeCollection[] }) {
+export function CategoryStrip({
+  categories,
+}: {
+  categories: HomeCollection[];
+}) {
   if (categories.length === 0) return null;
 
   return (

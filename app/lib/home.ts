@@ -6,6 +6,7 @@ import { Cache, gql, type StorefrontApi } from "@shopify/hydrogen";
 
 import { isSellable, PRODUCT_CARD_FRAGMENT, type ProductCardData } from "~/components/ProductCard";
 import { fieldMap, link, list, text, type LinkValue } from "~/lib/metaobject";
+import { PROBLEMS, type Problem } from "~/lib/problems";
 import type { RequestStorefrontClient } from "~/lib/storefront";
 
 /** Default spotlight until `home_page.spotlight_product` is set in Shopify. */
@@ -198,6 +199,20 @@ export const HOME_QUERY = gql(
   [META_FIELD_FRAGMENT, HOME_COLLECTION_FRAGMENT],
 );
 
+export const PRODUCTS_BY_HANDLE_QUERY = gql(
+  `
+    query ProductsByHandle($query: String!, $country: CountryCode, $language: LanguageCode)
+    @inContext(country: $country, language: $language) {
+      products(first: 20, query: $query) {
+        nodes {
+          ...ProductCard
+        }
+      }
+    }
+  `,
+  [PRODUCT_CARD_FRAGMENT],
+);
+
 export const SPOTLIGHT_QUERY = gql(
   `
     query HomeSpotlight($handle: String!, $country: CountryCode, $language: LanguageCode)
@@ -268,6 +283,7 @@ export type HomeData = {
   categories: HomeCollection[];
   rows: HomeCollection[];
   spotlight: Spotlight | null;
+  problems: { problem: Problem; product: ProductCardData }[];
 };
 
 function byKey(fields: MetaFields | undefined | null) {
@@ -297,6 +313,26 @@ function metaobjectsOf(field: MetaField | undefined) {
   return (field?.references?.nodes ?? []).flatMap((node) =>
     node.__typename === "Metaobject" ? [fieldMap(node.fields)] : [],
   );
+}
+
+/**
+ * Collections without their own image borrow a product photo; make sure two tiles
+ * never borrow the same one.
+ */
+function withDistinctImages(collections: HomeCollection[]): HomeCollection[] {
+  const used = new Set<string>();
+  return collections.map((collection) => {
+    const own = collection.image && !collection.products.some((p) => p.featuredImage?.url === collection.image?.url);
+    if (own && collection.image) {
+      used.add(collection.image.url);
+      return collection;
+    }
+    const candidate =
+      collection.products.find((p) => p.featuredImage && !used.has(p.featuredImage.url))?.featuredImage ??
+      collection.image;
+    if (candidate) used.add(candidate.url);
+    return { ...collection, image: candidate ?? null };
+  });
 }
 
 function pick(collections: HomeCollection[], handles: string[]) {
@@ -367,8 +403,10 @@ export async function loadHome(storefrontClient: RequestStorefrontClient): Promi
 
   // Category strip: curated list, else every collection that has products.
   const curatedStrip = pick(allCollections, collectionHandlesOf(pageFields.get("category_strip")));
-  const categories = (curatedStrip.length > 0 ? curatedStrip : allCollections).filter(
-    (collection) => collection.products.length > 0,
+  const categories = withDistinctImages(
+    (curatedStrip.length > 0 ? curatedStrip : allCollections).filter(
+      (collection) => collection.products.length > 0,
+    ),
   );
 
   // Product rows: curated list, else the fullest collections (3+ products).
@@ -385,9 +423,20 @@ export async function loadHome(storefrontClient: RequestStorefrontClient): Promi
     productHandleOf(pageFields.get("spotlight_product")) ??
     productHandleOf(heroFields.get("product")) ??
     DEFAULT_SPOTLIGHT_HANDLE;
-  const { data: spotlightData } = await storefrontClient.graphql(SPOTLIGHT_QUERY, {
-    variables: { handle: spotlightHandle },
-    cache: Cache.short(),
+  const [{ data: spotlightData }, { data: problemData }] = await Promise.all([
+    storefrontClient.graphql(SPOTLIGHT_QUERY, {
+      variables: { handle: spotlightHandle },
+      cache: Cache.short(),
+    }),
+    storefrontClient.graphql(PRODUCTS_BY_HANDLE_QUERY, {
+      variables: { query: PROBLEMS.map((p) => `handle:${p.handle}`).join(" OR ") },
+      cache: Cache.short(),
+    }),
+  ]);
+  const problemProducts = (problemData?.products.nodes ?? []).filter(isSellable);
+  const problems = PROBLEMS.flatMap((problem) => {
+    const product = problemProducts.find((p) => p.handle === problem.handle && p.availableForSale);
+    return product ? [{ problem, product }] : [];
   });
   const spotlightProduct = spotlightData?.product ?? null;
 
@@ -441,5 +490,5 @@ export async function loadHome(storefrontClient: RequestStorefrontClient): Promi
         fromShopify: false,
       };
 
-  return { hero, categories, rows, spotlight };
+  return { hero, categories, rows, spotlight, problems };
 }

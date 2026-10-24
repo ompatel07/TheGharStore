@@ -9,6 +9,7 @@ import {
   Scripts,
   ScrollRestoration,
   useNavigate,
+  useNavigation,
   useRouteLoaderData,
 } from "react-router";
 
@@ -151,7 +152,7 @@ export function Layout({ children }: { children: ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body className="bg-surface text-on-surface font-body flex min-h-svh flex-col antialiased">
+      <body className="grain bg-surface text-on-surface font-body flex min-h-svh flex-col antialiased">
         <a
           href="#main-content"
           className="focus-visible:bg-interactive focus-visible:text-interactive-text sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:start-4 focus-visible:top-4 focus-visible:z-50 focus-visible:rounded focus-visible:px-4 focus-visible:py-2"
@@ -178,6 +179,13 @@ export default function App({ loaderData }: Route.ComponentProps) {
   );
 }
 
+/** Thin terracotta bar while the next page loads (no spinners on content). */
+function NavProgress() {
+  const navigation = useNavigation();
+  if (navigation.state === "idle") return null;
+  return <div className="nav-progress" role="progressbar" aria-label="Loading page" />;
+}
+
 function SiteShell({
   cartData,
   shopInfo,
@@ -191,6 +199,7 @@ function SiteShell({
 }) {
   return (
     <CartProvider initialData={cartData}>
+      <NavProgress />
       <PageViewedTracker />
       <CartAnalyticsTracker />
       <AnnouncementBar

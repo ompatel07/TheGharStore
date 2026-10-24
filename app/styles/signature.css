@@ -1,0 +1,298 @@
+/*
+  The Ghar Store — signature visual language.
+  Jharokha arches, paper grain, marquee bands, masked type reveals, hand-drawn
+  strokes, mandala rotation, flip cards, tilt. Transform/opacity only; every
+  effect has a static fallback under prefers-reduced-motion.
+*/
+
+/* ─── Paper grain over the whole page (warm, tactile, very subtle) ─────── */
+.grain::before {
+  content: "";
+  position: fixed;
+  inset: -50%;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.22 0 0 0 0 0.17 0 0 0 0 0.16 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ─── Jharokha arch: the brand's window shape ─────────────────────────── */
+.arch {
+  border-radius: 50% 50% var(--radius-lg) var(--radius-lg) / 32% 32% var(--radius-lg) var(--radius-lg);
+  overflow: hidden;
+}
+.arch-frame {
+  position: relative;
+  padding: 0.6rem;
+  background: var(--color-cream);
+  border-radius: 50% 50% 1.75rem 1.75rem / 32% 32% 1.75rem 1.75rem;
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--color-gold) 70%, transparent),
+    0 40px 80px -40px rgb(56 44 42 / 0.45);
+}
+.arch-frame::after {
+  /* inner gold hairline */
+  content: "";
+  position: absolute;
+  inset: 0.3rem;
+  border-radius: inherit;
+  border: 1px solid color-mix(in oklab, var(--color-gold) 55%, transparent);
+  pointer-events: none;
+}
+
+/* ─── Section headline with a hand-written accent word ────────────────── */
+.display-xl {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+  font-size: clamp(2.6rem, 1.2rem + 6vw, 7rem);
+}
+.display-lg {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  font-size: clamp(2.2rem, 1.2rem + 3.6vw, 4.6rem);
+}
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--color-chocolate);
+}
+.text-outline-cream {
+  color: transparent;
+  -webkit-text-stroke: 1.5px color-mix(in oklab, var(--color-cream) 55%, transparent);
+}
+
+/* ─── Masked word reveal (words rise from behind a mask) ──────────────── */
+.mask-words .w {
+  display: inline-block;
+  overflow: clip;
+  vertical-align: top;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+.mask-words .w > span {
+  display: inline-block;
+  animation: ghar-rise 900ms var(--ease-ui) both;
+  animation-delay: calc(var(--i, 0) * 85ms + 120ms);
+}
+@keyframes ghar-rise {
+  from {
+    transform: translateY(105%) rotate(4deg);
+  }
+  to {
+    transform: translateY(0) rotate(0);
+  }
+}
+
+/* ─── Hand-drawn stroke that draws itself ─────────────────────────────── */
+.draw-stroke path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: ghar-draw 1.2s var(--ease-ui) 900ms forwards;
+}
+@keyframes ghar-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ─── Slow mandala / jaali rotation ──────────────────────────────────── */
+.spin-slow {
+  animation: ghar-spin 90s linear infinite;
+  transform-origin: 50% 50%;
+}
+.spin-slow-reverse {
+  animation: ghar-spin 140s linear infinite reverse;
+  transform-origin: 50% 50%;
+}
+@keyframes ghar-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ─── Diya flames: tiny warm glows that breathe ──────────────────────── */
+.diya-glow {
+  position: absolute;
+  width: var(--s, 14px);
+  height: var(--s, 14px);
+  border-radius: 9999px;
+  background: radial-gradient(closest-side, #ffd9a1, rgb(239 119 86 / 0.55) 55%, transparent);
+  filter: blur(0.5px);
+  animation: ghar-flicker var(--d, 2.6s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+@keyframes ghar-flicker {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: translateY(0) scale(1);
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(-6px) scale(1.15);
+  }
+  70% {
+    opacity: 0.75;
+    transform: translateY(-2px) scale(0.95);
+  }
+}
+
+/* ─── Marquee band ───────────────────────────────────────────────────── */
+.marquee {
+  display: flex;
+  overflow: hidden;
+  user-select: none;
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+.marquee-track {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 2.5rem;
+  padding-inline-end: 2.5rem;
+  animation: ghar-marquee var(--marquee-duration, 40s) linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+@keyframes ghar-marquee {
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+/* ─── Flip cards (problem → solution) ────────────────────────────────── */
+.flip {
+  perspective: 1200px;
+}
+.flip-inner {
+  position: relative;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 800ms var(--ease-spring);
+}
+.flip:hover .flip-inner,
+.flip:focus-within .flip-inner,
+.flip.is-flipped .flip-inner {
+  transform: rotateY(180deg);
+}
+.flip-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+.flip-back {
+  transform: rotateY(180deg);
+}
+
+/* ─── Tilt (driven by --rx / --ry from JS; transform only) ───────────── */
+.tilt {
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 400ms var(--ease-ui);
+  will-change: transform;
+}
+
+/* ─── Navigation progress bar ────────────────────────────────────────── */
+.nav-progress {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 3px;
+  z-index: 70;
+  transform-origin: 0 50%;
+  background: linear-gradient(90deg, var(--color-terracotta), var(--color-gold), var(--color-burgundy));
+  animation: ghar-progress 6s cubic-bezier(0.1, 0.7, 0.2, 1) forwards;
+}
+@keyframes ghar-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(0.92);
+  }
+}
+
+/* ─── Scroll cue ─────────────────────────────────────────────────────── */
+.scroll-cue span span {
+  animation: ghar-cue 1.8s var(--ease-ui) infinite;
+}
+@keyframes ghar-cue {
+  0% {
+    transform: translateY(-6px);
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+}
+
+/* ─── Scroll-lit words (statement section; GSAP sets --lit per word) ── */
+.lit-words .lw {
+  color: color-mix(in oklab, var(--color-chocolate) 18%, var(--color-cream));
+  transition: color 300ms linear;
+}
+.lit-words .lw.is-lit {
+  color: var(--color-chocolate);
+}
+.lit-words .lw.accent.is-lit {
+  color: var(--color-terracotta-deep);
+}
+
+/* ─── Bento tiles ────────────────────────────────────────────────────── */
+.bento-tile img {
+  transition: transform 1.2s var(--ease-ui);
+}
+.bento-tile:hover img,
+.bento-tile:focus-visible img {
+  transform: scale(1.07);
+}
+.bento-tile .bento-arrow {
+  transition: transform 400ms var(--ease-spring);
+}
+.bento-tile:hover .bento-arrow {
+  transform: translateX(4px) rotate(-45deg);
+}
+
+/* ─── Magnetic buttons ───────────────────────────────────────────────── */
+.magnetic {
+  transform: translate(var(--mx, 0px), var(--my, 0px));
+  transition: transform 350ms var(--ease-spring);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mask-words .w > span,
+  .draw-stroke path,
+  .spin-slow,
+  .spin-slow-reverse,
+  .diya-glow,
+  .marquee-track,
+  .scroll-cue span span,
+  .nav-progress {
+    animation: none !important;
+  }
+  .draw-stroke path {
+    stroke-dashoffset: 0;
+  }
+  .flip-inner,
+  .tilt,
+  .magnetic,
+  .bento-tile img {
+    transition: none !important;
+  }
+  .tilt,
+  .magnetic {
+    transform: none !important;
+  }
+  .lit-words .lw {
+    color: var(--color-chocolate);
+  }
+}

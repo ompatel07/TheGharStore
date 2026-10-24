@@ -17,7 +17,9 @@ export function CollectionRow({ collection }: { collection: HomeCollection }) {
               {collection.title}
             </h2>
             {collection.description ? (
-              <p className="text-on-surface-secondary mt-1.5 max-w-xl">{collection.description}</p>
+              <p className="text-on-surface-secondary mt-1.5 max-w-xl">
+                {collection.description}
+              </p>
             ) : null}
           </div>
           <Link
