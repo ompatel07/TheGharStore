@@ -213,6 +213,20 @@ export const PRODUCTS_BY_HANDLE_QUERY = gql(
   [PRODUCT_CARD_FRAGMENT],
 );
 
+export const BESTSELLERS_QUERY = gql(
+  `
+    query HomeBestsellers($country: CountryCode, $language: LanguageCode)
+    @inContext(country: $country, language: $language) {
+      products(first: 16, sortKey: BEST_SELLING) {
+        nodes {
+          ...ProductCard
+        }
+      }
+    }
+  `,
+  [PRODUCT_CARD_FRAGMENT],
+);
+
 export const SPOTLIGHT_QUERY = gql(
   `
     query HomeSpotlight($handle: String!, $country: CountryCode, $language: LanguageCode)
@@ -248,6 +262,13 @@ export type HomeCollection = {
 
 export type Benefit = { label: string; icon: string | null };
 
+export type HeroHotspot = {
+  x: number;
+  y: number;
+  label: string | null;
+  product: ProductCardData;
+};
+
 export type HeroContent = {
   eyebrow: string | null;
   headline: string;
@@ -262,6 +283,9 @@ export type HeroContent = {
   afterImage: HomeImage | null;
   note: string | null;
   product: SpotlightProductData | null;
+  /** Full-bleed lifestyle photo behind the hero copy. */
+  background: HomeImage | null;
+  hotspots: HeroHotspot[];
   fromShopify: boolean;
 };
 
@@ -284,7 +308,30 @@ export type HomeData = {
   rows: HomeCollection[];
   spotlight: Spotlight | null;
   problems: { problem: Problem; product: ProductCardData }[];
+  bestsellers: ProductCardData[];
 };
+
+type RawHotspot = { handle: string; x: number; y: number; label: string | null };
+
+/** `home_hero.hotspots` JSON → validated list (bad entries are dropped). */
+function parseHotspots(value: string | null | undefined): RawHotspot[] {
+  if (!value) return [];
+  try {
+    const parsed: unknown = JSON.parse(value);
+    if (!Array.isArray(parsed)) return [];
+    return parsed.flatMap((entry: unknown) => {
+      if (!entry || typeof entry !== "object") return [];
+      const { handle, x, y, label } = entry as Record<string, unknown>;
+      const nx = Number(x);
+      const ny = Number(y);
+      if (typeof handle !== "string" || !Number.isFinite(nx) || !Number.isFinite(ny)) return [];
+      if (nx < 0 || nx > 100 || ny < 0 || ny > 100) return [];
+      return [{ handle, x: nx, y: ny, label: typeof label === "string" && label.trim() ? label.trim() : null }];
+    });
+  } catch {
+    return [];
+  }
+}
 
 function byKey(fields: MetaFields | undefined | null) {
   const map = new Map<string, MetaField>();
@@ -423,16 +470,22 @@ export async function loadHome(storefrontClient: RequestStorefrontClient): Promi
     productHandleOf(pageFields.get("spotlight_product")) ??
     productHandleOf(heroFields.get("product")) ??
     DEFAULT_SPOTLIGHT_HANDLE;
-  const [{ data: spotlightData }, { data: problemData }] = await Promise.all([
+  const rawHotspots = parseHotspots(heroFields.get("hotspots")?.value);
+  const handles = [...new Set([...PROBLEMS.map((p) => p.handle), ...rawHotspots.map((h) => h.handle)])];
+  const [{ data: spotlightData }, { data: problemData }, { data: bestsellerData }] = await Promise.all([
     storefrontClient.graphql(SPOTLIGHT_QUERY, {
       variables: { handle: spotlightHandle },
       cache: Cache.short(),
     }),
     storefrontClient.graphql(PRODUCTS_BY_HANDLE_QUERY, {
-      variables: { query: PROBLEMS.map((p) => `handle:${p.handle}`).join(" OR ") },
+      variables: { query: handles.map((handle) => `handle:${handle}`).join(" OR ") },
       cache: Cache.short(),
     }),
+    storefrontClient.graphql(BESTSELLERS_QUERY, { cache: Cache.short() }),
   ]);
+  const bestsellers = (bestsellerData?.products.nodes ?? []).filter(
+    (product) => isSellable(product) && product.availableForSale,
+  );
   const problemProducts = (problemData?.products.nodes ?? []).filter(isSellable);
   const problems = PROBLEMS.flatMap((problem) => {
     const product = problemProducts.find((p) => p.handle === problem.handle && p.availableForSale);
@@ -448,6 +501,11 @@ export async function loadHome(storefrontClient: RequestStorefrontClient): Promi
 
   const heroHeadline = text(heroFields.get("headline")?.value);
   const heroImage = imageOf(heroFields.get("image"));
+  const heroBackground = imageOf(heroFields.get("background_image"));
+  const hotspots: HeroHotspot[] = rawHotspots.flatMap((spot) => {
+    const product = problemProducts.find((p) => p.handle === spot.handle && p.availableForSale);
+    return product ? [{ x: spot.x, y: spot.y, label: spot.label, product }] : [];
+  });
   const heroProduct = spotlight?.product ?? null;
   const beforeImage = imageOf(heroFields.get("before_image"));
   const afterImage = imageOf(heroFields.get("after_image"));
@@ -471,6 +529,8 @@ export async function loadHome(storefrontClient: RequestStorefrontClient): Promi
         afterImage: beforeImage && afterImage ? afterImage : null,
         note: text(heroFields.get("note")?.value),
         product: heroProduct,
+        background: heroBackground,
+        hotspots,
         fromShopify: true,
       }
     : {
@@ -487,8 +547,10 @@ export async function loadHome(storefrontClient: RequestStorefrontClient): Promi
         afterImage: null,
         note: null,
         product: heroProduct,
+        background: null,
+        hotspots: [],
         fromShopify: false,
       };
 
-  return { hero, categories, rows, spotlight, problems };
+  return { hero, categories, rows, spotlight, problems, bestsellers };
 }

@@ -1,7 +1,5 @@
 import { useEffect, useRef } from "react";
 
-import { Spark } from "~/components/ui/Ornaments";
-
 /**
  * Brand statement whose words light up as you scroll (GSAP scrub, lazy).
  * Words wrapped in *asterisks* get the terracotta accent. Static and fully
@@ -65,12 +63,12 @@ export function Statement({
   return (
     <section
       aria-label="About The Ghar Store"
-      className="max-w-page px-margin mx-auto py-24 md:py-36"
+      className="max-w-page px-margin mx-auto py-24 md:py-40"
     >
-      <Spark className="text-gold mx-auto mb-8 size-8" />
+      <p className="eyebrow text-terracotta-deep mb-10 flex justify-center">Why we exist</p>
       <p
         ref={ref}
-        className="lit-words font-heading mx-auto max-w-5xl text-center text-[clamp(1.8rem,1.1rem+2.6vw,3.6rem)] leading-[1.12] font-extrabold tracking-tight"
+        className="lit-words ed-display mx-auto max-w-5xl text-center text-[clamp(2rem,1.1rem+3.2vw,4.4rem)] leading-[1.08]"
       >
         {words.map((word, index) => {
           const accent = /^\*.*\*[.,!?]?$/.test(word);
@@ -78,7 +76,7 @@ export function Statement({
           return (
             <span
               key={`${word}-${index}`}
-              className={`lw ${accent ? "accent" : ""}`}
+              className={`lw ${accent ? "accent ed-italic" : ""}`}
             >
               {clean}{" "}
             </span>
@@ -86,7 +84,7 @@ export function Statement({
         })}
       </p>
       {signature ? (
-        <p className="type-hand text-terracotta-deep mt-8 text-center text-2xl md:text-3xl">
+        <p className="text-on-surface-secondary mt-10 text-center text-sm font-bold tracking-[0.2em] uppercase">
           {signature}
         </p>
       ) : null}

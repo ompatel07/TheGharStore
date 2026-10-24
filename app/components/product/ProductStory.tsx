@@ -6,7 +6,7 @@ import {
 } from "~/components/product/ProductDetails";
 import { BeforeAfterSlider } from "~/components/ui/BeforeAfterSlider";
 import { Icon } from "~/components/ui/Icon";
-import { Mandala, Spark } from "~/components/ui/Ornaments";
+import { Spark } from "~/components/ui/Ornaments";
 import { Reveal } from "~/components/ui/Reveal";
 import { shopifyImageUrl } from "~/lib/image";
 import type { MoneyValue } from "~/lib/metaobject";
@@ -89,19 +89,13 @@ export function ProductStory({
           aria-labelledby="story-title"
           className="max-w-page px-margin relative mx-auto scroll-mt-24"
         >
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -top-24 -left-24 size-80 text-[var(--color-gold)] opacity-25"
-          >
-            <Mandala className="spin-slow h-full w-full" />
-          </div>
           <div className="relative grid gap-10 lg:grid-cols-[0.9fr_1.4fr] lg:gap-20">
             <Reveal>
               <p className="type-hand text-terracotta-deep text-2xl md:text-3xl">
                 about this find
               </p>
               <h2 id="story-title" className="display-lg text-on-surface mt-1">
-                The <span className="text-outline">story</span>
+                The <em className="text-terracotta-deep">story</em>
               </h2>
               {content.highlights.length > 0 ? (
                 <ul role="list" className="mt-8 grid gap-3">
@@ -139,14 +133,8 @@ export function ProductStory({
         <section
           id="how-to-use"
           aria-labelledby="how-title"
-          className="bg-chocolate text-cream curve-top curve-bottom relative mt-24 scroll-mt-24 overflow-hidden py-20 md:mt-32 md:py-28"
+          className="bg-night text-cream relative mt-24 scroll-mt-24 overflow-hidden py-20 md:mt-32 md:py-28"
         >
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -right-40 -bottom-40 size-[36rem] text-[var(--color-gold)] opacity-15"
-          >
-            <Mandala className="spin-slow-reverse h-full w-full" />
-          </div>
           <div className="max-w-page px-margin relative mx-auto">
             <Reveal className="mb-12 flex flex-wrap items-end justify-between gap-4">
               <div>
@@ -154,7 +142,7 @@ export function ProductStory({
                   step by step
                 </p>
                 <h2 id="how-title" className="display-lg mt-1">
-                  How to <span className="text-outline-cream">use it</span>
+                  How to <em className="text-peach">use it</em>
                 </h2>
               </div>
               <p className="text-cream/70 max-w-sm">
@@ -172,7 +160,7 @@ export function ProductStory({
                 >
                   <span
                     aria-hidden="true"
-                    className="font-heading text-outline-cream text-7xl leading-none font-extrabold"
+                    className="ed-display ed-italic text-peach text-7xl leading-none"
                   >
                     {String(index + 1).padStart(2, "0")}
                   </span>
@@ -213,7 +201,7 @@ export function ProductStory({
               the fine print, made friendly
             </p>
             <h2 id="details-title" className="display-lg text-on-surface mt-1">
-              Good to <span className="text-outline">know</span>
+              Good to <em className="text-terracotta-deep">know</em>
             </h2>
           </Reveal>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5">
@@ -350,7 +338,7 @@ export function ProductStory({
                 sawaal-jawaab
               </p>
               <h2 id="faqs-title" className="display-lg text-on-surface mt-1">
-                Questions, <span className="text-outline">answered</span>
+                Questions, <em className="text-terracotta-deep">answered</em>
               </h2>
               <p className="text-on-surface-secondary mt-4">
                 Still unsure about {title}?{" "}

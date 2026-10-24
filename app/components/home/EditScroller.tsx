@@ -3,7 +3,6 @@ import { Link } from "react-router";
 
 import { ProductCard } from "~/components/ProductCard";
 import { Icon } from "~/components/ui/Icon";
-import { Mandala } from "~/components/ui/Ornaments";
 import type { HomeCollection } from "~/lib/home";
 
 /**
@@ -79,18 +78,13 @@ export function EditScroller({
     <section
       ref={sectionRef}
       aria-labelledby={`edit-${collection.handle}`}
-      className="bg-chocolate text-cream relative overflow-hidden lg:flex lg:h-svh lg:items-center"
+      className="bg-night text-cream relative overflow-hidden lg:flex lg:h-svh lg:items-center"
     >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-40 -right-40 size-[44rem] text-[var(--color-gold)] opacity-20"
-      >
-        <Mandala className="spin-slow-reverse h-full w-full" />
-      </div>
-      <div
-        aria-hidden="true"
-        className="festive-glow pointer-events-none absolute top-1/3 left-10 size-[30rem] rounded-full"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_50%_at_15%_60%,rgb(239_119_86/0.28),transparent_70%),radial-gradient(40%_40%_at_85%_20%,rgb(201_167_106/0.18),transparent_70%)]"
       />
+      <EditMotes />
 
       <ul
         ref={trackRef}
@@ -98,21 +92,21 @@ export function EditScroller({
         className="scrollbar-none relative flex snap-x snap-mandatory items-stretch gap-5 overflow-x-auto px-[var(--spacing-margin)] py-16 lg:snap-none lg:overflow-visible lg:py-0 lg:ps-[max(var(--spacing-margin),calc((100vw-var(--spacing-page))/2+var(--spacing-margin)))]"
       >
         <li className="flex w-[80vw] shrink-0 snap-start flex-col justify-center sm:w-[24rem] lg:w-[30rem] lg:pe-10">
-          <p className="type-hand text-peach text-3xl">{kicker}</p>
-          <h2 id={`edit-${collection.handle}`} className="display-xl mt-2">
+          <p className="eyebrow text-peach">{kicker}</p>
+          <h2 id={`edit-${collection.handle}`} className="ed-display ed-xl mt-5">
             {title}
-            <span className="text-outline-cream block">{accent}</span>
+            <em className="ed-italic text-sheen block pe-2">{accent}</em>
           </h2>
           {collection.description ? (
             <p className="text-cream/75 mt-5 max-w-sm text-lg">
               {collection.description}
             </p>
           ) : null}
-          <Link
-            to={`/collections/${collection.handle}`}
-            className="bg-cream text-chocolate hover:bg-peach mt-8 inline-flex min-h-12 w-fit items-center gap-2 rounded-full px-6 font-bold"
-          >
-            Shop the edit <Icon name="arrow-right" size={18} />
+          <Link to={`/collections/${collection.handle}`} className="btn btn-light mt-8 w-fit" prefetch="intent">
+            Shop the edit
+            <span className="btn-arrow" aria-hidden="true">
+              <Icon name="arrow-right" size={16} strokeWidth={2.5} />
+            </span>
           </Link>
           <p className="text-cream/50 mt-10 hidden items-center gap-2 text-xs font-bold tracking-[0.2em] uppercase lg:inline-flex">
             Keep scrolling <Icon name="arrow-right" size={14} />
@@ -123,15 +117,15 @@ export function EditScroller({
             key={product.id}
             className={`w-[72vw] shrink-0 snap-start sm:w-[19rem] lg:w-[22rem] ${index % 2 === 1 ? "lg:translate-y-10" : "lg:-translate-y-6"}`}
           >
-            <ProductCard product={product} />
+            <ProductCard product={product} tone="dark" />
           </li>
         ))}
         <li className="flex w-[60vw] shrink-0 snap-start items-center sm:w-[16rem]">
           <Link
             to={`/collections/${collection.handle}`}
-            className="group border-cream/30 hover:bg-cream/10 flex aspect-square w-full flex-col items-center justify-center gap-3 rounded-full border text-center"
+            className="group border-cream/30 hover:bg-cream/10 flex aspect-square w-full flex-col items-center justify-center gap-3 rounded-full border text-center transition-colors"
           >
-            <span className="font-heading text-2xl font-extrabold">
+            <span className="ed-display ed-italic text-3xl">
               See all
             </span>
             <span className="text-cream/70 text-sm">
@@ -146,5 +140,38 @@ export function EditScroller({
         </li>
       </ul>
     </section>
+  );
+}
+
+const EDIT_MOTES = [
+  [6, 70, 6, 10, 0],
+  [18, 30, 4, 12, 2],
+  [27, 82, 7, 9, 4],
+  [41, 16, 3, 11, 1],
+  [52, 64, 5, 10, 3],
+  [63, 36, 6, 12, 5],
+  [74, 78, 4, 9, 1.5],
+  [86, 24, 7, 11, 3.5],
+  [93, 58, 4, 10, 0.8],
+] as const;
+
+function EditMotes() {
+  return (
+    <div className="motes" aria-hidden="true">
+      {EDIT_MOTES.map(([left, top, size, duration, delay]) => (
+        <i
+          key={`${left}-${top}`}
+          style={
+            {
+              left: `${left}%`,
+              top: `${top}%`,
+              "--s": `${size}px`,
+              "--d": `${duration}s`,
+              "--delay": `${delay}s`,
+            } as React.CSSProperties
+          }
+        />
+      ))}
+    </div>
   );
 }

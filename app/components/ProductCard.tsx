@@ -136,20 +136,35 @@ function isSingleChoice(product: ProductCardData) {
   return product.options.every((option) => option.optionValues.length <= 1);
 }
 
-const CARD_WIDTHS = [240, 320, 400, 520, 640];
-const CARD_SIZES = "(min-width: 1024px) 22vw, (min-width: 640px) 33vw, 50vw";
+/** Square-ish photos fill the tile; anything else is shown whole. */
+function isNearSquare(image: { width?: number | null; height?: number | null } | null) {
+  if (!image?.width || !image.height) return false;
+  const ratio = image.width / image.height;
+  return ratio > 0.93 && ratio < 1.07;
+}
+
+const CARD_WIDTHS = [240, 320, 400, 520, 640, 800];
+const CARD_SIZES = "(min-width: 1024px) 24vw, (min-width: 640px) 34vw, 52vw";
 
 type ProductCardProps = {
   product: ProductCardData;
   priority?: boolean;
-  /** Layout hint for the quick-add control size. */
+  /** Smaller type for dense grids and drawers. */
   compact?: boolean;
+  /** Text colour scheme: "dark" for cards placed on night sections. */
+  tone?: "light" | "dark";
 };
 
+/**
+ * Editorial product card: a tall image tile (photo contained over a soft blurred
+ * copy of itself, so infographics are never cropped), second photo on hover,
+ * quick add that rises from the image, then title and price on the page colour.
+ */
 export function ProductCard({
   product,
   priority = false,
   compact = false,
+  tone = "light",
 }: ProductCardProps) {
   const imageRef = useRef<HTMLImageElement>(null);
   const primaryImage = product.featuredImage ?? product.images.nodes[0] ?? null;
@@ -163,31 +178,43 @@ export function ProductCard({
   const href = `/products/${product.handle}`;
   const altText = primaryImage?.altText?.trim() || product.title;
   const rating = parseRating(product.rating, product.ratingCount);
+  const dark = tone === "dark";
+  const fit = (image: { width?: number | null; height?: number | null } | null) =>
+    isNearSquare(image) ? " is-cover" : "";
 
   return (
     <article
-      className="group card surface-card flex h-full flex-col overflow-hidden motion-safe:transition-[transform,box-shadow] motion-safe:duration-300 motion-safe:hover:-translate-y-1 motion-safe:hover:shadow-[var(--shadow-lg)]"
+      className="pcard group relative flex h-full flex-col"
       aria-label={product.title}
       data-testid="product-card"
     >
-      <div className="bg-cream-deep relative aspect-square overflow-hidden">
+      <div className="pcard-media">
         {primaryImage ? (
-          <img
-            ref={imageRef}
-            src={shopifyImageUrl(primaryImage.url, { width: 520 })}
-            srcSet={responsiveSrcSet(
-              primaryImage.url,
-              CARD_WIDTHS,
-              primaryImage.width,
-            )}
-            sizes={CARD_SIZES}
-            alt={altText}
-            width={primaryImage.width ?? 520}
-            height={primaryImage.height ?? 520}
-            className="h-full w-full object-cover motion-safe:transition-transform motion-safe:duration-[900ms] motion-safe:ease-out motion-safe:group-hover:scale-[1.06]"
-            loading={priority ? "eager" : "lazy"}
-            fetchPriority={priority ? "high" : "auto"}
-          />
+          <>
+            <img
+              src={shopifyImageUrl(primaryImage.url, { width: 60 })}
+              alt=""
+              aria-hidden="true"
+              className="pcard-backdrop"
+              loading="lazy"
+            />
+            <img
+              ref={imageRef}
+              src={shopifyImageUrl(primaryImage.url, { width: 520 })}
+              srcSet={responsiveSrcSet(
+                primaryImage.url,
+                CARD_WIDTHS,
+                primaryImage.width,
+              )}
+              sizes={CARD_SIZES}
+              alt={altText}
+              width={primaryImage.width ?? 520}
+              height={primaryImage.height ?? 520}
+              className={`pcard-img pcard-img-main${fit(primaryImage)}`}
+              loading={priority ? "eager" : "lazy"}
+              fetchPriority={priority ? "high" : "auto"}
+            />
+          </>
         ) : null}
         {hoverImage ? (
           <img
@@ -200,69 +227,70 @@ export function ProductCard({
             sizes={CARD_SIZES}
             alt=""
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-0 max-md:hidden motion-safe:transition-opacity motion-safe:duration-500 motion-safe:group-hover:opacity-100 motion-reduce:hidden"
+            className={`pcard-img pcard-img-alt pointer-events-none bg-[var(--color-cream-deep)] max-md:hidden motion-reduce:hidden${fit(hoverImage)}`}
             loading="lazy"
           />
         ) : null}
 
-        <div className="absolute start-2.5 top-2.5 flex flex-col items-start gap-1.5">
+        <div className="absolute start-3 top-3 z-[2] flex flex-col items-start gap-1.5">
           {!product.availableForSale ? (
-            <span className="bg-chocolate text-cream rounded-full px-2.5 py-1 text-xs font-bold">
+            <span className="bg-chocolate text-cream rounded-full px-3 py-1 text-[0.7rem] font-bold tracking-wider uppercase">
               Sold out
             </span>
           ) : percent ? (
-            <span className="bg-burgundy rounded-full px-2.5 py-1 text-xs font-bold text-white">
+            <span className="bg-burgundy rounded-full px-3 py-1 text-[0.7rem] font-bold tracking-wider text-white uppercase">
               {percent}% off
             </span>
           ) : null}
         </div>
+
+        {product.availableForSale ? (
+          <div className="pcard-add">
+            {isSingleChoice(product) ? (
+              <CardProductProvider product={product}>
+                <QuickAdd product={product} imageRef={imageRef} />
+              </CardProductProvider>
+            ) : (
+              <Link
+                to={href}
+                className="bg-cream/95 text-chocolate relative z-10 inline-flex h-11 items-center justify-center gap-1.5 rounded-full px-4 text-sm font-bold shadow-[0_10px_24px_-12px_rgb(0_0_0/0.5)] backdrop-blur md:w-full"
+                aria-label={`Choose options for ${product.title}`}
+              >
+                Choose options
+              </Link>
+            )}
+          </div>
+        ) : null}
       </div>
 
-      <div className="flex flex-1 flex-col gap-2 p-3 md:p-4">
-        <h3 className="text-on-surface line-clamp-2 text-[0.95rem] leading-snug font-semibold">
+      <div className={`flex flex-1 flex-col gap-1.5 px-0.5 ${compact ? "pt-3" : "pt-4"}`}>
+        <h3
+          className={`line-clamp-2 leading-snug font-semibold ${compact ? "text-[0.92rem]" : "text-[1rem] md:text-[1.05rem]"} ${dark ? "text-cream" : "text-on-surface"}`}
+        >
           <Link to={href} className="card-link" prefetch="intent">
             {product.title}
           </Link>
         </h3>
         {rating ? <Rating rating={rating} /> : null}
-        <div className="mt-auto flex items-end justify-between gap-2">
-          <p className="flex flex-wrap items-baseline gap-x-2">
-            {onSale ? (
-              <>
-                <span className="text-on-surface text-lg font-bold">
-                  <span className="sr-only">Sale price </span>
-                  {formatPrice(price)}
-                </span>
-                <s className="text-compare text-sm">
-                  <span className="sr-only">Regular price </span>
-                  {formatPrice(compareAt)}
-                </s>
-              </>
-            ) : (
-              <span className="text-on-surface text-lg font-bold">
-                <span className="sr-only">Price </span>
+        <p className="mt-auto flex flex-wrap items-baseline gap-x-2 pt-0.5">
+          {onSale ? (
+            <>
+              <span className={`font-bold ${compact ? "text-base" : "text-lg"} ${dark ? "text-cream" : "text-on-surface"}`}>
+                <span className="sr-only">Sale price </span>
                 {formatPrice(price)}
               </span>
-            )}
-          </p>
-          {product.availableForSale && isSingleChoice(product) ? (
-            <CardProductProvider product={product}>
-              <QuickAdd
-                product={product}
-                imageRef={imageRef}
-                compact={compact}
-              />
-            </CardProductProvider>
-          ) : product.availableForSale ? (
-            <Link
-              to={href}
-              className="border-burgundy text-burgundy hover:bg-peach-soft relative z-10 inline-flex h-10 shrink-0 items-center rounded-full border-2 px-3 text-sm font-bold"
-              aria-label={`Choose options for ${product.title}`}
-            >
-              Choose
-            </Link>
-          ) : null}
-        </div>
+              <s className={`text-sm ${dark ? "text-cream/60" : "text-compare"}`}>
+                <span className="sr-only">Regular price </span>
+                {formatPrice(compareAt)}
+              </s>
+            </>
+          ) : (
+            <span className={`font-bold ${compact ? "text-base" : "text-lg"} ${dark ? "text-cream" : "text-on-surface"}`}>
+              <span className="sr-only">Price </span>
+              {formatPrice(price)}
+            </span>
+          )}
+        </p>
       </div>
     </article>
   );
@@ -271,11 +299,9 @@ export function ProductCard({
 function QuickAdd({
   product,
   imageRef,
-  compact,
 }: {
   product: ProductCardData;
   imageRef: React.RefObject<HTMLImageElement | null>;
-  compact: boolean;
 }) {
   const { formProps, register, options, pending } = useCardProductForm();
   const title = product.title;
@@ -290,7 +316,7 @@ function QuickAdd({
       onPointerEnter={preloadAddToCartMotion}
       onTouchStart={preloadAddToCartMotion}
       onFocus={preloadAddToCartMotion}
-      className="relative z-10 shrink-0"
+      className="relative z-10"
     >
       <input type="hidden" {...register("merchandiseId", {})} />
       <input type="hidden" {...register("quantity", { value: 1 })} />
@@ -298,12 +324,10 @@ function QuickAdd({
         {...register("addToCart", {})}
         disabled={!addable || pending}
         aria-label={`Add ${title} to cart`}
-        className={`bg-cta hover:bg-cta-hover text-cta-text inline-flex items-center justify-center gap-1 rounded-full font-bold shadow-[0_8px_18px_-10px_rgb(192_78_48/0.8)] disabled:opacity-60 motion-safe:transition-[background-color,transform] motion-safe:active:scale-95 ${
-          compact ? "size-10" : "h-10 px-3.5 text-sm"
-        }`}
+        className="bg-chocolate text-cream hover:bg-burgundy inline-flex size-11 items-center justify-center gap-2 rounded-full text-sm font-bold shadow-[0_12px_28px_-12px_rgb(0_0_0/0.6)] disabled:opacity-60 motion-safe:transition-[background-color,transform] motion-safe:active:scale-95 md:h-11 md:w-full"
       >
         <Icon name="plus" size={18} strokeWidth={2.5} />
-        {compact ? null : <span>Add</span>}
+        <span className="max-md:sr-only">{pending ? "Adding…" : "Add to cart"}</span>
       </button>
     </form>
   );

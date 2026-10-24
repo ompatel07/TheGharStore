@@ -15,14 +15,16 @@ export function MarqueeBand({
   duration = 45,
 }: {
   items: MarqueeItem[];
-  tone?: "dark" | "terracotta";
+  tone?: "dark" | "terracotta" | "light";
   duration?: number;
 }) {
   if (items.length === 0) return null;
   const toneClass =
     tone === "dark"
       ? "bg-chocolate text-cream"
-      : "bg-terracotta-deep text-white";
+      : tone === "light"
+        ? "bg-surface text-on-surface border-y border-border"
+        : "bg-terracotta-deep text-white";
 
   const renderTrack = (hidden: boolean) => (
     <ul role="list" className="marquee-track" aria-hidden={hidden || undefined}>
@@ -36,8 +38,8 @@ export function MarqueeBand({
               to={item.to}
               className={`whitespace-nowrap hover:underline ${
                 item.hand
-                  ? "type-hand text-peach text-3xl"
-                  : "font-heading text-2xl font-extrabold tracking-tight md:text-3xl"
+                  ? "ed-display ed-italic text-terracotta-deep text-3xl md:text-5xl"
+                  : "ed-display text-3xl md:text-5xl"
               }`}
             >
               {item.label}
@@ -46,14 +48,14 @@ export function MarqueeBand({
             <span
               className={`whitespace-nowrap ${
                 item.hand
-                  ? "type-hand text-peach text-3xl"
-                  : "font-heading text-2xl font-extrabold tracking-tight md:text-3xl"
+                  ? "ed-display ed-italic text-terracotta-deep text-3xl md:text-5xl"
+                  : "ed-display text-3xl md:text-5xl"
               }`}
             >
               {item.label}
             </span>
           )}
-          <Spark className="text-gold size-5 shrink-0" />
+          <Spark className="text-terracotta size-5 shrink-0" />
         </li>
       ))}
     </ul>
@@ -61,7 +63,7 @@ export function MarqueeBand({
 
   return (
     <div
-      className={`${toneClass} marquee relative py-5`}
+      className={`${toneClass} marquee relative py-6 md:py-8`}
       style={{ "--marquee-duration": `${duration}s` } as React.CSSProperties}
     >
       {renderTrack(false)}

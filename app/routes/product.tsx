@@ -378,7 +378,7 @@ function ProductPage({
                   {collection.title}
                 </Link>
               ) : null}
-              <h1 className="font-heading text-on-surface mt-1 text-[clamp(1.9rem,1.3rem+2vw,3.1rem)] leading-[1.02] font-extrabold tracking-tight">
+              <h1 className="ed-display text-on-surface mt-2 text-[clamp(2.1rem,1.4rem+2.2vw,3.4rem)] leading-[1.02]">
                 {product.title}
               </h1>
               {rating ? (

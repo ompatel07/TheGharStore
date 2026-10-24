@@ -18,11 +18,9 @@ import {
   Toolbar,
   useLoadMore,
 } from "~/components/CollectionBrowse";
-import { collectionIcon } from "~/components/home/CategoryStrip";
 import { BRAND_NAME } from "~/components/Logo";
 import { ProductCard } from "~/components/ProductCard";
 import { Icon } from "~/components/ui/Icon";
-import { Mandala } from "~/components/ui/Ornaments";
 import { shopifyImageUrl } from "~/lib/image";
 import { loadCollectionPage } from "~/lib/collection";
 import { storefrontClientContext } from "~/lib/storefront";
@@ -157,23 +155,15 @@ function CollectionHeader({
     .slice(0, 3);
 
   return (
-    <header className="bg-chocolate text-cream curve-bottom relative mb-10 overflow-hidden rounded-t-[var(--radius-xl)] px-6 pt-10 pb-16 md:px-12 md:pt-14 md:pb-20">
+    <header className="bg-night text-cream relative mb-12 overflow-hidden rounded-[2rem] px-6 pt-10 pb-12 md:px-12 md:pt-14 md:pb-16">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-32 -left-32 size-[30rem] text-[var(--color-gold)] opacity-15"
-      >
-        <Mandala className="spin-slow h-full w-full" />
-      </div>
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(55%_70%_at_85%_40%,rgb(239_119_86/0.3),transparent_70%)]"
+      />
       <div className="relative grid items-center gap-10 lg:grid-cols-[1.2fr_1fr]">
         <div>
-          <p className="type-hand text-peach inline-flex items-center gap-2 text-2xl md:text-3xl">
-            <Icon
-              name={collectionIcon({ handle: collection.handle, icon: null })}
-              size={26}
-            />
-            the collection
-          </p>
-          <h1 className="display-xl mt-2">{collection.title}</h1>
+          <p className="eyebrow text-peach">The collection</p>
+          <h1 className="ed-display ed-xl mt-5">{collection.title}</h1>
           {collection.description ? (
             <p className="text-cream/80 mt-5 max-w-xl text-lg md:text-xl">
               {collection.description}
@@ -188,7 +178,7 @@ function CollectionHeader({
             {images.map((image, index) => (
               <div
                 key={image.url}
-                className={`arch-frame absolute w-[42%] ${
+                className={`absolute w-[42%] overflow-hidden rounded-[1.5rem] shadow-[0_30px_60px_-24px_rgb(0_0_0/0.7)] ring-1 ring-white/15 ${
                   index === 0
                     ? "left-1/2 z-10 h-full -translate-x-1/2"
                     : index === 1
@@ -196,7 +186,7 @@ function CollectionHeader({
                       : "right-[4%] h-[78%] rotate-6"
                 }`}
               >
-                <div className="arch h-full bg-white">
+                <div className="h-full bg-white">
                   <img
                     src={shopifyImageUrl(image.url, { width: 400 })}
                     alt=""

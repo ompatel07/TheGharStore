@@ -38,12 +38,12 @@
       ],
       "legal": { "genericName": "Wall touch-up paint with roller applicator", "dimensions": ["21 × 10.5 × 8.5 cm", "supplier"], "netQuantity": ["500 g", "check"], "countryOfOrigin": [null, "check"] },
       "imageAlts": [
-        "Wall repair roller paint bottle with orange roller head, next to a hand rolling it on a wall",
-        "Four steps: clean the wall, prepare the roller, apply coats, check the finish",
-        "Roller paint parts: removable foam roller, orange head and bottle",
-        "Close-up of the rotating roller head and rinsing the roller under water",
-        "Roller paint size diagram with height and width",
-        "Wall marks before and after a touch-up"
+        "Wall repair roller paint bottle with built-in roller",
+        "Hand rolling white paint over marks on a wall, before and after",
+        "Close-up of the roller head, built-in paint reservoir and smooth coverage",
+        "Roller paint bottle with a spare roller beside a scribbled wall, before and after",
+        "Roller paint features: roller, built-in reservoir, covers stains and marks",
+        "Before and after: stained white wall patches covered clean"
       ],
       "flags": [
         "Images 2–6 are supplier infographics with machine-translated English (e.g. “superimpose smear”, “Strong Cover A Brush Is White”) and green branding. Replace with your own photos or clean edits.",
@@ -648,11 +648,11 @@
       ],
       "legal": { "genericName": "Wood polish", "dimensions": [null, "check"], "netQuantity": ["2 × 120 ml", "supplier"], "countryOfOrigin": [null, "check"] },
       "imageAlts": [
-        "Two bottles of floor essential beeswax polish, 120 ml each, with wood before and after",
-        "Wooden plank half polished, showing before and after",
-        "Wooden floor and dining table before and after polishing",
-        "Wooden staircase and floor before and after polishing",
-        "Mop polishing a wooden floor next to a beeswax polish bottle"
+        "Pack of two Floor Essential Wax bottles on a wooden floor",
+        "Wooden floor before and after polishing with Floor Essential Wax",
+        "How to use: clean the surface, apply a small amount of wax, then wipe and polish",
+        "Two bottles of Floor Essential Wax beside a wooden cabinet",
+        "Where to use: wooden floors, dining tables, stairs, cabinets, doors and furniture"
       ],
       "flags": [
         "Title says “Floor Essential Wax” — keep the brand name only if the bottle really says it; the new title describes what it is.",
@@ -676,7 +676,7 @@
         ["Light colour", "Warm white", "supplier"],
         ["Number of houses", "To be confirmed", "check"],
         ["Power", "Battery / USB / plug — to be confirmed", "check"],
-        ["String length", "To be confirmed", "check"]
+        ["Total length (approx.)", "2.5 m", "supplier"]
       ],
       "howToUse": [
         ["Arrange first", "Lay out the string where you want it before switching on."],
@@ -691,19 +691,13 @@
       ],
       "legal": { "genericName": "Decorative LED string light", "dimensions": ["House 6.5 × 5.5 × 4 cm", "supplier"], "netQuantity": ["1 set", "supplier"], "countryOfOrigin": [null, "check"] },
       "imageAlts": [
-        "White house-shaped LED string lights on a windowsill beside pink vases",
-        "Close-up of little white houses glowing warm",
-        "House string lights glowing on a shelf",
-        "Row of glowing house lights on a windowsill",
-        "House string lights arranged on a white surface",
-        "Glowing house lights in front of a window",
-        "House string lights at night",
-        "House light size diagram: 6.5 cm tall, 5.5 cm wide",
-        "House string lights hanging on a wall",
-        "Bunch of glowing house lights",
-        "Three white house lights close up"
+        "Warm white house-shaped LED string lights on a shelf",
+        "Size guide: each house is 6.5 cm tall and 5.5 cm wide; total string length approx. 2.5 m",
+        "House string lights draped above a bed for a cosy glow",
+        "House string lights in a living room, bedroom, balcony, on a wall, at festivals and as a gift",
+        "House string lights along a balcony railing at night"
       ],
-      "flags": ["Power source, number of houses and string length unknown — essential for buyers. Get from supplier.", "Collection: add to Roshan Ghar (lighting) once created."]
+      "flags": ["Power source and number of houses unknown — get from supplier. String length confirmed approx. 2.5 m.", "Collection: add to Roshan Ghar (lighting) once created."]
     },
     {
       "handle": "flameless-lotus-flower-water-sensor-led-diyas-pack-of-6-cv85s2q59o3h4p4k7mi0",
@@ -719,33 +713,31 @@
       "specifications": [
         ["Pieces", "6", "supplier"],
         ["Light", "LED", "supplier"],
+        ["On/off", "Switch on the base", "supplier"],
         ["Base", "Foam leaf base that floats", "supplier"],
         ["Colours", "Assorted", "supplier"],
         ["Battery", "Type and replaceability to be confirmed", "check"]
       ],
       "howToUse": [
-        ["Switch on", "Turn on the light (or activate it as described on the pack)."],
+        ["Switch on", "Slide the small ON/OFF switch on the base of each lotus to turn it on."],
         ["Float", "Place each lotus gently on still water in a bowl, urli or pond."],
-        ["Dry and store", "Take them out, dry them and switch off after use."]
+        ["Dry and store", "Lift them out, switch each one off and dry them before storing."]
       ],
       "inTheBox": ["6 × floating lotus LED diyas"],
       "care": "Dry fully before storing. Don’t submerge the light unit. Store in a dry box.",
       "faqs": [
-        ["How do they switch on?", "We’re confirming with our supplier whether they light up on contact with water or with a small switch, and will update this."],
+        ["How do they switch on?", "Each lotus has a small ON/OFF switch on its base. Switch it on, then float it. Switch it off after use to save the battery."],
         ["Are the colours fixed?", "Colours are assorted and may vary from the photos."]
       ],
       "legal": { "genericName": "Floating LED decorative light", "dimensions": [null, "check"], "netQuantity": ["6 pieces", "supplier"], "countryOfOrigin": [null, "check"] },
       "imageAlts": [
-        "Six glowing lotus LED diyas floating in a glass bowl",
-        "Floating foam base underneath a lotus LED diya",
-        "Lotus LED diyas in pink, beige, red, purple, orange and blue",
-        "Green leaf base and blue lotus diya",
-        "Lotus LED diyas floating in a garden pond",
-        "Close-up of glowing lotus diyas",
-        "Lotus LED diyas glowing in the dark",
-        "Six lotus LED diyas on a white surface"
+        "Floating LED lotus lights glowing in a glass bowl of water among marigolds and diyas",
+        "Six lotus light colours: pink, white, yellow, orange, purple and blue, with the ON/OFF switch on the base",
+        "Floating lotus lights for home décor, festivals and pooja, parties, and garden settings",
+        "Close-up details: lotus petals, ON/OFF switch, LED glow and floating base",
+        "Before and after: a plain glass bowl, then the same bowl with floating lotus lights"
       ],
-      "flags": ["Image 2 caption and image 3 headline (“Bow your head piously and make your wish”) are machine-translated supplier text; crop or replace.", "Title says “Water Sensor” — confirm whether they are water-activated or switch-operated."]
+      "flags": ["Image 2 caption and image 3 headline (“Bow your head piously and make your wish”) are machine-translated supplier text; crop or replace.", "Confirmed switch-operated (ON/OFF switch on the base). Battery type still to confirm."]
     }
   ],
   "notSellable": [
