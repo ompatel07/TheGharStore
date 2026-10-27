@@ -3,6 +3,7 @@ import { Link } from "react-router";
 
 import type { ProductCardData } from "~/components/ProductCard";
 import { Spark } from "~/components/ui/Ornaments";
+import { Wave } from "~/components/ui/Wave";
 import { shopifyImageUrl } from "~/lib/image";
 import { formatPrice } from "~/lib/money";
 
@@ -21,6 +22,8 @@ export function ProductRibbon({ products, title = "Smart finds. Better homes." }
   const rows = [items.slice(0, half), [...items.slice(half), ...items].slice(0, half)];
 
   return (
+    <>
+    <Wave className="text-burgundy -mb-px" />
     <section aria-label="Browse the store" className="ribbon bg-burgundy relative overflow-hidden py-14 md:py-20">
       <div
         aria-hidden="true"
@@ -70,5 +73,7 @@ export function ProductRibbon({ products, title = "Smart finds. Better homes." }
         <Spark className="text-gold sh-spark size-6 shrink-0" />
       </p>
     </section>
+    <Wave flip className="text-burgundy -mt-px" />
+    </>
   );
 }

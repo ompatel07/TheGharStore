@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Link } from "react-router";
 
+import { Toran } from "~/components/festive/Toran";
 import { Icon } from "~/components/ui/Icon";
 import type { HeroContent, HeroHotspot, HomeImage } from "~/lib/home";
 import { responsiveSrcSet, shopifyImageUrl } from "~/lib/image";
@@ -15,7 +16,15 @@ import type { TrustBadge } from "~/lib/promises";
  * high priority, never lazy. Copy rises in with CSS; pointer and scroll
  * parallax are transform-only and skip touch / reduced-motion.
  */
-export function HomeHero({ hero, trust }: { hero: HeroContent; trust: TrustBadge[] }) {
+export function HomeHero({
+  hero,
+  trust,
+  festive = false,
+}: {
+  hero: HeroContent;
+  trust: TrustBadge[];
+  festive?: boolean;
+}) {
   const sectionRef = useRef<HTMLElement>(null);
   const [openSpot, setOpenSpot] = useState<number | null>(null);
   const ctaRef = useMagnetic<HTMLAnchorElement>(0.3);
@@ -50,6 +59,7 @@ export function HomeHero({ hero, trust }: { hero: HeroContent; trust: TrustBadge
       ) : null}
       <div className="hero-scrim" />
       <Motes />
+      {festive ? <Toran className="absolute inset-x-0 top-0 z-[4]" /> : null}
 
       {/* Hotspots sit above the scrim on an identical stage, so they track the photo. */}
       {background && hero.hotspots.length > 0 ? (
@@ -71,7 +81,7 @@ export function HomeHero({ hero, trust }: { hero: HeroContent; trust: TrustBadge
         </div>
       ) : null}
 
-      <div className="max-w-page px-margin pointer-events-none relative z-[2] mx-auto flex w-full flex-1 flex-col justify-end pt-20 pb-6 lg:justify-center lg:py-14">
+      <div className={`max-w-page px-margin pointer-events-none relative z-[2] mx-auto flex w-full flex-1 flex-col justify-end ${festive ? "pt-36 lg:pt-40" : "pt-20 lg:pt-14"} pb-6 lg:justify-center lg:pb-14`}>
         <div className="max-w-[40rem]">
           {hero.eyebrow ? (
             <p className="eyebrow hero-in text-peach" style={{ "--delay": "200ms" } as CSSProperties}>
