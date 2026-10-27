@@ -11,7 +11,8 @@ type SectionHeadingProps = {
   accent?: string;
   /** Handwritten aside with a hand-drawn arrow, e.g. "free delivery on all of these!" */
   note?: string;
-  tone?: "light" | "dark";
+  /** "peach": on peach backgrounds (burgundy accents for AA contrast). */
+  tone?: "light" | "dark" | "peach";
   size?: "lg" | "xl" | "md";
   align?: "start" | "center";
   /** Right-hand slot on wide screens (links, arrows). */
@@ -60,6 +61,7 @@ export function SectionHeading({
   const words = title.split(/\s+/).filter(Boolean);
   const accentWords = accent ? accent.split(/\s+/).filter(Boolean) : [];
   const dark = tone === "dark";
+  const accentClass = dark ? "text-peach" : tone === "peach" ? "text-burgundy" : "text-terracotta-deep";
   const sizeClass = size === "xl" ? "ed-xl" : size === "md" ? "ed-md" : "ed-lg";
 
   return (
@@ -70,7 +72,7 @@ export function SectionHeading({
       <div className={align === "center" ? "mx-auto" : ""}>
         {kicker ? (
           <p
-            className={`sh-fade type-hand inline-flex items-center gap-2 text-2xl md:text-[1.7rem] ${dark ? "text-peach" : "text-terracotta-deep"}`}
+            className={`sh-fade type-hand inline-flex items-center gap-2 text-2xl md:text-[1.7rem] ${accentClass}`}
           >
             <Spark className="sh-spark text-gold size-4" />
             {kicker}
@@ -87,7 +89,7 @@ export function SectionHeading({
             <span key={`a-${word}-${index}`} className="w">
               <span
                 style={{ "--i": words.length + index } as CSSProperties}
-                className={dark ? "text-peach" : "text-terracotta-deep"}
+                className={accentClass}
               >
                 {word}
                 {index < accentWords.length - 1 ? " " : ""}

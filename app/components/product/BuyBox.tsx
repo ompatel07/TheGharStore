@@ -370,7 +370,7 @@ export function StickyBuyBar({
     >
       <div className="flex items-center gap-3">
         {image ? (
-          <img
+          <img loading="lazy"
             src={shopifyImageUrl(image.url, { width: 96 })}
             alt=""
             className="size-11 shrink-0 rounded-lg object-cover"

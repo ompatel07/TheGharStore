@@ -33,7 +33,8 @@ export function Logo({ height, className = "", priority = false, onClick }: Logo
         height={height}
         style={{ width, height }}
         className="block object-contain"
-        fetchPriority={priority ? "high" : undefined}
+        // Never "high": the hero / product photo is the page's main image.
+        loading={priority ? "eager" : "lazy"}
         decoding={priority ? "sync" : "async"}
       />
     </Link>

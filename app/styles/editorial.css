@@ -217,7 +217,15 @@
       min-block-size: clamp(36rem, calc(100svh - 5.5rem), 58rem);
     }
   }
-  .hero-stage > img {
+  @media (max-width: 63.999rem) {
+    .hero-stage {
+      inset-inline-start: 0;
+      inset-block-start: 0;
+      inline-size: 100%;
+      block-size: 100%;
+    }
+  }
+  .hero-stage img {
     position: absolute;
     inset: 0;
     inline-size: 100%;

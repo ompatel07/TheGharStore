@@ -5,7 +5,11 @@ export type ShopifyImageOptions = {
   width?: number;
   height?: number;
   crop?: "center" | "top" | "bottom" | "left" | "right";
+  /** CDN quality (1–100). Defaults to 75: visually identical, ~30% lighter WebP/AVIF. */
+  quality?: number;
 };
+
+const DEFAULT_QUALITY = 75;
 
 const SHOPIFY_CDN_HOSTS = ["cdn.shopify.com", "mock.shop"];
 
@@ -26,6 +30,8 @@ export function shopifyImageUrl(url: string, options: ShopifyImageOptions = {}) 
   if (options.width) parsed.searchParams.set("width", String(options.width));
   if (options.height) parsed.searchParams.set("height", String(options.height));
   if (options.crop) parsed.searchParams.set("crop", options.crop);
+  // Only resized requests get a quality hint (the original file stays untouched).
+  if (options.width || options.height) parsed.searchParams.set("quality", String(options.quality ?? DEFAULT_QUALITY));
 
   return parsed.toString();
 }

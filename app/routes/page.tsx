@@ -33,7 +33,11 @@ export function meta({ data }: Route.MetaArgs) {
     { title: `${page.seo?.title || page.title} · ${BRAND_NAME}` },
     {
       name: "description",
-      content: page.seo?.description || page.bodySummary || BRAND_TAGLINE,
+      content:
+        page.seo?.description ||
+        (page.bodySummary && page.bodySummary.length >= 70
+          ? page.bodySummary
+          : `${page.title} · ${BRAND_NAME}. ${page.bodySummary || BRAND_TAGLINE}`),
     },
   ];
 }

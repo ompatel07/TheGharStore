@@ -60,7 +60,7 @@ export function SectionTabs({
     >
       <div className="max-w-page px-margin mx-auto flex h-16 items-center gap-6">
         <div className="flex min-w-0 items-center gap-3">
-          {image ? <img src={shopifyImageUrl(image.url, { width: 96 })} alt="" className="size-10 rounded-lg object-cover" /> : null}
+          {image ? <img loading="lazy" src={shopifyImageUrl(image.url, { width: 96 })} alt="" className="size-10 rounded-lg object-cover" /> : null}
           <p className="text-on-surface max-w-[16rem] truncate text-sm font-bold">{title}</p>
         </div>
         <nav aria-label="Product sections" className="mx-auto">

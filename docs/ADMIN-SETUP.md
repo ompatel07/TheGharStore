@@ -235,15 +235,15 @@ The site links to them from badges and the FAQ. Shopify's API doesn't let the co
 > To request one, contact us within 7 days of delivery at offscriptlabss@gmail.com or +91 87808 76920 with your order
 > number and an unboxing photo or video showing the issue. Once we confirm it, we ship the replacement at no cost.
 > Not covered: items used, washed or damaged after delivery; change of mind; requests after 7 days.
-> **Refunds:** if a replacement isn't possible (for example, out of stock), we refund what you paid. Prepaid orders go back
-> to the original payment method; COD orders are refunded by bank transfer or UPI. Refunds are processed within 7 working days of approval.
+> **Refunds:** if a replacement isn't possible (for example, out of stock), we refund what you paid
+> by bank transfer or UPI to an account you share with us (all orders are Cash on Delivery). Refunds are processed within 7 working days of approval.
 > **Cancellations:** you can cancel before dispatch. Write to us with your order number.
 
 **Shipping policy**
 
 > **Free delivery across India** on every order, no minimum. Orders are dispatched in 1–2 working days and usually
 > delivered in 4–7 working days depending on your pincode; remote areas can take longer. You'll get tracking details once
-> your order ships. **Cash on Delivery** is available; you can also pay by UPI, card or net banking. If your parcel looks
+> your order ships. **Payment is Cash on Delivery only**: you pay when your order arrives. If your parcel looks
 > damaged on arrival, record an unboxing video and tell us within 7 days. Questions: offscriptlabss@gmail.com or +91 87808 76920.
 
 ## Still to fill in (legal, India e-commerce rules)

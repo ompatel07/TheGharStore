@@ -6,7 +6,7 @@ import { FestiveCarousel } from "~/components/home/FestiveCarousel";
 import { FeatureBanners } from "~/components/home/FeatureBanners";
 import { FlipTheSwitch } from "~/components/home/FlipTheSwitch";
 import { HomeFaq } from "~/components/home/HomeFaq";
-import { HomeHero } from "~/components/home/HomeHero";
+import { HERO_MOBILE_QUERY, heroImageSources, HomeHero } from "~/components/home/HomeHero";
 import { ProblemFix } from "~/components/home/ProblemFix";
 import { ProductRibbon } from "~/components/home/ProductRibbon";
 import { ProductSpotlight } from "~/components/home/ProductSpotlight";
@@ -27,7 +27,15 @@ export function meta({ data }: Route.MetaArgs) {
   const description =
     "Useful, good-looking finds for everyday Indian homes: décor, lighting, kitchen helpers, DIY fixes and festive specials.";
   const image = data?.hero.background?.url ?? data?.hero.image?.url;
+  const heroImage = data?.hero.background ?? data?.hero.image ?? null;
+  const sources = heroImage ? heroImageSources(heroImage) : null;
   return [
+    ...(sources
+      ? [
+          { tagName: "link", rel: "preload", as: "image", fetchPriority: "high", media: HERO_MOBILE_QUERY, imageSrcSet: sources.mobile.srcSet, imageSizes: sources.mobile.sizes },
+          { tagName: "link", rel: "preload", as: "image", fetchPriority: "high", media: "(min-width: 1024px)", imageSrcSet: sources.desktop.srcSet, imageSizes: sources.desktop.sizes },
+        ]
+      : []),
     { title },
     { name: "description", content: description },
     { property: "og:type", content: "website" },

@@ -16,7 +16,7 @@ export function PaymentMethodIcon({ method }: { method: PaymentMethodLabel }) {
   }
 
   return (
-    <img
+    <img loading="lazy"
       src={src}
       alt={method}
       title={method}

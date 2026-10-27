@@ -21,6 +21,8 @@ import {
 } from "~/components/product/BuyBox";
 import {
   ProductGallery,
+  STAGE_SIZES,
+  STAGE_WIDTHS,
   type GalleryImage,
   type GalleryItem,
 } from "~/components/product/ProductGallery";
@@ -39,6 +41,7 @@ import { isSellable } from "~/components/ProductCard";
 import { Icon } from "~/components/ui/Icon";
 import { parseRating, Rating } from "~/components/ui/Rating";
 import { text } from "~/lib/metaobject";
+import { responsiveSrcSet } from "~/lib/image";
 import { formatPrice } from "~/lib/money";
 import { trustBadges } from "~/lib/promises";
 import { soldLabel } from "~/lib/sold";
@@ -67,6 +70,20 @@ function plainDescription(description: string, max = 158) {
 export function meta({ data, location }: Route.MetaArgs) {
   if (!data) return [{ title: `Product not found · ${BRAND_NAME}` }];
   const { product } = data;
+  // The gallery opens on the selected variant's photo (else the featured one).
+  const leadImage = product.selectedOrFirstAvailableVariant?.image ?? product.featuredImage;
+  const preload = leadImage
+    ? [
+        {
+          tagName: "link",
+          rel: "preload",
+          as: "image",
+          fetchPriority: "high",
+          imageSrcSet: responsiveSrcSet(leadImage.url, STAGE_WIDTHS, leadImage.width),
+          imageSizes: STAGE_SIZES,
+        },
+      ]
+    : [];
   const title = `${text(product.seo.title) ?? product.title} · ${BRAND_NAME}`;
   const description =
     text(product.seo.description) ??
@@ -75,6 +92,7 @@ export function meta({ data, location }: Route.MetaArgs) {
       : `Shop ${product.title} at ${BRAND_NAME}.`);
   const image = product.featuredImage?.url;
   return [
+    ...preload,
     { title },
     { name: "description", content: description },
     {

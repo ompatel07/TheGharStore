@@ -160,20 +160,48 @@ export function HomeHero({
   );
 }
 
+/** Below this width the hero shows a centre-cropped portrait (hotspots are desktop-only). */
+export const HERO_MOBILE_QUERY = "(max-width: 1023px)";
+
+/**
+ * Hero image sources, shared with the home route's preload links so the
+ * browser fetches exactly one file. Phones get a portrait crop of the photo's
+ * centre from Shopify's CDN — the same pixels they saw before, ~70% lighter.
+ */
+export function heroImageSources(image: HomeImage) {
+  const sourceHeight = image.height ?? 941;
+  const crops = [0.75, 1].map((scale) => {
+    const height = Math.round(sourceHeight * scale);
+    const width = Math.round(height * 0.62);
+    return `${shopifyImageUrl(image.url, { width, height, crop: "center" })} ${width}w`;
+  });
+  return {
+    mobile: { srcSet: crops.join(", "), sizes: "100vw" },
+    desktop: {
+      src: shopifyImageUrl(image.url, { width: 1600 }),
+      srcSet: responsiveSrcSet(image.url, [1080, 1440, 1672, 2048], image.width),
+      sizes: "100vw",
+    },
+  };
+}
+
 function HeroImage({ image }: { image: HomeImage }) {
+  const sources = heroImageSources(image);
   return (
-    <img
-      src={shopifyImageUrl(image.url, { width: 1600 })}
-      srcSet={responsiveSrcSet(image.url, [720, 1080, 1440, 1672, 2048], image.width)}
-      // On portrait screens the stage is ~1.8× the viewport height wide.
-      sizes="(max-aspect-ratio: 16/9) 178vh, 100vw"
-      alt={image.altText ?? ""}
-      width={image.width ?? 1672}
-      height={image.height ?? 941}
-      fetchPriority="high"
-      loading="eager"
-      decoding="async"
-    />
+    <picture>
+      <source media={HERO_MOBILE_QUERY} srcSet={sources.mobile.srcSet} sizes={sources.mobile.sizes} />
+      <img
+        src={sources.desktop.src}
+        srcSet={sources.desktop.srcSet}
+        sizes={sources.desktop.sizes}
+        alt={image.altText ?? ""}
+        width={image.width ?? 1672}
+        height={image.height ?? 941}
+        fetchPriority="high"
+        loading="eager"
+        decoding="async"
+      />
+    </picture>
   );
 }
 

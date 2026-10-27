@@ -6,6 +6,15 @@ import type { Route } from "./+types/api.reviews";
 const GID = /^gid:\/\/shopify\/Product\/\d+$/;
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
+/** True when the Origin header points at this site ("null" or junk → false). */
+function sameHost(origin: string, requestUrl: string) {
+  try {
+    return new URL(origin).host === new URL(requestUrl).host;
+  } catch {
+    return false;
+  }
+}
+
 /** GET /api/reviews?productId=gid://… → published Judge.me reviews (JSON). */
 export async function loader({ context, request }: Route.LoaderArgs) {
   const url = new URL(request.url);
@@ -19,6 +28,13 @@ export async function loader({ context, request }: Route.LoaderArgs) {
 /** POST /api/reviews — a visitor's review, forwarded to Judge.me for moderation. */
 export async function action({ context, request }: Route.ActionArgs) {
   if (request.method !== "POST") return Response.json({ status: "failed" }, { status: 405 });
+  const origin = request.headers.get("Origin");
+  if (origin && !sameHost(origin, request.url)) {
+    return Response.json({ status: "failed" }, { status: 403 });
+  }
+  if (Number(request.headers.get("Content-Length") ?? 0) > 20_000) {
+    return Response.json({ status: "invalid", errors: ["body"] }, { status: 413 });
+  }
   const form = await request.formData();
   const field = (name: string) => String(form.get(name) ?? "").trim();
 

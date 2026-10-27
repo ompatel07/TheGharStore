@@ -52,7 +52,7 @@ export function ShopByPrice({
               >
                 <span className="relative z-10 flex h-full flex-col justify-between gap-6">
                   <span>
-                    <span className="block text-xs font-bold tracking-[0.2em] uppercase opacity-80">Under</span>
+                    <span className="block text-xs font-bold tracking-[0.2em] uppercase">Under</span>
                     <span className="font-heading block text-[3.1rem] leading-none font-extrabold tracking-tight md:text-[3.7rem] lg:text-[2.9rem] xl:text-[3.3rem]">
                       <span className="sr-only">₹{tier.max.toLocaleString("en-IN")}</span>
                       <span aria-hidden="true">
@@ -60,7 +60,7 @@ export function ShopByPrice({
                       </span>
                     </span>
                   </span>
-                  <span className="text-sm font-semibold opacity-85">
+                  <span className="text-sm font-semibold">
                     {tier.products.length >= 8 ? "8+" : tier.products.length} finds{freeDelivery ? ", free delivery" : ""}
                   </span>
                   <span className="inline-flex items-center gap-2 text-sm font-bold">
