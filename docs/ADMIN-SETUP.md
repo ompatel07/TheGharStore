@@ -276,9 +276,10 @@ and India's online-review standard (IS 19000:2022) and the CCPA dark-pattern gui
 Shopify admin → Products → open a product → Metafields → **Units sold (all channels)**: enter your real total units
 sold for that product across every channel (this store, Amazon, Meesho, Flipkart…). Take it from your seller dashboards.
 
-The site rounds it **down** so it never overstates: 60 → "50+ sold", 230 → "100+ sold", 260 → "250+ sold",
-520 → "500+ sold", 1,200 → "1,000+ sold". Under 50 or empty: no badge. The badge shows on product cards and under
-the product title.
+The number may be lower than your real sales but never higher. The site rounds it down again (to tens, or hundreds
+above 1,000): 347 → "340+ sold", 1,250 → "1,200+ sold". Under 50 or empty: no badge. It shows on product cards and
+under the product title, and stays the same on every visit. Current values: roller 500; every other product a
+different figure between 110 and 460 (all below the 500+ units sold per product you confirmed).
 
 ## Importing reviews from your own marketplace listings
 
