@@ -73,6 +73,9 @@ export const PRODUCT_QUERY = gql(
         description
         descriptionHtml
         requiresSellingPlan
+        unitsSold: metafield(namespace: "custom", key: "units_sold") {
+          value
+        }
         rating: metafield(namespace: "reviews", key: "rating") {
           value
         }

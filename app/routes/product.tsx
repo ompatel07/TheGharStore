@@ -40,6 +40,7 @@ import { parseRating, Rating } from "~/components/ui/Rating";
 import { text } from "~/lib/metaobject";
 import { formatPrice } from "~/lib/money";
 import { trustBadges } from "~/lib/promises";
+import { soldLabel } from "~/lib/sold";
 import {
   ProductProvider,
   useProductForm,
@@ -398,6 +399,12 @@ function ProductPage({
               <h1 className="ed-display text-on-surface mt-2 text-[clamp(2.1rem,1.4rem+2.2vw,3.4rem)] leading-[1.02]">
                 {product.title}
               </h1>
+              {soldLabel(product.unitsSold?.value) ? (
+                <p className="bg-peach-soft text-chocolate mt-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-bold">
+                  <Icon name="diya" size={16} className="text-terracotta-deep" />
+                  {soldLabel(product.unitsSold?.value)}
+                </p>
+              ) : null}
               {rating ? (
                 <a href="#reviews" className="mt-2 inline-block">
                   <Rating rating={rating} size="md" />

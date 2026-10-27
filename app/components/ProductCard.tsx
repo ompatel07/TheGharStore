@@ -12,6 +12,7 @@ import {
 } from "~/lib/fly-to-cart";
 import { responsiveSrcSet, shopifyImageUrl } from "~/lib/image";
 import { compareMoney, formatPrice, salePercent } from "~/lib/money";
+import { soldLabel } from "~/lib/sold";
 import type { loader as rootLoader } from "~/root";
 
 const CARD_VARIANT_FRAGMENT = gql(`
@@ -52,6 +53,9 @@ export const PRODUCT_CARD_FRAGMENT = gql(
       title
       availableForSale
       requiresSellingPlan
+      unitsSold: metafield(namespace: "custom", key: "units_sold") {
+        value
+      }
       rating: metafield(namespace: "reviews", key: "rating") {
         value
       }
@@ -179,6 +183,7 @@ export function ProductCard({
   const href = `/products/${product.handle}`;
   const altText = primaryImage?.altText?.trim() || product.title;
   const rating = parseRating(product.rating, product.ratingCount);
+  const sold = soldLabel(product.unitsSold?.value);
   const dark = tone === "dark";
   // Morph this card's photo into the product page gallery on navigation.
   // Only the card that was clicked claims the name (the same product can be on screen twice).
@@ -252,6 +257,12 @@ export function ProductCard({
           ) : percent ? (
             <span className="bg-burgundy rounded-full px-3 py-1 text-[0.7rem] font-bold tracking-wider text-white uppercase">
               {percent}% off
+            </span>
+          ) : null}
+          {sold && product.availableForSale ? (
+            <span className="bg-cream/95 text-chocolate inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[0.7rem] font-bold shadow-[var(--shadow-sm)] backdrop-blur">
+              <Icon name="diya" size={13} className="text-terracotta-deep" />
+              {sold}
             </span>
           ) : null}
         </div>

@@ -270,3 +270,20 @@ To collect reviews automatically:
 
 Don't import reviews from Amazon, Meesho or other sellers' listings: they're about other sellers' products,
 and India's online-review standard (IS 19000:2022) and the CCPA dark-pattern guidelines treat that as misleading.
+
+## "Units sold" badges (real numbers only)
+
+Shopify admin → Products → open a product → Metafields → **Units sold (all channels)**: enter your real total units
+sold for that product across every channel (this store, Amazon, Meesho, Flipkart…). Take it from your seller dashboards.
+
+The site rounds it **down** so it never overstates: 60 → "50+ sold", 230 → "100+ sold", 260 → "250+ sold",
+520 → "500+ sold", 1,200 → "1,000+ sold". Under 50 or empty: no badge. The badge shows on product cards and under
+the product title.
+
+## Importing reviews from your own marketplace listings
+
+Reviews your buyers left on **your own** Amazon / Flipkart / Meesho listings are real reviews of your products, so
+they can be shown here:
+- Judge.me → Import reviews: import from your own listing (or upload the CSV export from your seller account).
+- Keep the source visible (e.g. "Verified buyer on Amazon").
+- Never import from other sellers' listings or AliExpress / supplier pages: those reviews aren't about your products.
