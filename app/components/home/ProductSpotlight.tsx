@@ -4,6 +4,7 @@ import { Link } from "react-router";
 import { BeforeAfterSlider } from "~/components/ui/BeforeAfterSlider";
 import { Icon } from "~/components/ui/Icon";
 import { Reveal } from "~/components/ui/Reveal";
+import { SectionHeading } from "~/components/ui/SectionHeading";
 import type { Spotlight } from "~/lib/home";
 import { responsiveSrcSet, shopifyImageUrl } from "~/lib/image";
 import { formatPrice } from "~/lib/money";
@@ -29,10 +30,7 @@ export function ProductSpotlight({ spotlight }: { spotlight: Spotlight }) {
     >
       <div className="max-w-page px-margin mx-auto py-20 md:py-28">
         <div className="mb-12 max-w-3xl">
-          <p className="eyebrow text-terracotta-deep">Featured find</p>
-          <h2 id="spotlight-title" className="ed-display ed-lg text-on-surface mt-4">
-            {heading}
-          </h2>
+          <SectionHeading id="spotlight-title" kicker="featured find" title={heading} note="see how it works, step by step" />
           {spotlight.intro ? (
             <p className="text-on-surface-secondary mt-3 text-lg">
               {spotlight.intro}
@@ -237,7 +235,7 @@ function SpotlightStory({ spotlight }: { spotlight: Spotlight }) {
           aria-hidden="true"
           className="bg-gold absolute top-2 bottom-2 left-[1.375rem] w-0.5 origin-top max-lg:hidden"
         />
-        <ol className="relative grid gap-6 lg:gap-[22vh] lg:py-[8vh]">
+        <ol className="relative grid gap-6 lg:gap-[12vh] lg:py-[6vh]">
           {steps.map((step, index) => (
             <li
               key={step.title}

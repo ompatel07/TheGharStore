@@ -3,7 +3,7 @@ import { Link } from "react-router";
 
 import type { ProductCardData } from "~/components/ProductCard";
 import { Icon } from "~/components/ui/Icon";
-import { Reveal } from "~/components/ui/Reveal";
+import { SectionHeading } from "~/components/ui/SectionHeading";
 import { responsiveSrcSet, shopifyImageUrl } from "~/lib/image";
 import { formatPrice } from "~/lib/money";
 import type { Problem } from "~/lib/problems";
@@ -65,15 +65,16 @@ export function ProblemFix({ pairs }: { pairs: Pair[] }) {
     <section
       ref={sectionRef}
       aria-labelledby="fix-title"
-      className="bg-cream-deep relative overflow-hidden py-20 md:py-28"
+      className="bg-cream-deep dot-pattern relative overflow-hidden py-20 md:py-28"
     >
       <div className="max-w-page px-margin mx-auto">
-        <Reveal className="max-w-3xl">
-          <p className="eyebrow text-terracotta-deep">Har ghar ki kahani</p>
-          <h2 id="fix-title" className="ed-display ed-lg text-on-surface mt-4">
-            Chhoti problems, <em className="text-terracotta-deep">smart fixes</em>
-          </h2>
-        </Reveal>
+        <SectionHeading
+          id="fix-title"
+          kicker="har ghar ki kahani"
+          title="Chhoti problems,"
+          accent="smart fixes"
+          note="tap a problem, see the fix"
+        />
 
         {/* Desktop: tabs + panel */}
         <div className="mt-14 hidden grid-cols-[1fr_1.05fr] items-center gap-16 lg:grid">

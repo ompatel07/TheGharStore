@@ -2,31 +2,31 @@ import { Link } from "react-router";
 
 import { Icon } from "~/components/ui/Icon";
 import { Reveal } from "~/components/ui/Reveal";
-import type { FaqItem } from "~/lib/promises";
+import { SectionHeading } from "~/components/ui/SectionHeading";
+import { TrustStrip } from "~/components/home/TrustStrip";
+import type { FaqItem, TrustBadge } from "~/lib/promises";
 
 /**
  * Numbered FAQ accordion (native <details>, so it works without JS). Answers
  * are generated from the store's own promises and contact details.
  */
-export function HomeFaq({ faqs }: { faqs: FaqItem[] }) {
+export function HomeFaq({ faqs, badges = [] }: { faqs: FaqItem[]; badges?: TrustBadge[] }) {
   if (faqs.length < 3) return null;
 
   return (
     <section aria-labelledby="faq-title" className="max-w-page px-margin mx-auto py-16 md:py-24">
       <div className="grid gap-10 lg:grid-cols-[0.8fr_1.4fr] lg:gap-20">
         <Reveal>
-          <p className="type-hand text-terracotta-deep text-2xl">koi sawaal?</p>
-          <h2 id="faq-title" className="ed-display ed-lg text-on-surface mt-1">
-            Questions, answered
-          </h2>
+          <SectionHeading id="faq-title" kicker="koi sawaal?" title="Questions," accent="answered" />
           <p className="text-on-surface-secondary mt-4 max-w-sm text-lg">
             Delivery, payment and replacements, in plain words.
           </p>
           <Link to="/pages/contact" className="btn btn-outline mt-7">
             Still unsure? Contact us
           </Link>
+          {badges.length > 0 ? <TrustStrip badges={badges} className="mt-10 md:!grid-cols-2" /> : null}
         </Reveal>
-        <div className="border-border border-t">
+        <Reveal className="stagger border-border border-t">
           {faqs.map((faq, index) => (
             <details key={faq.question} className="faq-item border-border group border-b" name="home-faq">
               <summary className="flex cursor-pointer list-none items-center gap-5 py-5 md:py-6 [&::-webkit-details-marker]:hidden">
@@ -49,7 +49,7 @@ export function HomeFaq({ faqs }: { faqs: FaqItem[] }) {
               </div>
             </details>
           ))}
-        </div>
+        </Reveal>
       </div>
     </section>
   );

@@ -4,6 +4,7 @@ import { Link } from "react-router";
 import { ProductCard, type ProductCardData } from "~/components/ProductCard";
 import { Icon } from "~/components/ui/Icon";
 import { Reveal } from "~/components/ui/Reveal";
+import { SectionHeading } from "~/components/ui/SectionHeading";
 import type { HomeCollection } from "~/lib/home";
 
 type Tab = { id: string; label: string; to: string; products: ProductCardData[] };
@@ -50,18 +51,19 @@ export function BestsellerTabs({
   return (
     <section aria-labelledby="best-title" className="py-14 md:py-20">
       <div className="max-w-page px-margin mx-auto">
-        <Reveal className="flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <p className="type-hand text-terracotta-deep text-2xl">sabse pyaare</p>
-            <h2 id="best-title" className="ed-display ed-lg text-on-surface mt-1">
-              Bestsellers
-            </h2>
-          </div>
-          <Link to={current.to} prefetch="intent" className="text-on-surface inline-flex min-h-11 items-center gap-1.5 font-bold">
-            <span className="link-sweep">View all {current.id === "all" ? "products" : current.label}</span>
-            <Icon name="arrow-right" size={18} />
-          </Link>
-        </Reveal>
+        <SectionHeading
+          id="best-title"
+          kicker="sabse pyaare"
+          title="Our"
+          accent="bestsellers"
+          note="free delivery on every one!"
+          aside={
+            <Link to={current.to} prefetch="intent" className="btn btn-outline">
+              View all {current.id === "all" ? "products" : current.label}
+              <Icon name="arrow-right" size={18} />
+            </Link>
+          }
+        />
 
         <div
           role="tablist"
@@ -96,12 +98,12 @@ export function BestsellerTabs({
           })}
         </div>
 
+        <Reveal key={current.id} className="mt-8">
         <ul
-          key={current.id}
           id={`${baseId}-panel`}
           role="tabpanel"
           aria-labelledby={`${baseId}-tab-${current.id}`}
-          className="mt-8 grid grid-cols-2 gap-x-3 gap-y-8 md:grid-cols-3 md:gap-x-5 lg:grid-cols-4"
+          className="stagger grid grid-cols-2 gap-x-3 gap-y-8 md:grid-cols-3 md:gap-x-5 lg:grid-cols-4"
         >
           {current.products.slice(0, 8).map((product, index) => (
             <li
@@ -113,6 +115,7 @@ export function BestsellerTabs({
             </li>
           ))}
         </ul>
+        </Reveal>
       </div>
     </section>
   );

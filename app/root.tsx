@@ -200,6 +200,7 @@ function SiteShell({
   return (
     <CartProvider initialData={cartData}>
       <NavProgress />
+      <div className="scroll-progress" aria-hidden="true" />
       <PageViewedTracker />
       <CartAnalyticsTracker />
       <AnnouncementBar

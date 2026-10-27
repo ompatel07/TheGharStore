@@ -6,8 +6,8 @@ import { EditScroller } from "~/components/home/EditScroller";
 import { FeatureBanners } from "~/components/home/FeatureBanners";
 import { HomeFaq } from "~/components/home/HomeFaq";
 import { HomeHero } from "~/components/home/HomeHero";
-import { MarqueeBand } from "~/components/home/MarqueeBand";
 import { ProblemFix } from "~/components/home/ProblemFix";
+import { ProductRibbon } from "~/components/home/ProductRibbon";
 import { ProductSpotlight } from "~/components/home/ProductSpotlight";
 import { ShopByPrice } from "~/components/home/ShopByPrice";
 import { TrustSection } from "~/components/home/TrustSection";
@@ -50,28 +50,23 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   const faqs = site ? storeFaqs(site.storePromises, site.policies, site.storeProfile) : [];
   const all = bestsellers.length >= 4 ? bestsellers : (rows[0]?.products ?? []);
 
-  const marqueeItems = categories.flatMap((collection, index) => [
-    { label: collection.label, to: `/collections/${collection.handle}` },
-    ...(index % 2 === 0 ? [{ label: index === 0 ? "smart finds" : "better homes", hand: true }] : []),
-  ]);
-
   return (
     <main className="flex-1" id="main-content" tabIndex={-1}>
       <HomeHero hero={hero} trust={badges} />
       <div className="max-w-page px-margin mx-auto mt-5 lg:hidden">
         <TrustStrip badges={badges} />
       </div>
-      <CategoryBubbles collections={categories} />
+      <CategoryBubbles collections={categories} priceTiers={priceTiers} />
       <BestsellerTabs all={all} categories={categories} />
       <ShopByPrice tiers={priceTiers} />
       <FeatureBanners features={features} />
-      <MarqueeBand items={marqueeItems} tone="terracotta" duration={50} />
+      <ProductRibbon products={all} />
       {festive ? (
         <EditScroller collection={festive} kicker="Roshni ka tyohaar" title="The Diwali" accent="Edit" />
       ) : null}
       <ProblemFix pairs={problems} />
       {spotlight ? <ProductSpotlight spotlight={spotlight} /> : null}
-      <HomeFaq faqs={faqs} />
+      <HomeFaq faqs={faqs} badges={badges} />
       {site ? <TrustSection badges={badges} policies={site.policies} profile={site.storeProfile} /> : null}
     </main>
   );

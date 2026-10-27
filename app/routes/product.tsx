@@ -369,7 +369,7 @@ function ProductPage({
             <ProductGallery title={product.title} items={galleryItems} />
           </div>
 
-          <div className="flex flex-col gap-5">
+          <div className="pdp-in flex flex-col gap-5">
             <div>
               {collection ? (
                 <Link

@@ -2,7 +2,9 @@ import type { CSSProperties } from "react";
 import { Link } from "react-router";
 
 import { Icon } from "~/components/ui/Icon";
+import { CountUp } from "~/components/ui/CountUp";
 import { Reveal } from "~/components/ui/Reveal";
+import { SectionHeading } from "~/components/ui/SectionHeading";
 import type { HomeCollection } from "~/lib/home";
 import { shopifyImageUrl } from "~/lib/image";
 
@@ -31,15 +33,11 @@ export function ShopByPrice({ tiers }: { tiers: (HomeCollection & { max: number 
   return (
     <section aria-labelledby="price-title" className="py-14 md:py-20">
       <div className="max-w-page px-margin mx-auto">
+        <SectionHeading id="price-title" kicker="budget mein best" title="Shop by" accent="price" note="gifts sorted, wallet happy" />
         <Reveal>
-          <p className="type-hand text-terracotta-deep text-2xl">budget mein best</p>
-          <h2 id="price-title" className="ed-display ed-lg text-on-surface mt-1">
-            Shop by price
-          </h2>
-        </Reveal>
-        <ul role="list" className="mt-8 grid gap-4 md:grid-cols-3 md:gap-6">
+        <ul role="list" className="stagger mt-8 grid gap-4 md:grid-cols-3 md:gap-6">
           {items.map((tier, index) => (
-            <Reveal as="li" key={tier.handle} delay={index * 90}>
+            <li key={tier.handle}>
               <Link
                 to={`/collections/${tier.handle}`}
                 prefetch="intent"
@@ -49,7 +47,10 @@ export function ShopByPrice({ tiers }: { tiers: (HomeCollection & { max: number 
                   <span>
                     <span className="block text-xs font-bold tracking-[0.2em] uppercase opacity-80">Under</span>
                     <span className="font-heading block text-[3.1rem] leading-none font-extrabold tracking-tight md:text-[3.7rem]">
-                      ₹{tier.max.toLocaleString("en-IN")}
+                      <span className="sr-only">₹{tier.max.toLocaleString("en-IN")}</span>
+                      <span aria-hidden="true">
+                        ₹<CountUp value={tier.max} />
+                      </span>
                     </span>
                   </span>
                   <span className="mt-6 inline-flex items-center gap-2 text-sm font-bold">
@@ -74,9 +75,10 @@ export function ShopByPrice({ tiers }: { tiers: (HomeCollection & { max: number 
                   )}
                 </span>
               </Link>
-            </Reveal>
+            </li>
           ))}
         </ul>
+        </Reveal>
       </div>
     </section>
   );

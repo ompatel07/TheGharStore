@@ -1,3 +1,4 @@
+import { useEffect, useRef, type CSSProperties } from "react";
 import { Link } from "react-router";
 
 import { Icon } from "~/components/ui/Icon";
@@ -17,10 +18,16 @@ const PANELS = [
  * alternating sides. Photos wipe in as they enter view and drift on hover.
  */
 export function FeatureBanners({ features }: { features: FeatureBanner[] }) {
+  const ref = useStackProgress<HTMLElement>();
   if (features.length === 0) return null;
 
   return (
-    <section aria-label="Featured finds" className="max-w-page px-margin mx-auto grid gap-6 py-10 md:gap-8 md:py-16">
+    <section
+      ref={ref}
+      aria-label="Featured finds"
+      className="max-w-page px-margin mx-auto grid gap-6 py-10 md:gap-10 md:py-16"
+      style={{ "--stack-top": "6.5rem" } as CSSProperties}
+    >
       {features.map((feature, index) => {
         const tone = PANELS[index % PANELS.length];
         const flip = index % 2 === 1;
@@ -29,9 +36,11 @@ export function FeatureBanners({ features }: { features: FeatureBanner[] }) {
         return (
           <article
             key={feature.handle}
-            className={`feature-banner group grid overflow-hidden rounded-[2rem] shadow-[var(--shadow-lg)] md:grid-cols-2 ${tone.panel}`}
+            data-stack-card
+            style={{ "--si": index } as CSSProperties}
+            className={`feature-banner stack-card group relative grid overflow-hidden rounded-[2rem] shadow-[var(--shadow-xl)] md:min-h-[32rem] md:grid-cols-2 ${tone.panel}`}
           >
-            <Reveal className={`wipe relative aspect-[4/3] overflow-hidden md:aspect-auto md:min-h-[30rem] ${flip ? "md:order-2" : ""}`}>
+            <Reveal className={`wipe relative aspect-[4/3] overflow-hidden md:aspect-auto ${flip ? "md:order-2" : ""}`}>
               <img
                 src={shopifyImageUrl(feature.image.url, { width: 1000 })}
                 srcSet={responsiveSrcSet(feature.image.url, [600, 900, 1200], feature.image.width)}
@@ -86,4 +95,47 @@ export function FeatureBanners({ features }: { features: FeatureBanner[] }) {
       })}
     </section>
   );
+}
+
+/**
+ * Stacking cards (md+): every banner sticks under the header and, as the next
+ * one slides over it, eases back (scale + shade via --p). One rAF scroll
+ * handler; off on phones and under reduced motion.
+ */
+function useStackProgress<T extends HTMLElement>() {
+  const ref = useRef<T>(null);
+  useEffect(() => {
+    const root = ref.current;
+    if (!root) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const desktop = window.matchMedia("(min-width: 48rem)");
+    const cards = Array.from(root.querySelectorAll<HTMLElement>("[data-stack-card]"));
+    if (cards.length < 2) return;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      if (!desktop.matches) {
+        cards.forEach((card) => card.style.removeProperty("--p"));
+        return;
+      }
+      for (let i = 0; i < cards.length - 1; i += 1) {
+        const current = cards[i].getBoundingClientRect();
+        const next = cards[i + 1].getBoundingClientRect();
+        const overlap = (current.bottom - next.top) / current.height;
+        cards[i].style.setProperty("--p", Math.min(1, Math.max(0, overlap)).toFixed(3));
+      }
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
+  return ref;
 }
