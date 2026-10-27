@@ -1,37 +1,12 @@
 /*
-  The Ghar Store — editorial layer (v3).
-  Serif display type, the cinematic shoppable hero, light motes, product cards,
+  The Ghar Store — editorial layer (v4).
+  Display type scale, the cinematic shoppable hero, light motes, product cards,
   carousels and section furniture. Transform/opacity only; every effect has a
   static fallback under prefers-reduced-motion (bottom of file).
 */
 
-@font-face {
-  font-family: "Fraunces";
-  src: url("/fonts/fraunces-latin-var.woff2") format("woff2");
-  font-weight: 300 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Fraunces";
-  src: url("/fonts/fraunces-italic-latin-var.woff2") format("woff2");
-  font-weight: 300 700;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Fraunces Fallback";
-  src: local("Georgia");
-  size-adjust: 104%;
-  ascent-override: 92%;
-  descent-override: 24%;
-  line-gap-override: 0%;
-}
-
 @theme {
-  --font-display: "Fraunces", "Fraunces Fallback", Georgia, serif;
+  --font-display: var(--font-heading);
   --color-night: #1f1614;
   --color-night-soft: #2b201d;
 }
@@ -40,30 +15,28 @@
 @layer components {
   /* ─── Display type ───────────────────────────────────────────────────── */
   .ed-display {
-    font-family: var(--font-display);
-    font-weight: 380;
-    font-optical-sizing: auto;
-    letter-spacing: -0.025em;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    letter-spacing: -0.035em;
     line-height: 0.98;
     text-wrap: balance;
   }
   .ed-xl {
-    font-size: clamp(3rem, 1.4rem + 6.4vw, 7.6rem);
+    font-size: clamp(2.7rem, 1.3rem + 5vw, 6.2rem);
   }
   .ed-lg {
-    font-size: clamp(2.4rem, 1.5rem + 3.6vw, 5rem);
+    font-size: clamp(2rem, 1.3rem + 2.8vw, 3.9rem);
   }
   .ed-md {
-    font-size: clamp(1.9rem, 1.35rem + 2.1vw, 3.1rem);
+    font-size: clamp(1.7rem, 1.3rem + 1.6vw, 2.6rem);
   }
   .ed-sm {
-    font-size: clamp(1.45rem, 1.2rem + 0.9vw, 1.9rem);
+    font-size: clamp(1.3rem, 1.1rem + 0.8vw, 1.7rem);
   }
+  /* Accent words: colour, not italics (Outfit has no italic). */
   .ed-display em,
   .ed-italic {
-    font-style: italic;
-    font-weight: 340;
-    letter-spacing: -0.02em;
+    font-style: normal;
   }
 
   /* Masked rise needs room for serif descenders (g, y). */
@@ -660,6 +633,101 @@
     }
   }
 
+  /* ─── Category bubbles: turning festive ring, lift on hover ────────── */
+  .bubble-ring {
+    isolation: isolate;
+    transition: transform 500ms var(--ease-spring);
+  }
+  .bubble-ring::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: conic-gradient(
+      var(--color-terracotta),
+      var(--color-gold),
+      var(--color-burgundy),
+      var(--color-peach),
+      var(--color-terracotta)
+    );
+    animation: ghar-spin 9s linear infinite;
+  }
+  .bubble-photo img {
+    transition: transform 900ms var(--ease-ui);
+  }
+  .bubble:hover .bubble-ring,
+  .bubble:focus-visible .bubble-ring {
+    transform: translateY(-5px) scale(1.04);
+  }
+  .bubble:hover .bubble-photo img,
+  .bubble:focus-visible .bubble-photo img {
+    transform: scale(1.14) rotate(-3deg);
+  }
+  .bubble:active .bubble-ring {
+    transform: scale(0.96);
+  }
+
+  /* ─── Cards rising in one after another (tab switches) ─────────────── */
+  .stagger-in {
+    animation: hero-in 650ms var(--ease-ui) both;
+    animation-delay: calc(var(--i, 0) * 55ms);
+  }
+
+  /* ─── Price tiles: photos fan out ──────────────────────────────────── */
+  .price-tile {
+    transition:
+      transform 500ms var(--ease-spring),
+      box-shadow 500ms var(--ease-ui);
+  }
+  .price-tile:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+  }
+  .price-fan img {
+    transform: translateX(calc((var(--f, 1) - 1) * 12px)) rotate(calc((var(--f, 1) - 1) * 8deg));
+    transition: transform 650ms var(--ease-spring);
+  }
+  .price-tile:hover .price-fan img {
+    transform: translate(calc((var(--f, 1) - 1) * 38px), -8px) rotate(calc((var(--f, 1) - 1) * 15deg));
+  }
+
+  /* ─── Feature banners ──────────────────────────────────────────────── */
+  .feature-img {
+    transition: transform 1.6s var(--ease-ui);
+  }
+  .feature-banner:hover .feature-img {
+    transform: scale(1.05);
+  }
+
+  /* ─── Trust icons wiggle on hover ──────────────────────────────────── */
+  .trust-icon {
+    transition: transform 450ms var(--ease-spring);
+  }
+  :is(li, a, div):hover > .trust-icon,
+  li:hover .trust-icon {
+    transform: rotate(-8deg) scale(1.08);
+  }
+
+  /* ─── FAQ accordion ────────────────────────────────────────────────── */
+  .faq-plus {
+    transition:
+      transform 450ms var(--ease-spring),
+      background-color 300ms var(--ease-ui),
+      color 300ms var(--ease-ui);
+  }
+  .faq-item[open] .faq-plus {
+    transform: rotate(45deg);
+    background: var(--color-chocolate);
+    color: var(--color-cream);
+  }
+  .faq-item summary:hover .faq-plus {
+    background: var(--color-peach);
+  }
+  .faq-item[open] .faq-answer {
+    animation: hero-in 500ms var(--ease-ui) both;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .text-sheen,
     .hero-stage,
@@ -669,8 +737,20 @@
     .hotspot-dot::before,
     .hotspot-dot::after,
     .fix-panel,
-    .fix-tab[aria-selected="true"] .fix-bar {
+    .fix-tab[aria-selected="true"] .fix-bar,
+    .bubble-ring::before,
+    .stagger-in,
+    .faq-item[open] .faq-answer {
       animation: none !important;
+    }
+    .bubble-ring,
+    .bubble-photo img,
+    .price-tile,
+    .price-fan img,
+    .feature-img,
+    .trust-icon,
+    .faq-plus {
+      transition: none !important;
     }
     .motes {
       display: none;

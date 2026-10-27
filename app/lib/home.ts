@@ -7,6 +7,7 @@ import { Cache, gql, type StorefrontApi } from "@shopify/hydrogen";
 import { isSellable, PRODUCT_CARD_FRAGMENT, type ProductCardData } from "~/components/ProductCard";
 import { fieldMap, link, list, text, type LinkValue } from "~/lib/metaobject";
 import { PROBLEMS, type Problem } from "~/lib/problems";
+import { isPriceCollection } from "~/lib/site-content";
 import type { RequestStorefrontClient } from "~/lib/storefront";
 
 /** Default spotlight until `home_page.spotlight_product` is set in Shopify. */
@@ -201,9 +202,9 @@ export const HOME_QUERY = gql(
 
 export const PRODUCTS_BY_HANDLE_QUERY = gql(
   `
-    query ProductsByHandle($query: String!, $country: CountryCode, $language: LanguageCode)
+    query ProductsByHandle($country: CountryCode, $language: LanguageCode)
     @inContext(country: $country, language: $language) {
-      products(first: 20, query: $query) {
+      products(first: 100, query: "available_for_sale:true") {
         nodes {
           ...ProductCard
         }
@@ -226,6 +227,79 @@ export const BESTSELLERS_QUERY = gql(
   `,
   [PRODUCT_CARD_FRAGMENT],
 );
+
+const FEATURE_PRODUCT_FRAGMENT = gql(`
+  fragment FeatureProduct on Product {
+    id
+    handle
+    title
+    description(truncateAt: 170)
+    availableForSale
+    images(first: 6) {
+      nodes {
+        url
+        altText
+        width
+        height
+      }
+    }
+    priceRange {
+      minVariantPrice {
+        amount
+        currencyCode
+      }
+    }
+    compareAtPriceRange {
+      minVariantPrice {
+        amount
+        currencyCode
+      }
+    }
+    highlights: metafield(namespace: "custom", key: "highlights") {
+      value
+    }
+  }
+`);
+
+// Storefront search ignores `handle:`, so each banner product is looked up by handle.
+export const FEATURE_PRODUCTS_QUERY = gql(
+  `
+    query HomeFeatures($h1: String!, $h2: String!, $h3: String!, $country: CountryCode, $language: LanguageCode)
+    @inContext(country: $country, language: $language) {
+      f1: product(handle: $h1) {
+        ...FeatureProduct
+      }
+      f2: product(handle: $h2) {
+        ...FeatureProduct
+      }
+      f3: product(handle: $h3) {
+        ...FeatureProduct
+      }
+    }
+  `,
+  [FEATURE_PRODUCT_FRAGMENT],
+);
+
+/**
+ * Editorial banners: which product, and which of its photos shows the product
+ * in a real room. Products that are missing, unsellable or out of stock drop out.
+ */
+const FEATURES = [
+  { handle: "flameless-lotus-flower-water-sensor-led-diyas-pack-of-6-cv85s2q59o3h4p4k7mi0", image: 0, kicker: "pooja room ki roshni" },
+  { handle: "white-home-string-lights-cv85s2q59o3h4p4k7mg0", image: 2, kicker: "cosy corners" },
+  { handle: "floor-essential-wax-120-ml-each-pack-of-2-d6678ulb6hvc73f0c2s0", image: 3, kicker: "wood that glows" },
+];
+
+export type FeatureBanner = {
+  kicker: string;
+  handle: string;
+  title: string;
+  description: string | null;
+  highlights: string[];
+  image: HomeImage;
+  price: { amount: string; currencyCode: string };
+  compareAt: { amount: string; currencyCode: string } | null;
+};
 
 export const SPOTLIGHT_QUERY = gql(
   `
@@ -309,6 +383,8 @@ export type HomeData = {
   spotlight: Spotlight | null;
   problems: { problem: Problem; product: ProductCardData }[];
   bestsellers: ProductCardData[];
+  priceTiers: (HomeCollection & { max: number })[];
+  features: FeatureBanner[];
 };
 
 type RawHotspot = { handle: string; x: number; y: number; label: string | null };
@@ -444,9 +520,14 @@ export async function loadHome(storefrontClient: RequestStorefrontClient): Promi
   const heroFields = byKey(data?.homeHero?.fields);
   const pageFields = byKey(data?.homePage?.fields);
 
-  const allCollections: HomeCollection[] = (data?.collections.nodes ?? [])
+  const normalized: HomeCollection[] = (data?.collections.nodes ?? [])
     .filter((collection: RawCollection) => collection.handle !== "all")
     .map(normalizeCollection);
+  const allCollections = normalized.filter((collection) => !isPriceCollection(collection.handle));
+  const priceTiers = normalized
+    .filter((collection) => isPriceCollection(collection.handle))
+    .map((collection) => ({ ...collection, max: Number(collection.handle.replace("under-", "")) }))
+    .sort((a, b) => a.max - b.max);
 
   // Category strip: curated list, else every collection that has products.
   const curatedStrip = pick(allCollections, collectionHandlesOf(pageFields.get("category_strip")));
@@ -471,18 +552,41 @@ export async function loadHome(storefrontClient: RequestStorefrontClient): Promi
     productHandleOf(heroFields.get("product")) ??
     DEFAULT_SPOTLIGHT_HANDLE;
   const rawHotspots = parseHotspots(heroFields.get("hotspots")?.value);
-  const handles = [...new Set([...PROBLEMS.map((p) => p.handle), ...rawHotspots.map((h) => h.handle)])];
-  const [{ data: spotlightData }, { data: problemData }, { data: bestsellerData }] = await Promise.all([
+  const [{ data: spotlightData }, { data: problemData }, { data: bestsellerData }, { data: featureData }] = await Promise.all([
     storefrontClient.graphql(SPOTLIGHT_QUERY, {
       variables: { handle: spotlightHandle },
       cache: Cache.short(),
     }),
     storefrontClient.graphql(PRODUCTS_BY_HANDLE_QUERY, {
-      variables: { query: handles.map((handle) => `handle:${handle}`).join(" OR ") },
       cache: Cache.short(),
     }),
     storefrontClient.graphql(BESTSELLERS_QUERY, { cache: Cache.short() }),
+    storefrontClient.graphql(FEATURE_PRODUCTS_QUERY, {
+      variables: { h1: FEATURES[0].handle, h2: FEATURES[1].handle, h3: FEATURES[2].handle },
+      cache: Cache.short(),
+    }),
   ]);
+  const features: FeatureBanner[] = FEATURES.flatMap((feature) => {
+    const product = [featureData?.f1, featureData?.f2, featureData?.f3].find((p) => p?.handle === feature.handle);
+    if (!product?.availableForSale) return [];
+    const price = product.priceRange.minVariantPrice;
+    if (!(Number.parseFloat(price.amount) > 0)) return [];
+    const image = product.images.nodes[feature.image] ?? product.images.nodes[0];
+    if (!image) return [];
+    const compare = product.compareAtPriceRange.minVariantPrice;
+    return [
+      {
+        kicker: feature.kicker,
+        handle: product.handle,
+        title: product.title,
+        description: text(product.description),
+        highlights: list(product.highlights?.value).slice(0, 3),
+        image,
+        price,
+        compareAt: Number.parseFloat(compare.amount) > Number.parseFloat(price.amount) ? compare : null,
+      },
+    ];
+  });
   const bestsellers = (bestsellerData?.products.nodes ?? []).filter(
     (product) => isSellable(product) && product.availableForSale,
   );
@@ -552,5 +656,5 @@ export async function loadHome(storefrontClient: RequestStorefrontClient): Promi
         fromShopify: false,
       };
 
-  return { hero, categories, rows, spotlight, problems, bestsellers };
+  return { hero, categories, rows, spotlight, problems, bestsellers, priceTiers, features };
 }

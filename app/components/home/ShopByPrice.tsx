@@ -1,0 +1,83 @@
+import type { CSSProperties } from "react";
+import { Link } from "react-router";
+
+import { Icon } from "~/components/ui/Icon";
+import { Reveal } from "~/components/ui/Reveal";
+import type { HomeCollection } from "~/lib/home";
+import { shopifyImageUrl } from "~/lib/image";
+
+const TONES = [
+  "bg-burgundy text-cream",
+  "bg-terracotta-deep text-white",
+  "bg-chocolate text-cream",
+];
+
+/**
+ * "Shop by price" tiles backed by real automated collections (under-500 …).
+ * Hovering fans out the three product photos.
+ */
+export function ShopByPrice({ tiers }: { tiers: (HomeCollection & { max: number })[] }) {
+  const items = tiers.filter((tier) => tier.products.length > 0).slice(0, 3);
+  if (items.length < 2) return null;
+  // Each tile fans out different photos: skip products a cheaper tile already shows.
+  const used = new Set<string>();
+  const fans = items.map((tier) => {
+    const fresh = tier.products.filter((product) => product.featuredImage && !used.has(product.id));
+    const picks = (fresh.length >= 3 ? fresh : tier.products).slice(0, 3);
+    picks.forEach((product) => used.add(product.id));
+    return picks;
+  });
+
+  return (
+    <section aria-labelledby="price-title" className="py-14 md:py-20">
+      <div className="max-w-page px-margin mx-auto">
+        <Reveal>
+          <p className="type-hand text-terracotta-deep text-2xl">budget mein best</p>
+          <h2 id="price-title" className="ed-display ed-lg text-on-surface mt-1">
+            Shop by price
+          </h2>
+        </Reveal>
+        <ul role="list" className="mt-8 grid gap-4 md:grid-cols-3 md:gap-6">
+          {items.map((tier, index) => (
+            <Reveal as="li" key={tier.handle} delay={index * 90}>
+              <Link
+                to={`/collections/${tier.handle}`}
+                prefetch="intent"
+                className={`price-tile group relative flex h-full min-h-[13rem] overflow-hidden rounded-[1.75rem] p-6 md:min-h-[17rem] md:p-7 ${TONES[index % TONES.length]}`}
+              >
+                <span className="relative z-10 flex flex-col justify-between">
+                  <span>
+                    <span className="block text-xs font-bold tracking-[0.2em] uppercase opacity-80">Under</span>
+                    <span className="font-heading block text-[3.1rem] leading-none font-extrabold tracking-tight md:text-[3.7rem]">
+                      ₹{tier.max.toLocaleString("en-IN")}
+                    </span>
+                  </span>
+                  <span className="mt-6 inline-flex items-center gap-2 text-sm font-bold">
+                    Shop now
+                    <span className="grid size-8 place-items-center rounded-full bg-white/15 transition-transform duration-500 group-hover:translate-x-1 group-hover:-rotate-45">
+                      <Icon name="arrow-right" size={16} />
+                    </span>
+                  </span>
+                </span>
+                <span aria-hidden="true" className="price-fan absolute end-5 bottom-5 h-[7rem] w-[7rem] md:h-[8rem] md:w-[8rem]">
+                  {fans[index].map((product, i) =>
+                    product.featuredImage ? (
+                      <img
+                        key={product.id}
+                        src={shopifyImageUrl(product.featuredImage.url, { width: 240 })}
+                        alt=""
+                        loading="lazy"
+                        className="absolute inset-0 h-full w-full rounded-2xl border-[3px] border-white/90 object-cover shadow-[0_18px_40px_-18px_rgb(0_0_0/0.6)]"
+                        style={{ "--f": i } as CSSProperties}
+                      />
+                    ) : null,
+                  )}
+                </span>
+              </Link>
+            </Reveal>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+}

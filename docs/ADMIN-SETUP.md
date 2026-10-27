@@ -212,3 +212,47 @@ Shopify admin → Content → Metaobjects → **Home hero**:
   ```
   `x` is % from the left edge of the photo and `y` is % from the top. Out-of-stock products are skipped automatically. On phones, the same products show as a "Shop this scene" strip.
 - Eyebrow, headline, headline accent (the italic word), subtext and button work as before.
+
+## Trust badges, delivery date and FAQ
+
+Everything the site promises (free delivery, COD, replacement, delivery date, FAQ answers) is read from
+Shopify admin → Content → Metaobjects → **Store promises** (`main`). Change a value there and the whole
+site follows. Leave a field empty and its badge disappears.
+
+- Free shipping threshold: `0` means "free on every order". Any other amount shows a progress bar in the cart.
+- Delivery fastest / slowest (working days): drives "Free delivery by Sat, 31 Oct – Wed, 4 Nov" on product pages.
+- Returns badge title / note / window: the replacement badge and FAQ answer.
+
+Shipping rates must match: Settings → Shipping and delivery → the India rate is set to **Free delivery (₹0)**.
+
+## Paste these two policies (Settings → Policies)
+
+The site links to them from badges and the FAQ. Shopify's API doesn't let the connector write policies.
+
+**Refund policy**
+
+> **7-day replacement.** If your order arrives damaged, defective or with a part missing, we send a free replacement.
+> To request one, contact us within 7 days of delivery at offscriptlabss@gmail.com or +91 87808 76920 with your order
+> number and an unboxing photo or video showing the issue. Once we confirm it, we ship the replacement at no cost.
+> Not covered: items used, washed or damaged after delivery; change of mind; requests after 7 days.
+> **Refunds:** if a replacement isn't possible (for example, out of stock), we refund what you paid. Prepaid orders go back
+> to the original payment method; COD orders are refunded by bank transfer or UPI. Refunds are processed within 7 working days of approval.
+> **Cancellations:** you can cancel before dispatch. Write to us with your order number.
+
+**Shipping policy**
+
+> **Free delivery across India** on every order, no minimum. Orders are dispatched in 1–2 working days and usually
+> delivered in 4–7 working days depending on your pincode; remote areas can take longer. You'll get tracking details once
+> your order ships. **Cash on Delivery** is available; you can also pay by UPI, card or net banking. If your parcel looks
+> damaged on arrival, record an unboxing video and tell us within 7 days. Questions: offscriptlabss@gmail.com or +91 87808 76920.
+
+## Still to fill in (legal, India e-commerce rules)
+
+- Settings → Store details → **Store name** is still "My Store". Change it to **The Ghar Store** (it appears in policies and receipts).
+- Metaobjects → **Store profile** (`main`): add your **legal name**, **GSTIN** (if registered) and a **grievance officer**
+  (name, email, phone). The footer and contact page show them automatically once filled.
+
+## Shop by price
+
+Three automated collections drive the "Shop by price" tiles: `under-500`, `under-700`, `under-1000`. They update themselves
+from product prices. They're hidden from category menus on purpose.

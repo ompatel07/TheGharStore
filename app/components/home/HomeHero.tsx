@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Link } from "react-router";
 
-import type { TrustItem } from "~/components/home/TrustSection";
 import { Icon } from "~/components/ui/Icon";
 import type { HeroContent, HeroHotspot, HomeImage } from "~/lib/home";
 import { responsiveSrcSet, shopifyImageUrl } from "~/lib/image";
 import { formatPrice } from "~/lib/money";
+import type { TrustBadge } from "~/lib/promises";
 
 /**
  * Cinematic, shoppable hero. A full-bleed lifestyle photo (set in Shopify:
@@ -14,7 +14,7 @@ import { formatPrice } from "~/lib/money";
  * high priority, never lazy. Copy rises in with CSS; pointer and scroll
  * parallax are transform-only and skip touch / reduced-motion.
  */
-export function HomeHero({ hero, trust }: { hero: HeroContent; trust: TrustItem[] }) {
+export function HomeHero({ hero, trust }: { hero: HeroContent; trust: TrustBadge[] }) {
   const sectionRef = useRef<HTMLElement>(null);
   const [openSpot, setOpenSpot] = useState<number | null>(null);
   const background = hero.background ?? hero.image;
@@ -117,7 +117,7 @@ export function HomeHero({ hero, trust }: { hero: HeroContent; trust: TrustItem[
 
       {trust.length > 0 ? (
         <div
-          className="hero-in relative z-[2] border-t border-white/12"
+          className="hero-in relative z-[2] border-t border-white/12 max-lg:hidden"
           style={{ "--delay": "1.1s" } as CSSProperties}
         >
           <ul

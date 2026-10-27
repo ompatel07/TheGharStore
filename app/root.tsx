@@ -51,13 +51,6 @@ export const links: Route.LinksFunction = () => [
   },
   {
     rel: "preload",
-    href: "/fonts/fraunces-latin-var.woff2",
-    as: "font",
-    type: "font/woff2",
-    crossOrigin: "anonymous",
-  },
-  {
-    rel: "preload",
     href: "/fonts/dmsans-latin-var.woff2",
     as: "font",
     type: "font/woff2",

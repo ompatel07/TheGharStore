@@ -19,6 +19,7 @@ export function MarqueeBand({
   duration?: number;
 }) {
   if (items.length === 0) return null;
+  const handClass = tone === "light" ? "text-terracotta-deep" : tone === "dark" ? "text-peach" : "text-cream";
   const toneClass =
     tone === "dark"
       ? "bg-chocolate text-cream"
@@ -38,8 +39,8 @@ export function MarqueeBand({
               to={item.to}
               className={`whitespace-nowrap hover:underline ${
                 item.hand
-                  ? "ed-display ed-italic text-terracotta-deep text-3xl md:text-5xl"
-                  : "ed-display text-3xl md:text-5xl"
+                  ? `type-hand text-3xl md:text-4xl ${handClass}`
+                  : "font-heading text-2xl font-extrabold tracking-tight md:text-4xl"
               }`}
             >
               {item.label}
@@ -48,14 +49,14 @@ export function MarqueeBand({
             <span
               className={`whitespace-nowrap ${
                 item.hand
-                  ? "ed-display ed-italic text-terracotta-deep text-3xl md:text-5xl"
-                  : "ed-display text-3xl md:text-5xl"
+                  ? `type-hand text-3xl md:text-4xl ${handClass}`
+                  : "font-heading text-2xl font-extrabold tracking-tight md:text-4xl"
               }`}
             >
               {item.label}
             </span>
           )}
-          <Spark className="text-terracotta size-5 shrink-0" />
+          <Spark className={`size-5 shrink-0 ${tone === "terracotta" ? "text-cream/70" : "text-gold"}`} />
         </li>
       ))}
     </ul>
