@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type PointerEvent } from "react";
+import { useNavigation } from "react-router";
 
 import { Icon } from "~/components/ui/Icon";
 import { responsiveSrcSet, shopifyImageUrl } from "~/lib/image";
@@ -190,6 +191,7 @@ function ZoomImage({
   title: string;
   priority: boolean;
 }) {
+  const navigation = useNavigation();
   const canZoom = (image.width ?? 0) >= MIN_ZOOM_SOURCE_WIDTH;
   const imgRef = useRef<HTMLImageElement>(null);
   const [zooming, setZooming] = useState(false);
@@ -227,6 +229,9 @@ function ZoomImage({
         }`}
         loading={priority ? "eager" : "lazy"}
         fetchPriority={priority ? "high" : "auto"}
+        // Shared-element morph from the clicked product card (see ProductCard).
+        // Dropped while leaving, so a card on this page can own the name.
+        style={priority && navigation.state === "idle" ? { viewTransitionName: "product-hero" } : undefined}
         draggable={false}
       />
       {canZoom ? (

@@ -41,6 +41,7 @@ export function ShopByPrice({ tiers }: { tiers: (HomeCollection & { max: number 
               <Link
                 to={`/collections/${tier.handle}`}
                 prefetch="intent"
+                data-cursor="Shop"
                 className={`price-tile group relative flex h-full min-h-[13rem] overflow-hidden rounded-[1.75rem] p-6 md:min-h-[17rem] md:p-7 ${TONES[index % TONES.length]}`}
               >
                 <span className="relative z-10 flex flex-col justify-between">

@@ -1020,6 +1020,104 @@
   .pdp-in > :nth-child(9) { animation-delay: 640ms; }
   .pdp-in > :nth-child(10) { animation-delay: 710ms; }
 
+  /* ─── Custom cursor (desktop, fine pointer): ring that grows into a label ── */
+  .cursor {
+    position: fixed;
+    inset-inline-start: 0;
+    inset-block-start: 0;
+    z-index: 90;
+    inline-size: 0;
+    block-size: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 300ms var(--ease-ui);
+  }
+  .cursor[data-on="true"] {
+    opacity: 1;
+  }
+  .cursor-dot {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    inline-size: 2.25rem;
+    block-size: 2.25rem;
+    margin: -1.125rem 0 0 -1.125rem;
+    border-radius: 9999px;
+    border: 1.5px solid #fff;
+    mix-blend-mode: difference;
+    transition:
+      inline-size 450ms var(--ease-spring),
+      block-size 450ms var(--ease-spring),
+      margin 450ms var(--ease-spring),
+      background-color 300ms var(--ease-ui),
+      border-color 300ms var(--ease-ui);
+  }
+  .cursor[data-label="true"] .cursor-dot {
+    inline-size: 5.5rem;
+    block-size: 5.5rem;
+    margin: -2.75rem 0 0 -2.75rem;
+    background: var(--color-terracotta-deep);
+    border-color: transparent;
+    mix-blend-mode: normal;
+    box-shadow: 0 16px 36px -14px rgb(192 78 48 / 0.7);
+  }
+  .cursor-label {
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    opacity: 0;
+    transform: scale(0.5);
+    transition:
+      opacity 250ms var(--ease-ui),
+      transform 400ms var(--ease-spring);
+  }
+  .cursor[data-label="true"] .cursor-label {
+    opacity: 1;
+    transform: none;
+  }
+  .cursor[data-press="true"] .cursor-dot {
+    transform: scale(0.85);
+  }
+
+  /* ─── Mega menu: category panel with product photos ─────────────────── */
+  .mega-panel {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: 100%;
+    background: var(--color-cream);
+    border-block: 1px solid var(--color-border);
+    box-shadow: 0 30px 60px -30px rgb(56 44 42 / 0.4);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition:
+      opacity 250ms var(--ease-ui),
+      transform 350ms var(--ease-ui),
+      visibility 0s linear 250ms;
+  }
+  .mega-item:hover > .mega-panel,
+  .mega-item:focus-within > .mega-panel {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition:
+      opacity 250ms var(--ease-ui) 80ms,
+      transform 400ms var(--ease-ui) 80ms,
+      visibility 0s linear 80ms;
+  }
+  .mega-item:hover > .mega-panel .mega-product,
+  .mega-item:focus-within > .mega-panel .mega-product {
+    animation: hero-in 500ms var(--ease-ui) both;
+    animation-delay: calc(var(--i, 0) * 60ms + 120ms);
+  }
+  .mega-product img {
+    transition: transform 900ms var(--ease-ui);
+  }
+  .mega-product:hover img {
+    transform: scale(1.07);
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .text-sheen,
     .hero-stage,
@@ -1032,6 +1130,7 @@
     .fix-tab[aria-selected="true"] .fix-bar,
     .sh-spark,
     .pdp-in > *,
+    .mega-product,
     .scroll-progress,
     .sd-drift,
     .sd-pop,
@@ -1073,5 +1172,46 @@
       opacity: 1;
       transform: none;
     }
+  }
+}
+
+/* ─── Page transitions (View Transitions API via React Router `viewTransition`) ─
+   Pages cross-fade and rise; the product photo morphs from the clicked card
+   into the product page gallery ("product-hero"). The header stays put. */
+.site-header {
+  view-transition-name: site-header;
+}
+::view-transition-old(root) {
+  animation: 260ms var(--ease-ui) both vt-fade-out;
+}
+::view-transition-new(root) {
+  animation: 420ms var(--ease-ui) both vt-rise-in;
+}
+::view-transition-group(product-hero) {
+  animation-duration: 620ms;
+  animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+::view-transition-image-pair(product-hero) {
+  isolation: isolate;
+}
+@keyframes vt-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes vt-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+  .cursor {
+    display: none;
   }
 }

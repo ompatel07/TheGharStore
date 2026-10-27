@@ -5,7 +5,9 @@ import { Logo } from "~/components/Logo";
 import { Icon } from "~/components/ui/Icon";
 import { useCart } from "~/lib/cart";
 import { CART_DRAWER_ID, SEARCH_DRAWER_ID, openDialogFromLinkClick } from "~/lib/cart-drawer";
-import type { NavItem } from "~/lib/site-content";
+import { shopifyImageUrl } from "~/lib/image";
+import { formatPrice } from "~/lib/money";
+import type { NavCollection, NavItem } from "~/lib/site-content";
 
 import { MobileNav, MobileNavTrigger } from "./MobileNav";
 
@@ -23,7 +25,7 @@ function displayCount(count: number) {
 
 type HeaderProps = {
   mainMenu: NavItem[];
-  collections: { handle: string; title: string }[];
+  collections: NavCollection[];
 };
 
 export function Header({ mainMenu, collections }: HeaderProps) {
@@ -40,7 +42,7 @@ export function Header({ mainMenu, collections }: HeaderProps) {
   return (
     <>
       <header className="site-header bg-surface sticky top-0 z-40" data-scrolled={scrolled}>
-        <div className="max-w-page px-margin relative mx-auto flex h-16 items-center gap-1 lg:h-[5.5rem] lg:gap-8">
+        <div className="max-w-page px-margin mx-auto flex h-16 items-center gap-1 max-lg:relative lg:h-[5.5rem] lg:gap-8">
           <div className="flex items-center lg:hidden">
             <MobileNavTrigger />
             <SearchButton />
@@ -143,9 +145,10 @@ function PrimaryNav({
   collections,
 }: {
   items: NavItem[];
-  collections: { handle: string; title: string }[];
+  collections: NavCollection[];
 }) {
   const location = useLocation();
+  const byPath = new Map(collections.map((collection) => [`/collections/${collection.handle}`, collection]));
   // Fallback while the Shopify main menu is empty: the store's collections.
   const navItems: NavItem[] =
     items.length > 0
@@ -161,8 +164,8 @@ function PrimaryNav({
   if (navItems.length === 0) return null;
 
   return (
-    <nav aria-label="Main" className="hidden lg:block">
-      <ul role="list" className="flex items-center gap-1 xl:gap-3">
+    <nav aria-label="Main" className="hidden self-stretch lg:block">
+      <ul role="list" className="flex h-full items-stretch gap-1 xl:gap-3">
         {navItems.map((item) => {
           const active =
             item.to === "/" ? location.pathname === "/" : location.pathname.startsWith(item.to);
@@ -170,16 +173,28 @@ function PrimaryNav({
             active ? "text-burgundy" : "text-on-surface hover:text-burgundy"
           }`;
 
+          const mega = byPath.get(item.to);
+          if (item.items.length === 0 && mega && (mega.products?.nodes.length ?? 0) >= 2) {
+            return (
+              <li key={item.id} className="mega-item flex items-center">
+                <NavItemLink item={item} className={pillClass} active={active}>
+                  <Icon name="chevron-down" size={15} />
+                </NavItemLink>
+                <MegaPanel collection={mega} />
+              </li>
+            );
+          }
+
           if (item.items.length === 0) {
             return (
-              <li key={item.id}>
+              <li key={item.id} className="flex items-center">
                 <NavItemLink item={item} className={pillClass} active={active} />
               </li>
             );
           }
 
           return (
-            <li key={item.id} className="nav-has-dropdown relative">
+            <li key={item.id} className="nav-has-dropdown relative flex items-center">
               <NavItemLink item={item} className={pillClass} active={active}>
                 <Icon name="chevron-down" size={16} />
               </NavItemLink>
@@ -227,10 +242,63 @@ function NavItemLink({
       to={item.to}
       className={className}
       prefetch="intent"
+      viewTransition
       aria-current={active ? "page" : undefined}
     >
       <span className="link-sweep">{item.title}</span>
       {children}
     </NavLink>
+  );
+}
+
+/** Full-width panel under the header: the category's story + four products. */
+function MegaPanel({ collection }: { collection: NavCollection }) {
+  const products = collection.products?.nodes.slice(0, 4) ?? [];
+  return (
+    <div className="mega-panel">
+      <div className="max-w-page px-margin mx-auto grid grid-cols-[17rem_1fr] gap-10 py-8">
+        <div className="flex flex-col justify-between gap-6 border-e border-[var(--color-border)] pe-8">
+          <div>
+            <p className="type-hand text-terracotta-deep text-2xl">explore</p>
+            <p className="font-heading text-on-surface mt-1 text-3xl leading-tight font-extrabold tracking-tight">
+              {collection.title}
+            </p>
+            {collection.description ? (
+              <p className="text-on-surface-secondary mt-3 text-sm leading-relaxed">{collection.description}</p>
+            ) : null}
+          </div>
+          <Link to={`/collections/${collection.handle}`} className="btn btn-dark w-fit" prefetch="intent" viewTransition>
+            Shop all
+            <span className="btn-arrow" aria-hidden="true">
+              <Icon name="arrow-right" size={16} strokeWidth={2.5} />
+            </span>
+          </Link>
+        </div>
+        <ul role="list" className="grid grid-cols-4 gap-5">
+          {products.map((product, index) => (
+            <li key={product.handle} className="mega-product" style={{ "--i": index } as React.CSSProperties}>
+              <Link to={`/products/${product.handle}`} prefetch="intent" className="group block" viewTransition>
+                <span className="block aspect-square overflow-hidden rounded-2xl bg-[var(--color-cream-deep)]">
+                  {product.featuredImage ? (
+                    <img
+                      src={shopifyImageUrl(product.featuredImage.url, { width: 360 })}
+                      alt=""
+                      loading="lazy"
+                      className="h-full w-full object-cover"
+                    />
+                  ) : null}
+                </span>
+                <span className="text-on-surface mt-2.5 line-clamp-2 text-sm leading-snug font-semibold group-hover:underline">
+                  {product.title}
+                </span>
+                <span className="text-on-surface mt-0.5 block text-sm font-bold">
+                  {formatPrice(product.priceRange.minVariantPrice)}
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
   );
 }

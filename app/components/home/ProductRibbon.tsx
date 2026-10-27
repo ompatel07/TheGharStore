@@ -40,6 +40,7 @@ export function ProductRibbon({ products, title = "Smart finds. Better homes." }
                   <Link
                     to={`/products/${product.handle}`}
                     tabIndex={index >= row.length ? -1 : undefined}
+                    data-cursor="View"
                     className="ribbon-item group bg-cream flex w-[15rem] items-center gap-3 rounded-2xl p-2 pe-4 shadow-[0_20px_40px_-20px_rgb(0_0_0/0.6)] md:w-[18rem]"
                   >
                     <img

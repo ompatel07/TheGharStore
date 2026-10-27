@@ -4,6 +4,7 @@ import { Link } from "react-router";
 import { Icon } from "~/components/ui/Icon";
 import type { HeroContent, HeroHotspot, HomeImage } from "~/lib/home";
 import { responsiveSrcSet, shopifyImageUrl } from "~/lib/image";
+import { useMagnetic } from "~/lib/interactions";
 import { formatPrice } from "~/lib/money";
 import type { TrustBadge } from "~/lib/promises";
 
@@ -17,6 +18,7 @@ import type { TrustBadge } from "~/lib/promises";
 export function HomeHero({ hero, trust }: { hero: HeroContent; trust: TrustBadge[] }) {
   const sectionRef = useRef<HTMLElement>(null);
   const [openSpot, setOpenSpot] = useState<number | null>(null);
+  const ctaRef = useMagnetic<HTMLAnchorElement>(0.3);
   const tour = useHotspotTour(sectionRef, hero.hotspots.length, openSpot !== null);
   const background = hero.background ?? hero.image;
   const ratio = background?.width && background?.height ? background.width / background.height : 16 / 9;
@@ -102,7 +104,7 @@ export function HomeHero({ hero, trust }: { hero: HeroContent; trust: TrustBadge
             </p>
           ) : null}
           <div className="hero-in pointer-events-auto mt-8 flex w-fit flex-wrap gap-3" style={{ "--delay": "900ms" } as CSSProperties}>
-            <Link to={hero.cta.url} className="btn btn-light shine" prefetch="intent">
+            <Link ref={ctaRef} to={hero.cta.url} className="btn btn-light shine magnetic" prefetch="intent" viewTransition>
               {hero.cta.text}
               <span className="btn-arrow" aria-hidden="true">
                 <Icon name="arrow-right" size={16} strokeWidth={2.5} />

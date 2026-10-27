@@ -70,6 +70,23 @@ export const SITE_CONTENT_QUERY = gql(
         nodes {
           handle
           title
+          description(truncateAt: 110)
+          products(first: 4) {
+            nodes {
+              handle
+              title
+              featuredImage {
+                url
+                altText
+              }
+              priceRange {
+                minVariantPrice {
+                  amount
+                  currencyCode
+                }
+              }
+            }
+          }
         }
       }
       announcements: metaobjects(type: "announcement", first: 10) {
@@ -161,10 +178,25 @@ export type FestiveMode = {
 
 export type PolicyLink = { title: string; handle: string };
 
+/** Collection for menus; products feed the desktop mega menu. */
+export type NavCollection = {
+  handle: string;
+  title: string;
+  description?: string | null;
+  products?: {
+    nodes: {
+      handle: string;
+      title: string;
+      featuredImage?: { url: string; altText?: string | null } | null;
+      priceRange: { minVariantPrice: { amount: string; currencyCode: string } };
+    }[];
+  };
+};
+
 export type SiteContent = {
   mainMenu: NavItem[];
   footerMenu: NavItem[];
-  collections: { handle: string; title: string }[];
+  collections: NavCollection[];
   announcements: Announcement[];
   storeProfile: StoreProfile | null;
   storePromises: StorePromises;
