@@ -1,9 +1,8 @@
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 
 import { PRODUCT_FORM_ID } from "~/components/product/BuyBox";
 import { Icon } from "~/components/ui/Icon";
-import { Rating, type RatingData } from "~/components/ui/Rating";
 import { SectionHeading } from "~/components/ui/SectionHeading";
 import { shopifyImageUrl } from "~/lib/image";
 import { formatPrice } from "~/lib/money";
@@ -154,68 +153,6 @@ export function WhyLoveIt({ highlights, images, title }: { highlights: string[];
             </figure>
           );
         })}
-      </div>
-    </section>
-  );
-}
-
-/* ────────────────────────────────────────────────────────────────────────── */
-/* Reviews: only real ones. Empty state invites buyers to share theirs.      */
-/* ────────────────────────────────────────────────────────────────────────── */
-
-export function ReviewsBlock({
-  rating,
-  title,
-  supportEmail,
-}: {
-  rating: RatingData | null;
-  title: string;
-  supportEmail: string | null;
-}) {
-  const reviewHref = supportEmail
-    ? `mailto:${supportEmail}?subject=${encodeURIComponent(`My review: ${title}`)}&body=${encodeURIComponent("Order number:\nRating (1–5):\nWhat I liked / didn't like:\n")}`
-    : "/pages/contact";
-
-  return (
-    <section id="reviews" aria-labelledby="reviews-title" className="max-w-page px-margin mx-auto mt-20 scroll-mt-40 md:mt-28">
-      <div className="grid items-center gap-8 overflow-hidden rounded-[2rem] bg-white p-7 shadow-[var(--shadow)] md:grid-cols-[1fr_1.2fr] md:p-12">
-        <div>
-          <SectionHeading id="reviews-title" kicker="aapki raay" title="Customer" accent="reviews" size="md" />
-          {rating ? (
-            <div className="mt-5 flex items-center gap-4">
-              <span className="font-heading text-on-surface text-6xl font-extrabold">{rating.value.toFixed(1)}</span>
-              <div>
-                <Rating rating={rating} size="md" />
-                <p className="text-on-surface-secondary mt-1 text-sm">
-                  From {rating.count} verified {rating.count === 1 ? "buyer" : "buyers"}
-                </p>
-              </div>
-            </div>
-          ) : (
-            <p className="text-on-surface-secondary mt-4 max-w-md text-lg leading-relaxed">
-              No reviews yet. We only ever show reviews from people who bought from us, never copied or made-up ones.
-            </p>
-          )}
-        </div>
-        <div className="bg-peach-soft relative rounded-[1.5rem] p-6 md:p-8">
-          <span aria-hidden="true" className="text-terracotta-deep absolute -top-5 left-6 flex gap-1">
-            {[0, 1, 2, 3, 4].map((star) => (
-              <svg key={star} viewBox="0 0 24 24" className="size-7 fill-current drop-shadow" style={{ "--i": star } as CSSProperties}>
-                <path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z" />
-              </svg>
-            ))}
-          </span>
-          <p className="font-heading text-on-surface mt-3 text-2xl font-extrabold tracking-tight">Bought this already?</p>
-          <p className="text-on-surface-secondary mt-2">
-            Tell us how it went: what worked, what didn't, a photo if you like. Honest reviews help the next family choose well.
-          </p>
-          <a href={reviewHref} className="btn btn-dark mt-5">
-            Write a review
-            <span className="btn-arrow" aria-hidden="true">
-              <Icon name="arrow-right" size={16} strokeWidth={2.5} />
-            </span>
-          </a>
-        </div>
       </div>
     </section>
   );

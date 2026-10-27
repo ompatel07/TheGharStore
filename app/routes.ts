@@ -15,5 +15,6 @@ export default [
   route("sitemap.xml", "routes/sitemap.tsx"),
   route("robots.txt", "routes/robots.tsx"),
   route("api/recommendations", "routes/api.recommendations.tsx"),
+  route("api/reviews", "routes/api.reviews.tsx"),
   route("*", "routes/catchall.tsx"),
 ] satisfies RouteConfig;
