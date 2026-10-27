@@ -1,17 +1,20 @@
 import { useRouteLoaderData } from "react-router";
 
-import { CategoryIndex } from "~/components/home/CategoryIndex";
-import { CollectionRow } from "~/components/home/CollectionRow";
+import { BestsellerTabs } from "~/components/home/BestsellerTabs";
+import { CategoryBubbles } from "~/components/home/CategoryBubbles";
 import { EditScroller } from "~/components/home/EditScroller";
+import { FeatureBanners } from "~/components/home/FeatureBanners";
+import { HomeFaq } from "~/components/home/HomeFaq";
 import { HomeHero } from "~/components/home/HomeHero";
-import { MarqueeBand } from "~/components/home/MarqueeBand";
 import { ProblemFix } from "~/components/home/ProblemFix";
-import { ProductRail } from "~/components/home/ProductRail";
+import { ProductRibbon } from "~/components/home/ProductRibbon";
 import { ProductSpotlight } from "~/components/home/ProductSpotlight";
-import { Statement } from "~/components/home/Statement";
-import { buildTrustItems, TrustSection } from "~/components/home/TrustSection";
+import { ShopByPrice } from "~/components/home/ShopByPrice";
+import { TrustSection } from "~/components/home/TrustSection";
+import { TrustStrip } from "~/components/home/TrustStrip";
 import { BRAND_NAME, BRAND_TAGLINE } from "~/components/Logo";
 import { loadHome } from "~/lib/home";
+import { storeFaqs, trustBadges } from "~/lib/promises";
 import { storefrontClientContext } from "~/lib/storefront";
 import type { loader as rootLoader } from "~/root";
 
@@ -39,50 +42,32 @@ export async function loader({ context }: Route.LoaderArgs) {
 export default function Home({ loaderData }: Route.ComponentProps) {
   const rootData = useRouteLoaderData<typeof rootLoader>("root");
   const site = rootData?.siteContent;
-  const { hero, categories, rows, spotlight, problems, bestsellers } = loaderData;
+  const { hero, categories, rows, spotlight, problems, bestsellers, priceTiers, features } = loaderData;
 
-  // The festive collection gets the pinned night "edit"; other rows stay grids.
+  // The festive collection gets the pinned night "edit".
   const festive = rows.find((row) => /diwali|festive/.test(row.handle)) ?? null;
-  const gridRows = rows.filter((row) => row !== festive);
-  const trust = site ? buildTrustItems(site.storePromises, site.policies, site.storeProfile) : [];
-  const picks = bestsellers.length >= 4 ? bestsellers : (rows[0]?.products ?? []);
-
-  const marqueeItems = categories.flatMap((collection, index) => [
-    { label: collection.label, to: `/collections/${collection.handle}` },
-    ...(index % 2 === 0 ? [{ label: index === 0 ? "smart finds" : "better homes", hand: true }] : []),
-  ]);
+  const badges = site ? trustBadges(site.storePromises, site.policies, site.storeProfile) : [];
+  const faqs = site ? storeFaqs(site.storePromises, site.policies, site.storeProfile) : [];
+  const all = bestsellers.length >= 4 ? bestsellers : (rows[0]?.products ?? []);
 
   return (
     <main className="flex-1" id="main-content" tabIndex={-1}>
-      <HomeHero hero={hero} trust={trust} />
-      <CategoryIndex collections={categories} />
-      <ProductRail
-        id="picks-title"
-        eyebrow="Hand-picked"
-        title={
-          <>
-            Finds we <em className="text-terracotta-deep">love</em>
-          </>
-        }
-        products={picks}
-        viewAll={{ to: "/collections/all", label: "Shop all" }}
-      />
+      <HomeHero hero={hero} trust={badges} />
+      <div className="max-w-page px-margin mx-auto mt-5 lg:hidden">
+        <TrustStrip badges={badges} />
+      </div>
+      <CategoryBubbles collections={categories} priceTiers={priceTiers} />
+      <BestsellerTabs all={all} categories={categories} />
+      <ShopByPrice tiers={priceTiers} />
+      <FeatureBanners features={features} />
+      <ProductRibbon products={all} />
       {festive ? (
         <EditScroller collection={festive} kicker="Roshni ka tyohaar" title="The Diwali" accent="Edit" />
       ) : null}
       <ProblemFix pairs={problems} />
       {spotlight ? <ProductSpotlight spotlight={spotlight} /> : null}
-      <MarqueeBand items={marqueeItems} tone="light" duration={60} />
-      <Statement
-        text="We look for *small,* *smart* things that make everyday home life a little easier — and a lot nicer to look at. Picked for Indian homes, *one* *find* *at* *a* *time.*"
-        signature="The Ghar Store"
-      />
-      {gridRows.map((collection) => (
-        <CollectionRow key={collection.handle} collection={collection} />
-      ))}
-      {site ? (
-        <TrustSection promises={site.storePromises} policies={site.policies} profile={site.storeProfile} />
-      ) : null}
+      <HomeFaq faqs={faqs} badges={badges} />
+      {site ? <TrustSection badges={badges} policies={site.policies} profile={site.storeProfile} /> : null}
     </main>
   );
 }

@@ -201,13 +201,10 @@
     font-weight: 700;
     letter-spacing: 0.12em;
   }
-  /* Kicker / accent line: display serif italic (Kalam stays available as --font-hand). */
   .type-hand {
-    font-family: var(--font-display);
-    font-style: italic;
-    font-weight: 400;
+    font-family: var(--font-hand);
+    font-weight: 700;
     line-height: 1.1;
-    letter-spacing: -0.01em;
   }
 
   /* Buttons: pill, bold, with a soft press. */
@@ -336,12 +333,41 @@
      so content is visible without JS and nothing above the fold ever hides. */
   .reveal-armed:not(.is-revealed) {
     opacity: 0;
-    transform: translateY(18px);
+    transform: translateY(48px) scale(0.985);
   }
   .reveal {
     transition:
+      opacity 900ms var(--ease-ui),
+      transform 1000ms var(--ease-ui);
+  }
+  /* Children of a .stagger list rise one after another once their Reveal fires. */
+  .stagger > :nth-child(1) { --si: 0; }
+  .stagger > :nth-child(2) { --si: 1; }
+  .stagger > :nth-child(3) { --si: 2; }
+  .stagger > :nth-child(4) { --si: 3; }
+  .stagger > :nth-child(5) { --si: 4; }
+  .stagger > :nth-child(6) { --si: 5; }
+  .stagger > :nth-child(7) { --si: 6; }
+  .stagger > :nth-child(8) { --si: 7; }
+  .stagger > :nth-child(9) { --si: 8; }
+  .stagger > :nth-child(10) { --si: 9; }
+  .stagger > :nth-child(11) { --si: 10; }
+  .stagger > :nth-child(12) { --si: 11; }
+  .stagger > :nth-child(13) { --si: 12; }
+  .stagger > :nth-child(14) { --si: 13; }
+  .stagger > :nth-child(15) { --si: 14; }
+  .stagger > :nth-child(16) { --si: 15; }
+  .reveal-armed .stagger > * {
+    opacity: 0;
+    transform: translateY(42px) scale(0.94);
+  }
+  .reveal-armed.is-revealed .stagger > * {
+    opacity: 1;
+    transform: none;
+    transition:
       opacity 700ms var(--ease-ui),
-      transform 700ms var(--ease-ui);
+      transform 900ms var(--ease-spring);
+    transition-delay: calc(var(--si, 0) * 75ms + 120ms);
   }
 
   /* Hero headline: word-by-word reveal, CSS only, visible at first paint w/o JS. */
@@ -495,7 +521,8 @@
   .word-reveal > span {
     animation: none !important;
   }
-  .reveal-armed:not(.is-revealed) {
+  .reveal-armed:not(.is-revealed),
+  .reveal-armed .stagger > * {
     opacity: 1;
     transform: none;
   }

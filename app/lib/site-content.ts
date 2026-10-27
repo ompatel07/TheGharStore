@@ -140,7 +140,13 @@ export type StoreProfile = {
 };
 
 export type StorePromises = {
+  /** Free above this amount (cart progress bar). Null when free on all orders. */
   freeShippingThreshold: MoneyValue | null;
+  /** Threshold set to 0 in Shopify = free delivery on every order. */
+  freeShippingAll: boolean;
+  returnsTitle: string | null;
+  deliveryMinDays: number | null;
+  deliveryMaxDays: number | null;
   codAvailable: boolean;
   codNote: string | null;
   returnsWindowDays: number | null;
@@ -168,6 +174,10 @@ export type SiteContent = {
 
 const EMPTY_PROMISES: StorePromises = {
   freeShippingThreshold: null,
+  freeShippingAll: false,
+  returnsTitle: null,
+  deliveryMinDays: null,
+  deliveryMaxDays: null,
   codAvailable: false,
   codNote: null,
   returnsWindowDays: null,
@@ -255,12 +265,32 @@ function normalizeStoreProfile(
   };
 }
 
+/** "Under ₹500"-style collections are price shortcuts, not categories. */
+export function isPriceCollection(handle: string) {
+  return /^under-\d+$/.test(handle);
+}
+
+function isZeroMoney(value: string | null | undefined) {
+  if (!value) return false;
+  try {
+    return Number.parseFloat((JSON.parse(value) as { amount?: string }).amount ?? "") === 0;
+  } catch {
+    return false;
+  }
+}
+
 function normalizePromises(fields: SiteContentQueryResult["storePromises"]): StorePromises {
   if (!fields) return EMPTY_PROMISES;
   const f = fieldMap(fields.fields);
   const days = int(f.returns_window_days);
+  const minDays = int(f.delivery_min_days);
+  const maxDays = int(f.delivery_max_days);
   return {
     freeShippingThreshold: money(f.free_shipping_threshold),
+    freeShippingAll: isZeroMoney(f.free_shipping_threshold),
+    returnsTitle: text(f.returns_title),
+    deliveryMinDays: minDays !== null && minDays > 0 ? minDays : null,
+    deliveryMaxDays: maxDays !== null && maxDays > 0 ? Math.max(maxDays, minDays ?? 0) : null,
     codAvailable: bool(f.cod_available),
     codNote: text(f.cod_note),
     returnsWindowDays: days !== null && days > 0 ? days : null,
@@ -325,7 +355,9 @@ export async function loadSiteContent(
   return {
     mainMenu: normalizeMenu(data.mainMenu?.items, internalHosts),
     footerMenu: normalizeMenu(data.footerMenu?.items, internalHosts),
-    collections: data.collections.nodes.filter((collection) => collection.handle !== "all"),
+    collections: data.collections.nodes.filter(
+      (collection) => collection.handle !== "all" && !isPriceCollection(collection.handle),
+    ),
     announcements: normalizeAnnouncements(data.announcements.nodes),
     storeProfile: normalizeStoreProfile(data.storeProfile),
     storePromises: normalizePromises(data.storePromises),

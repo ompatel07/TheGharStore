@@ -18,25 +18,26 @@ import {
   PriceBlock,
   StickyBuyBar,
   StockStatus,
-  TrustRow,
 } from "~/components/product/BuyBox";
 import {
   ProductGallery,
   type GalleryImage,
   type GalleryItem,
 } from "~/components/product/ProductGallery";
+import { BuyTogether, DeliveryCard, ShareRow } from "~/components/product/PdpExtras";
 import { ProductStory, StoryNav } from "~/components/product/ProductStory";
+import { ProductRail } from "~/components/home/ProductRail";
 import {
   hasRealOptions,
   VariantOptions,
   variantUrl,
 } from "~/components/product/VariantOptions";
-import { isSellable, ProductCard } from "~/components/ProductCard";
+import { isSellable } from "~/components/ProductCard";
 import { Icon } from "~/components/ui/Icon";
 import { parseRating, Rating } from "~/components/ui/Rating";
-import { Reveal } from "~/components/ui/Reveal";
 import { text } from "~/lib/metaobject";
 import { formatPrice } from "~/lib/money";
+import { trustBadges } from "~/lib/promises";
 import {
   ProductProvider,
   useProductForm,
@@ -368,7 +369,7 @@ function ProductPage({
             <ProductGallery title={product.title} items={galleryItems} />
           </div>
 
-          <div className="flex flex-col gap-5">
+          <div className="pdp-in flex flex-col gap-5">
             <div>
               {collection ? (
                 <Link
@@ -421,11 +422,13 @@ function ProductPage({
             />
 
             {site ? (
-              <TrustRow
+              <DeliveryCard
                 promises={site.storePromises}
-                policies={site.policies}
+                badges={trustBadges(site.storePromises, site.policies, site.storeProfile)}
               />
             ) : null}
+
+            <ShareRow title={product.title} url={`${origin}/products/${product.handle}`} />
 
             <StoryNav
               content={content}
@@ -436,6 +439,22 @@ function ProductPage({
           </div>
         </div>
       </div>
+
+      {selectedVariant?.availableForSale && related.length > 0 ? (
+        <div className="max-w-page px-margin mx-auto mt-14">
+          <BuyTogether
+            main={{
+              key: product.id,
+              merchandiseId: selectedVariant.id,
+              title: product.title,
+              handle: product.handle,
+              image: selectedVariant.image ?? product.featuredImage ?? null,
+              price: selectedVariant.price,
+            }}
+            related={related}
+          />
+        </div>
+      ) : null}
 
       <ProductStory
         title={product.title}
@@ -448,35 +467,14 @@ function ProductPage({
         collection={collection ?? null}
       />
 
-      {related.length > 0 ? (
-        <Reveal
-          as="section"
-          aria-labelledby="related-title"
-          className="mt-16 py-10"
-        >
-          <div className="max-w-page px-margin mx-auto">
-            <div className="gold-rule mb-12" aria-hidden="true" />
-            <h2
-              id="related-title"
-              className="type-heading-xl text-on-surface mb-6"
-            >
-              You may also like
-            </h2>
-            <ul
-              role="list"
-              className="scrollbar-none -mx-[var(--spacing-margin)] flex snap-x gap-3 overflow-x-auto px-[var(--spacing-margin)] pb-6 md:mx-0 md:grid md:grid-cols-3 md:gap-5 md:px-0 lg:grid-cols-4"
-            >
-              {related.slice(0, 4).map((item) => (
-                <li
-                  key={item.id}
-                  className="w-[46%] shrink-0 snap-start md:w-auto"
-                >
-                  <ProductCard product={item} compact />
-                </li>
-              ))}
-            </ul>
-          </div>
-        </Reveal>
+      {related.length >= 3 ? (
+        <ProductRail
+          id="related-title"
+          eyebrow="More to love"
+          title="You may also like"
+          products={related.slice(0, 10)}
+          viewAll={collection ? { to: `/collections/${collection.handle}`, label: `More from ${collection.title}` } : undefined}
+        />
       ) : null}
 
       <StickyBuyBar

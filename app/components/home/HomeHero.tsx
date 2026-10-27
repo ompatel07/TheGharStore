@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Link } from "react-router";
 
-import type { TrustItem } from "~/components/home/TrustSection";
 import { Icon } from "~/components/ui/Icon";
 import type { HeroContent, HeroHotspot, HomeImage } from "~/lib/home";
 import { responsiveSrcSet, shopifyImageUrl } from "~/lib/image";
 import { formatPrice } from "~/lib/money";
+import type { TrustBadge } from "~/lib/promises";
 
 /**
  * Cinematic, shoppable hero. A full-bleed lifestyle photo (set in Shopify:
@@ -14,9 +14,10 @@ import { formatPrice } from "~/lib/money";
  * high priority, never lazy. Copy rises in with CSS; pointer and scroll
  * parallax are transform-only and skip touch / reduced-motion.
  */
-export function HomeHero({ hero, trust }: { hero: HeroContent; trust: TrustItem[] }) {
+export function HomeHero({ hero, trust }: { hero: HeroContent; trust: TrustBadge[] }) {
   const sectionRef = useRef<HTMLElement>(null);
   const [openSpot, setOpenSpot] = useState<number | null>(null);
+  const tour = useHotspotTour(sectionRef, hero.hotspots.length, openSpot !== null);
   const background = hero.background ?? hero.image;
   const ratio = background?.width && background?.height ? background.width / background.height : 16 / 9;
   const stageStyle = { "--ar": ratio.toFixed(4) } as CSSProperties;
@@ -50,7 +51,7 @@ export function HomeHero({ hero, trust }: { hero: HeroContent; trust: TrustItem[
 
       {/* Hotspots sit above the scrim on an identical stage, so they track the photo. */}
       {background && hero.hotspots.length > 0 ? (
-        <div className="hero-media pointer-events-none !z-[1] max-lg:hidden">
+        <div className="hero-media pointer-events-none !z-[3] max-lg:hidden" data-hotspot-layer>
           <div className="hero-parallax" data-parallax>
             <div className="hero-stage" style={stageStyle}>
               {hero.hotspots.map((spot, index) => (
@@ -59,6 +60,7 @@ export function HomeHero({ hero, trust }: { hero: HeroContent; trust: TrustItem[
                   spot={spot}
                   index={index}
                   open={openSpot === index}
+                  touring={tour === index && openSpot === null}
                   onToggle={() => setOpenSpot(openSpot === index ? null : index)}
                 />
               ))}
@@ -68,7 +70,7 @@ export function HomeHero({ hero, trust }: { hero: HeroContent; trust: TrustItem[
       ) : null}
 
       <div className="max-w-page px-margin pointer-events-none relative z-[2] mx-auto flex w-full flex-1 flex-col justify-end pt-20 pb-6 lg:justify-center lg:py-14">
-        <div className="pointer-events-auto max-w-[40rem]">
+        <div className="max-w-[40rem]">
           {hero.eyebrow ? (
             <p className="eyebrow hero-in text-peach" style={{ "--delay": "200ms" } as CSSProperties}>
               {hero.eyebrow}
@@ -99,8 +101,8 @@ export function HomeHero({ hero, trust }: { hero: HeroContent; trust: TrustItem[
               {hero.subtext}
             </p>
           ) : null}
-          <div className="hero-in mt-8 flex flex-wrap gap-3" style={{ "--delay": "900ms" } as CSSProperties}>
-            <Link to={hero.cta.url} className="btn btn-light" prefetch="intent">
+          <div className="hero-in pointer-events-auto mt-8 flex w-fit flex-wrap gap-3" style={{ "--delay": "900ms" } as CSSProperties}>
+            <Link to={hero.cta.url} className="btn btn-light shine" prefetch="intent">
               {hero.cta.text}
               <span className="btn-arrow" aria-hidden="true">
                 <Icon name="arrow-right" size={16} strokeWidth={2.5} />
@@ -117,7 +119,7 @@ export function HomeHero({ hero, trust }: { hero: HeroContent; trust: TrustItem[
 
       {trust.length > 0 ? (
         <div
-          className="hero-in relative z-[2] border-t border-white/12"
+          className="hero-in relative z-[2] border-t border-white/12 max-lg:hidden"
           style={{ "--delay": "1.1s" } as CSSProperties}
         >
           <ul
@@ -167,11 +169,13 @@ function Hotspot({
   spot,
   index,
   open,
+  touring,
   onToggle,
 }: {
   spot: HeroHotspot;
   index: number;
   open: boolean;
+  touring: boolean;
   onToggle: () => void;
 }) {
   const { product } = spot;
@@ -183,6 +187,7 @@ function Hotspot({
     <div
       className="hotspot pointer-events-auto"
       data-open={open}
+      data-tour={touring}
       data-align={align === "center" ? undefined : align}
       style={
         {
@@ -201,6 +206,9 @@ function Hotspot({
       >
         <Icon name="plus" size={18} strokeWidth={2.5} />
       </button>
+      <span className="hotspot-chip" aria-hidden="true">
+        {label} · {formatPrice(product.priceRange.minVariantPrice)}
+      </span>
       <div className="hotspot-card">
         <Link
           to={`/products/${product.handle}`}
@@ -353,6 +361,7 @@ function useHeroParallax(sectionRef: React.RefObject<HTMLElement | null>) {
     };
     const onPointer = (event: PointerEvent) => {
       if (!visible) return;
+      if ((event.target as HTMLElement | null)?.closest?.(".hotspot")) return;
       const rect = section.getBoundingClientRect();
       px = -((event.clientX - rect.left) / rect.width - 0.5) * 18;
       py = -((event.clientY - rect.top) / rect.height - 0.5) * 12;
@@ -377,4 +386,59 @@ function useHeroParallax(sectionRef: React.RefObject<HTMLElement | null>) {
       window.removeEventListener("scroll", onScroll);
     };
   }, [sectionRef]);
+}
+
+/**
+ * Walks through the hotspots one by one (card open for a few seconds each) so
+ * visitors see the scene is shoppable. Stops for good on the first pointer or
+ * keyboard interaction with a hotspot, while one is open, off-screen, on touch
+ * devices and under reduced motion.
+ */
+function useHotspotTour(
+  sectionRef: React.RefObject<HTMLElement | null>,
+  count: number,
+  paused: boolean,
+) {
+  const [index, setIndex] = useState<number | null>(null);
+  const [stopped, setStopped] = useState(false);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section || count === 0) return;
+    if (
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      !window.matchMedia("(min-width: 1024px) and (pointer: fine)").matches
+    ) {
+      setStopped(true);
+      return;
+    }
+    const layer = section.querySelector("[data-hotspot-layer]");
+    const stop = (event: Event) => {
+      if ((event.target as HTMLElement | null)?.closest?.(".hotspot")) {
+        setStopped(true);
+        setIndex(null);
+      }
+    };
+    layer?.addEventListener("pointerover", stop);
+    layer?.addEventListener("focusin", stop);
+    const observer = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), { threshold: 0.4 });
+    observer.observe(section);
+    return () => {
+      layer?.removeEventListener("pointerover", stop);
+      layer?.removeEventListener("focusin", stop);
+      observer.disconnect();
+    };
+  }, [sectionRef, count]);
+
+  useEffect(() => {
+    if (stopped || paused || !visible || count === 0) return;
+    // 0 → 1 → … → last → short rest (null) → 0 …
+    const timer = window.setInterval(() => {
+      setIndex((current) => (current === null ? 0 : current + 1 >= count ? null : current + 1));
+    }, 3200);
+    return () => window.clearInterval(timer);
+  }, [stopped, paused, visible, count]);
+
+  return stopped ? null : index;
 }

@@ -229,7 +229,7 @@ export function AddToCartForm({
           <div ref={buttonRef} className="flex min-w-[12rem] flex-1">
             <button
               {...register("addToCart", {})}
-              className="button-cta h-14 flex-1 !text-lg disabled:cursor-not-allowed"
+              className="button-cta shine h-14 flex-1 !text-lg disabled:cursor-not-allowed"
               disabled={!addable || pending}
               aria-disabled={!addable || pending}
               data-testid="add-to-cart"
