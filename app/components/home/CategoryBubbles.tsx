@@ -94,6 +94,8 @@ function Bubble({
     <Link
       to={to}
       prefetch="intent"
+      viewTransition
+      data-cursor="Explore"
       className="bubble group flex w-[5.75rem] flex-col items-center gap-2.5 text-center md:w-[7.25rem]"
       style={{ "--i": index } as CSSProperties}
     >

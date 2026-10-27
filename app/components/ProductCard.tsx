@@ -1,7 +1,7 @@
 import { canAddToCart, gql, type StorefrontApi } from "@shopify/hydrogen";
 import { createProductComponents } from "@shopify/hydrogen/react";
-import { useRef } from "react";
-import { Link } from "react-router";
+import { useRef, useState } from "react";
+import { Link, useRouteLoaderData, useViewTransitionState } from "react-router";
 
 import { Icon } from "~/components/ui/Icon";
 import { parseRating, Rating } from "~/components/ui/Rating";
@@ -12,6 +12,7 @@ import {
 } from "~/lib/fly-to-cart";
 import { responsiveSrcSet, shopifyImageUrl } from "~/lib/image";
 import { compareMoney, formatPrice, salePercent } from "~/lib/money";
+import type { loader as rootLoader } from "~/root";
 
 const CARD_VARIANT_FRAGMENT = gql(`
   fragment CardVariant on ProductVariant {
@@ -179,12 +180,19 @@ export function ProductCard({
   const altText = primaryImage?.altText?.trim() || product.title;
   const rating = parseRating(product.rating, product.ratingCount);
   const dark = tone === "dark";
+  // Morph this card's photo into the product page gallery on navigation.
+  // Only the card that was clicked claims the name (the same product can be on screen twice).
+  const [picked, setPicked] = useState(false);
+  const transitioning = useViewTransitionState(href) && picked;
+  const rootData = useRouteLoaderData<typeof rootLoader>("root");
+  const freeDelivery = rootData?.siteContent.storePromises.freeShippingAll ?? false;
   const fit = (image: { width?: number | null; height?: number | null } | null) =>
     isNearSquare(image) ? " is-cover" : "";
 
   return (
     <article
       className="pcard group relative flex h-full flex-col"
+      data-cursor="View"
       aria-label={product.title}
       data-testid="product-card"
     >
@@ -211,6 +219,7 @@ export function ProductCard({
               width={primaryImage.width ?? 520}
               height={primaryImage.height ?? 520}
               className={`pcard-img pcard-img-main${fit(primaryImage)}`}
+              style={transitioning ? { viewTransitionName: "product-hero" } : undefined}
               loading={priority ? "eager" : "lazy"}
               fetchPriority={priority ? "high" : "auto"}
             />
@@ -267,7 +276,7 @@ export function ProductCard({
         <h3
           className={`line-clamp-2 leading-snug font-semibold ${compact ? "text-[0.92rem]" : "text-[1rem] md:text-[1.05rem]"} ${dark ? "text-cream" : "text-on-surface"}`}
         >
-          <Link to={href} className="card-link" prefetch="intent">
+          <Link to={href} className="card-link" prefetch="intent" viewTransition onClick={() => setPicked(true)}>
             {product.title}
           </Link>
         </h3>
@@ -291,6 +300,12 @@ export function ProductCard({
             </span>
           )}
         </p>
+        {freeDelivery && product.availableForSale ? (
+          <p className={`flex items-center gap-1.5 text-[0.75rem] font-semibold ${dark ? "text-cream/70" : "text-success"}`}>
+            <Icon name="truck" size={14} />
+            Free delivery
+          </p>
+        ) : null}
       </div>
     </article>
   );

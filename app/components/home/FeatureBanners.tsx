@@ -37,6 +37,7 @@ export function FeatureBanners({ features }: { features: FeatureBanner[] }) {
           <article
             key={feature.handle}
             data-stack-card
+            data-cursor="Shop"
             style={{ "--si": index } as CSSProperties}
             className={`feature-banner stack-card group relative grid overflow-hidden rounded-[2rem] shadow-[var(--shadow-xl)] md:min-h-[32rem] md:grid-cols-2 ${tone.panel}`}
           >

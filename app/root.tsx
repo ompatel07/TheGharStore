@@ -18,6 +18,7 @@ import { AnnouncementBar } from "~/components/AnnouncementBar";
 import { CartDrawer } from "~/components/CartDrawer";
 import { ErrorScreen } from "~/components/ErrorScreen";
 import { Footer } from "~/components/Footer";
+import { CursorFollower } from "~/components/ui/CursorFollower";
 import { Header } from "~/components/Header";
 import { SearchDrawer } from "~/components/SearchDrawer";
 import { CartProvider } from "~/lib/cart";
@@ -201,6 +202,7 @@ function SiteShell({
     <CartProvider initialData={cartData}>
       <NavProgress />
       <div className="scroll-progress" aria-hidden="true" />
+      <CursorFollower />
       <PageViewedTracker />
       <CartAnalyticsTracker />
       <AnnouncementBar
