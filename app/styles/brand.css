@@ -76,6 +76,13 @@
   --color-terracotta-deep: #c04e30;
   --color-terracotta-deeper: #a8432a;
   --color-white: #ffffff;
+  /* Festive accents (decorative only; never text): marigold toran, leaves, bulbs. */
+  --color-marigold: #f4a234;
+  --color-marigold-deep: #e2761b;
+  --color-marigold-light: #ffd166;
+  --color-leaf: #3f7a3a;
+  --color-leaf-light: #6aa84f;
+  --color-bulb: #ffe7a8;
 
   /* ─── Template semantic tokens → brand ───────────────────────────────── */
   --color-surface: var(--color-cream);

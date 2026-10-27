@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { Link } from "react-router";
 
 import { ProductCard } from "~/components/ProductCard";
+import { StringLights } from "~/components/festive/Toran";
 import { Icon } from "~/components/ui/Icon";
 import type { HomeCollection } from "~/lib/home";
 
@@ -15,11 +16,13 @@ export function EditScroller({
   kicker,
   title,
   accent,
+  festive = false,
 }: {
   collection: HomeCollection;
   kicker: string;
   title: string;
   accent: string;
+  festive?: boolean;
 }) {
   const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLUListElement>(null);
@@ -85,6 +88,7 @@ export function EditScroller({
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_50%_at_15%_60%,rgb(239_119_86/0.28),transparent_70%),radial-gradient(40%_40%_at_85%_20%,rgb(201_167_106/0.18),transparent_70%)]"
       />
       <EditMotes />
+      {festive ? <StringLights /> : null}
 
       <ul
         ref={trackRef}

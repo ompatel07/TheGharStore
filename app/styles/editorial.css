@@ -1118,6 +1118,272 @@
     transform: scale(1.07);
   }
 
+  /* ─── Festive: marigold toran ──────────────────────────────────────────── */
+  .toran svg {
+    overflow: visible;
+    filter: drop-shadow(0 4px 3px rgb(0 0 0 / 0.28));
+  }
+  .toran-cord {
+    fill: none;
+    stroke: var(--color-leaf);
+    stroke-width: 3;
+  }
+  .toran-beads {
+    fill: none;
+    stroke: var(--color-marigold-deep);
+    stroke-width: 13;
+    stroke-linecap: round;
+    stroke-dasharray: 0 13.5;
+  }
+  .toran-beads--alt {
+    stroke: var(--color-marigold);
+  }
+  .toran-beads-core {
+    fill: none;
+    stroke: var(--color-marigold-light);
+    stroke-width: 4.5;
+    stroke-linecap: round;
+    stroke-dasharray: 0 13.5;
+    opacity: 0.85;
+  }
+  .toran-leaf {
+    fill: var(--color-leaf-light);
+    stroke: var(--color-leaf);
+    stroke-width: 1.2;
+  }
+  .toran-leaf-vein {
+    fill: none;
+    stroke: var(--color-leaf);
+    stroke-width: 1;
+  }
+  .toran-strand {
+    transform-box: fill-box;
+    transform-origin: 50% 0;
+    animation: toran-sway 3.6s ease-in-out var(--d, 0s) infinite alternate;
+  }
+  @keyframes toran-sway {
+    from {
+      transform: rotate(-4deg);
+    }
+    to {
+      transform: rotate(4deg);
+    }
+  }
+  .toran {
+    animation: toran-drop 1.2s var(--ease-spring) both;
+  }
+  @keyframes toran-drop {
+    from {
+      transform: translateY(-70%);
+      opacity: 0;
+    }
+    to {
+      transform: none;
+      opacity: 1;
+    }
+  }
+
+  /* ─── Festive: string lights ───────────────────────────────────────────── */
+  .string-lights {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: 0;
+    block-size: 3.5rem;
+    z-index: 1;
+  }
+  .string-wire {
+    fill: none;
+    stroke: rgb(255 248 239 / 0.35);
+    stroke-width: 1.5;
+  }
+  .string-bulb {
+    inline-size: 10px;
+    block-size: 14px;
+    margin-block-start: var(--y, 16px);
+    border-radius: 50% 50% 45% 45%;
+    background: var(--color-bulb);
+    box-shadow:
+      0 0 10px 4px rgb(255 209 102 / 0.7),
+      0 0 30px 12px rgb(244 162 52 / 0.25);
+    animation: bulb-twinkle 2.6s ease-in-out var(--d, 0s) infinite;
+  }
+  @keyframes bulb-twinkle {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.35;
+      box-shadow: 0 0 4px 1px rgb(255 209 102 / 0.4);
+    }
+  }
+
+  /* ─── Flip the switch ──────────────────────────────────────────────────── */
+  .switch-photo {
+    filter: brightness(0.16) saturate(0.35) hue-rotate(-12deg);
+    transform: scale(1.04);
+    transition:
+      filter 1.4s var(--ease-ui),
+      transform 2.4s var(--ease-ui);
+  }
+  [data-lit="true"] .switch-photo {
+    filter: none;
+    transform: none;
+    animation: switch-flicker 900ms steps(1, end) both;
+  }
+  @keyframes switch-flicker {
+    0% {
+      filter: brightness(0.2);
+    }
+    12% {
+      filter: brightness(0.95);
+    }
+    20% {
+      filter: brightness(0.3);
+    }
+    34% {
+      filter: brightness(1.05);
+    }
+    42% {
+      filter: brightness(0.55);
+    }
+    56%,
+    100% {
+      filter: none;
+    }
+  }
+  .switch-dark {
+    background: radial-gradient(60% 60% at 50% 60%, rgb(31 22 20 / 0.1), rgb(31 22 20 / 0.75));
+    transition: opacity 1.2s var(--ease-ui);
+  }
+  [data-lit="true"] .switch-dark {
+    opacity: 0;
+  }
+  .switch-glow {
+    background: radial-gradient(55% 50% at 50% 65%, rgb(255 184 92 / 0.35), transparent 70%);
+    mix-blend-mode: screen;
+    opacity: 0;
+    transition: opacity 1.6s var(--ease-ui) 0.4s;
+  }
+  [data-lit="true"] .switch-glow {
+    opacity: 1;
+  }
+  .wall-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .wall-switch-plate {
+    display: grid;
+    place-items: center;
+    inline-size: 4.75rem;
+    block-size: 4.75rem;
+    border-radius: 1rem;
+    background: linear-gradient(145deg, var(--color-white), var(--color-cream-deep));
+    box-shadow:
+      0 14px 30px -12px rgb(0 0 0 / 0.7),
+      inset 0 -3px 0 rgb(0 0 0 / 0.08);
+  }
+  .wall-switch-rocker {
+    position: relative;
+    inline-size: 2.1rem;
+    block-size: 3.1rem;
+    border-radius: 0.55rem;
+    background: linear-gradient(180deg, var(--color-cream) 0%, var(--color-white) 48%, var(--color-cream-deep) 52%, var(--color-cream) 100%);
+    box-shadow:
+      inset 0 0 0 1px rgb(0 0 0 / 0.08),
+      0 3px 6px -2px rgb(0 0 0 / 0.3);
+    transform: perspective(160px) rotateX(16deg);
+    transition: transform 280ms var(--ease-spring);
+  }
+  .wall-switch[aria-checked="true"] .wall-switch-rocker {
+    transform: perspective(160px) rotateX(-16deg);
+  }
+  .wall-switch-led {
+    position: absolute;
+    inset-block-start: 0.45rem;
+    inset-inline-start: 50%;
+    inline-size: 0.4rem;
+    block-size: 0.4rem;
+    margin-inline-start: -0.2rem;
+    border-radius: 9999px;
+    background: var(--color-burgundy);
+    transition:
+      background-color 300ms,
+      box-shadow 300ms;
+  }
+  .wall-switch[aria-checked="true"] .wall-switch-led {
+    background: var(--color-terracotta);
+    box-shadow: 0 0 8px 2px rgb(255 106 61 / 0.8);
+  }
+  .wall-switch:focus-visible .wall-switch-plate {
+    outline: 2px solid var(--color-peach);
+    outline-offset: 3px;
+  }
+  .switch-products > li {
+    opacity: 0.35;
+    transform: translateX(14px);
+    transition:
+      opacity 600ms var(--ease-ui),
+      transform 700ms var(--ease-spring);
+    transition-delay: calc(var(--i, 0) * 120ms + 500ms);
+  }
+  [data-lit="true"] .switch-products > li {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ─── So many ways (word reveal) ───────────────────────────────────────── */
+  .ways-word {
+    transition:
+      opacity 400ms var(--ease-ui),
+      color 400ms var(--ease-ui),
+      transform 600ms var(--ease-spring);
+  }
+  .ways[data-active="true"] .ways-item:not([data-on="true"]) .ways-word {
+    opacity: 0.28;
+  }
+  .ways-item[data-on="true"] .ways-word {
+    color: var(--color-burgundy);
+    transform: translateX(6px) rotate(-1.5deg);
+  }
+  .ways-hint {
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+      opacity 300ms var(--ease-ui),
+      transform 400ms var(--ease-ui);
+  }
+  .ways-item[data-on="true"] .ways-hint {
+    opacity: 1;
+    transform: none;
+  }
+  .ways-float {
+    z-index: 3;
+    inline-size: 0;
+    block-size: 0;
+  }
+  .ways-float-card {
+    position: absolute;
+    inset-inline-start: 1.5rem;
+    inset-block-start: -9rem;
+    inline-size: 14rem;
+    padding: 0.6rem;
+    border-radius: 1.25rem;
+    background: var(--color-cream);
+    color: var(--color-chocolate);
+    box-shadow: 0 30px 60px -24px rgb(56 44 42 / 0.55);
+    opacity: 0;
+    transform: scale(0.6) rotate(-8deg);
+    transition:
+      opacity 250ms var(--ease-ui),
+      transform 450ms var(--ease-spring);
+  }
+  .ways-float-card[data-on="true"] {
+    opacity: 1;
+    transform: none;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .text-sheen,
     .hero-stage,
@@ -1129,6 +1395,10 @@
     .fix-panel,
     .fix-tab[aria-selected="true"] .fix-bar,
     .sh-spark,
+    .toran,
+    .toran-strand,
+    .string-bulb,
+    [data-lit="true"] .switch-photo,
     .pdp-in > *,
     .mega-product,
     .scroll-progress,
@@ -1141,6 +1411,12 @@
     .faq-item[open] .faq-answer {
       animation: none !important;
     }
+    .switch-photo,
+    .switch-dark,
+    .switch-glow,
+    .switch-products > li,
+    .ways-word,
+    .ways-float-card,
     .sh-armed .sh-words .w > span,
     .sh-armed .sh-fade,
     .pcard-media,

@@ -4,6 +4,7 @@ import { BestsellerTabs } from "~/components/home/BestsellerTabs";
 import { CategoryBubbles } from "~/components/home/CategoryBubbles";
 import { EditScroller } from "~/components/home/EditScroller";
 import { FeatureBanners } from "~/components/home/FeatureBanners";
+import { FlipTheSwitch } from "~/components/home/FlipTheSwitch";
 import { HomeFaq } from "~/components/home/HomeFaq";
 import { HomeHero } from "~/components/home/HomeHero";
 import { ProblemFix } from "~/components/home/ProblemFix";
@@ -12,6 +13,7 @@ import { ProductSpotlight } from "~/components/home/ProductSpotlight";
 import { ShopByPrice } from "~/components/home/ShopByPrice";
 import { TrustSection } from "~/components/home/TrustSection";
 import { TrustStrip } from "~/components/home/TrustStrip";
+import { WaysToGhar, type Way } from "~/components/home/WaysToGhar";
 import { BRAND_NAME, BRAND_TAGLINE } from "~/components/Logo";
 import { loadHome } from "~/lib/home";
 import { storeFaqs, trustBadges } from "~/lib/promises";
@@ -39,6 +41,17 @@ export async function loader({ context }: Route.LoaderArgs) {
   return loadHome(context.get(storefrontClientContext));
 }
 
+/** Verb → product (matched by handle prefix); missing products simply drop out. */
+const WAYS: [string, string, string][] = [
+  ["Light it", "for the pooja corner", "flameless-lotus"],
+  ["Fix it", "for wall marks", "wall-repair-roller"],
+  ["Clean it", "for wet floors", "magic-broom-sweeper"],
+  ["Polish it", "for wooden furniture", "floor-essential-wax"],
+  ["Gift it", "for Diwali rangoli", "magic-rangoli-kit"],
+  ["Grow it", "for the garden", "360-degree-sprayer"],
+  ["Move it", "for heavy furniture", "furniture-lifter"],
+];
+
 export default function Home({ loaderData }: Route.ComponentProps) {
   const rootData = useRouteLoaderData<typeof rootLoader>("root");
   const site = rootData?.siteContent;
@@ -49,20 +62,29 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   const badges = site ? trustBadges(site.storePromises, site.policies, site.storeProfile) : [];
   const faqs = site ? storeFaqs(site.storePromises, site.policies, site.storeProfile) : [];
   const all = bestsellers.length >= 4 ? bestsellers : (rows[0]?.products ?? []);
+  const isFestive = Boolean(site?.festiveMode);
+  const find = (prefix: string) => all.find((product) => product.handle.startsWith(prefix));
+  const ways = WAYS.flatMap(([word, hint, prefix]): Way[] => {
+    const product = find(prefix);
+    return product ? [{ word, hint, product }] : [];
+  });
+  const lighting = all.filter((product) => /lotus|string-lights|diya/.test(product.handle));
 
   return (
     <main className="flex-1" id="main-content" tabIndex={-1}>
-      <HomeHero hero={hero} trust={badges} />
+      <HomeHero hero={hero} trust={badges} festive={isFestive} />
       <div className="max-w-page px-margin mx-auto mt-5 lg:hidden">
         <TrustStrip badges={badges} />
       </div>
       <CategoryBubbles collections={categories} priceTiers={priceTiers} />
       <BestsellerTabs all={all} categories={categories} />
+      <WaysToGhar ways={ways} />
       <ShopByPrice tiers={priceTiers} />
       <FeatureBanners features={features} />
       <ProductRibbon products={all} />
+      <FlipTheSwitch image={hero.background} products={lighting} festive={isFestive} />
       {festive ? (
-        <EditScroller collection={festive} kicker="Roshni ka tyohaar" title="The Diwali" accent="Edit" />
+        <EditScroller collection={festive} kicker="Roshni ka tyohaar" title="The Diwali" accent="Edit" festive={isFestive} />
       ) : null}
       <ProblemFix pairs={problems} />
       {spotlight ? <ProductSpotlight spotlight={spotlight} /> : null}
