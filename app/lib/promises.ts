@@ -79,7 +79,7 @@ export function trustBadges(
     id: "secure",
     icon: "shield",
     title: "Secure checkout",
-    text: "Payments are encrypted and processed by Shopify.",
+    text: "Checkout runs on Shopify, and your details travel encrypted.",
   });
 
   if (profile?.supportPhone || profile?.whatsappNumber || profile?.supportEmail) {
@@ -144,8 +144,8 @@ export function storeFaqs(
   }
   if (promises.codAvailable) {
     faqs.push({
-      question: "Can I pay with Cash on Delivery?",
-      answer: `Yes. Choose Cash on Delivery at checkout. ${promises.codNote ?? ""} Or pay online with any method shown at checkout.`.trim(),
+      question: "How do I pay?",
+      answer: `With Cash on Delivery. ${promises.codNote ?? "Pay when your order arrives."} No card or online payment is needed to place an order.`,
     });
   }
   if (promises.returnsWindowDays) {
@@ -156,9 +156,9 @@ export function storeFaqs(
     });
   }
   faqs.push({
-    question: "Is it safe to pay on this site?",
+    question: "Is it safe to order on this site?",
     answer:
-      "Yes. Checkout runs on Shopify's secure, encrypted payment system. We never see or store your card details.",
+      "Yes. Checkout runs on Shopify's secure, encrypted checkout, and you pay in cash only when your order arrives.",
   });
   faqs.push({
     question: "How do I track my order?",

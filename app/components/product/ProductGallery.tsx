@@ -24,7 +24,9 @@ export type GalleryItem =
 
 /** Zoom only when the source has enough pixels to be worth zooming into. */
 const MIN_ZOOM_SOURCE_WIDTH = 1000;
-const STAGE_WIDTHS = [400, 600, 800, 1000, 1200, 1600];
+export const STAGE_WIDTHS = [400, 600, 800, 1000, 1200, 1600];
+// Phones: ~80vw keeps the photo crisp (≈2× density) without shipping a 1,200 px file.
+export const STAGE_SIZES = "(min-width: 1024px) 46vw, 80vw";
 
 type ProductGalleryProps = {
   title: string;
@@ -220,7 +222,7 @@ function ZoomImage({
         ref={imgRef}
         src={shopifyImageUrl(image.url, { width: 1000 })}
         srcSet={responsiveSrcSet(image.url, STAGE_WIDTHS, image.width)}
-        sizes="(min-width: 1024px) 46vw, 100vw"
+        sizes={STAGE_SIZES}
         alt={alt}
         width={image.width ?? 1000}
         height={image.height ?? Math.round(1000 / ratio)}
@@ -228,7 +230,7 @@ function ZoomImage({
           zooming ? "scale-[2]" : ""
         }`}
         loading={priority ? "eager" : "lazy"}
-        fetchPriority={priority ? "high" : "auto"}
+        fetchPriority={priority ? "high" : "low"}
         // Shared-element morph from the clicked product card (see ProductCard).
         // Dropped while leaving, so a card on this page can own the name.
         style={priority && navigation.state === "idle" ? { viewTransitionName: "product-hero" } : undefined}

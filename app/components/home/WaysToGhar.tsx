@@ -27,7 +27,7 @@ export function WaysToGhar({ ways, freeDelivery = false }: { ways: Way[]; freeDe
       <Wave className="text-peach -mb-px" />
       <section aria-labelledby="ways-title" className="ways bg-peach relative overflow-hidden py-16 md:py-24" data-active={hovering}>
         <div className="max-w-page px-margin relative mx-auto">
-          <SectionHeading id="ways-title" kicker="ek ghar, kayi kaam" title="So many ways to love your" accent="ghar" />
+          <SectionHeading id="ways-title" tone="peach" kicker="ek ghar, kayi kaam" title="So many ways to love your" accent="ghar" />
 
           <div className="mt-10 grid items-center gap-10 md:mt-12 lg:grid-cols-[1.15fr_1fr] lg:gap-16">
             <ul role="list" className="ways-list grid gap-1" onPointerLeave={() => setHovering(false)}>

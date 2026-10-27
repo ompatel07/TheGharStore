@@ -320,9 +320,25 @@ export function CartEmpty({ onNavigate }: { onNavigate?: () => void }) {
  */
 export function FreeShippingProgress() {
   const rootData = useRouteLoaderData<typeof rootLoader>("root");
-  const threshold =
-    rootData?.siteContent.storePromises.freeShippingThreshold ?? null;
+  const promises = rootData?.siteContent.storePromises;
+  const threshold = promises?.freeShippingThreshold ?? null;
   const subtotal = useCart((state) => state.data.cost.subtotalAmount);
+  if (promises?.freeShippingAll) {
+    return (
+      <p className="bg-peach-soft/70 text-on-surface flex flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl px-4 py-3 text-sm font-semibold">
+        <span className="inline-flex items-center gap-2">
+          <Icon name="truck" size={18} className="text-terracotta-deep" />
+          Free delivery on this order
+        </span>
+        {promises.codAvailable ? (
+          <span className="inline-flex items-center gap-2">
+            <Icon name="cod" size={18} className="text-terracotta-deep" />
+            Pay with Cash on Delivery
+          </span>
+        ) : null}
+      </p>
+    );
+  }
   if (
     !threshold ||
     !subtotal ||

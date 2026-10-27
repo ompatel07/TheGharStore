@@ -158,7 +158,7 @@ function FixPanel({ pair }: { pair: Pair }) {
     <div className="fix-panel grid grid-cols-[1.1fr_1fr] overflow-hidden rounded-[2rem] bg-white shadow-[var(--shadow-xl)]">
       <div className="relative aspect-square bg-white">
         {image ? (
-          <img
+          <img loading="lazy"
             src={shopifyImageUrl(image.url, { width: 720 })}
             srcSet={responsiveSrcSet(image.url, [480, 720, 960], image.width)}
             sizes="28vw"

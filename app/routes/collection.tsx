@@ -30,9 +30,12 @@ import type { Route } from "./+types/collection";
 export function meta({ data }: Route.MetaArgs) {
   if (!data) return [{ title: `Collection not found · ${BRAND_NAME}` }];
   const { collection, origin } = data;
+  // Short collection blurbs get a fuller sentence so search snippets read well.
+  const blurb = collection.description?.trim() ?? "";
   const description =
-    collection.description ||
-    `Shop ${collection.title} at ${BRAND_NAME} — useful finds for Indian homes.`;
+    blurb.length >= 70
+      ? blurb
+      : `${blurb ? `${blurb.replace(/\.$/, "")}. ` : ""}Shop ${collection.title} at ${BRAND_NAME}: useful, good-looking finds for everyday Indian homes.`;
   return [
     { title: `${collection.title} · ${BRAND_NAME}` },
     { name: "description", content: description },
@@ -103,7 +106,7 @@ function BreadcrumbJsonLd({
     ],
   };
 
-  return <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>;
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />;
 }
 
 function Breadcrumb({ collection }: { collection: CollectionData }) {

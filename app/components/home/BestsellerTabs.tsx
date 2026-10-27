@@ -99,10 +99,9 @@ export function BestsellerTabs({
         </div>
 
         <Reveal key={current.id} className="mt-8">
+        <div id={`${baseId}-panel`} role="tabpanel" aria-labelledby={`${baseId}-tab-${current.id}`}>
         <ul
-          id={`${baseId}-panel`}
-          role="tabpanel"
-          aria-labelledby={`${baseId}-tab-${current.id}`}
+          role="list"
           className="stagger grid grid-cols-2 gap-x-3 gap-y-8 md:grid-cols-3 md:gap-x-5 lg:grid-cols-4"
         >
           {current.products.slice(0, 8).map((product, index) => (
@@ -115,6 +114,7 @@ export function BestsellerTabs({
             </li>
           ))}
         </ul>
+        </div>
         </Reveal>
       </div>
     </section>
