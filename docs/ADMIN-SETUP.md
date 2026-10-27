@@ -256,3 +256,17 @@ The site links to them from badges and the FAQ. Shopify's API doesn't let the co
 
 Three automated collections drive the "Shop by price" tiles: `under-500`, `under-700`, `under-1000`. They update themselves
 from product prices. They're hidden from category menus on purpose.
+
+## Real reviews (how to start collecting them)
+
+The product page has a Reviews section that shows **only real buyer reviews**. Until a reviews app is set up,
+it shows "No reviews yet" and a **Write a review** button that opens an email to your support address.
+
+To collect reviews automatically:
+1. Install **Judge.me Product Reviews** (free plan) from the Shopify App Store.
+2. Judge.me → Settings → Review requests: turn on the email/WhatsApp request a few days after delivery.
+3. Judge.me writes the average rating and count to each product (`reviews.rating`, `reviews.rating_count`);
+   the stars and score appear on product cards and the product page automatically.
+
+Don't import reviews from Amazon, Meesho or other sellers' listings: they're about other sellers' products,
+and India's online-review standard (IS 19000:2022) and the CCPA dark-pattern guidelines treat that as misleading.

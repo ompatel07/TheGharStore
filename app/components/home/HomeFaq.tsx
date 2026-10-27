@@ -3,28 +3,49 @@ import { Link } from "react-router";
 import { Icon } from "~/components/ui/Icon";
 import { Reveal } from "~/components/ui/Reveal";
 import { SectionHeading } from "~/components/ui/SectionHeading";
-import { TrustStrip } from "~/components/home/TrustStrip";
-import type { FaqItem, TrustBadge } from "~/lib/promises";
+import type { FaqItem } from "~/lib/promises";
+import type { StoreProfile } from "~/lib/site-content";
 
 /**
  * Numbered FAQ accordion (native <details>, so it works without JS). Answers
  * are generated from the store's own promises and contact details.
  */
-export function HomeFaq({ faqs, badges = [] }: { faqs: FaqItem[]; badges?: TrustBadge[] }) {
+export function HomeFaq({ faqs, profile = null }: { faqs: FaqItem[]; profile?: StoreProfile | null }) {
+  const phoneHref = profile?.supportPhone ? `tel:${profile.supportPhone.replace(/[^\d+]/g, "")}` : null;
   if (faqs.length < 3) return null;
 
   return (
-    <section aria-labelledby="faq-title" className="max-w-page px-margin mx-auto py-16 md:py-24">
+    <section aria-labelledby="faq-title" className="cv-auto max-w-page px-margin mx-auto py-16 md:py-24">
       <div className="grid gap-10 lg:grid-cols-[0.8fr_1.4fr] lg:gap-20">
         <Reveal>
           <SectionHeading id="faq-title" kicker="koi sawaal?" title="Questions," accent="answered" />
           <p className="text-on-surface-secondary mt-4 max-w-sm text-lg">
             Delivery, payment and replacements, in plain words.
           </p>
-          <Link to="/pages/contact" className="btn btn-outline mt-7">
-            Still unsure? Contact us
-          </Link>
-          {badges.length > 0 ? <TrustStrip badges={badges} className="mt-10 md:!grid-cols-2" /> : null}
+          <div className="bg-chocolate text-cream relative mt-8 overflow-hidden rounded-[1.75rem] p-7">
+            <span aria-hidden="true" className="bg-terracotta/30 absolute -top-10 -right-10 size-40 rounded-full blur-2xl" />
+            <p className="type-hand text-peach relative text-2xl">abhi bhi sawaal?</p>
+            <p className="font-heading relative mt-1 text-2xl font-extrabold tracking-tight">Talk to a real person</p>
+            {profile?.supportHours ? <p className="text-cream/70 relative mt-1 text-sm">{profile.supportHours}</p> : null}
+            <div className="relative mt-5 grid gap-2.5">
+              {phoneHref ? (
+                <a href={phoneHref} className="btn btn-light justify-start">
+                  <Icon name="phone" size={18} />
+                  {profile?.supportPhone}
+                </a>
+              ) : null}
+              {profile?.supportEmail ? (
+                <a href={`mailto:${profile.supportEmail}`} className="btn btn-ghost-light justify-start">
+                  <Icon name="mail" size={18} />
+                  Email us
+                </a>
+              ) : null}
+              <Link to="/pages/contact" className="text-cream/80 mt-1 inline-flex items-center gap-1.5 text-sm font-semibold">
+                <span className="link-sweep">Contact page</span>
+                <Icon name="arrow-right" size={14} />
+              </Link>
+            </div>
+          </div>
         </Reveal>
         <Reveal className="stagger border-border border-t">
           {faqs.map((faq, index) => (

@@ -18,7 +18,13 @@ const TONES = [
  * "Shop by price" tiles backed by real automated collections (under-500 …).
  * Hovering fans out the three product photos.
  */
-export function ShopByPrice({ tiers }: { tiers: (HomeCollection & { max: number })[] }) {
+export function ShopByPrice({
+  tiers,
+  freeDelivery = false,
+}: {
+  tiers: (HomeCollection & { max: number })[];
+  freeDelivery?: boolean;
+}) {
   const items = tiers.filter((tier) => tier.products.length > 0).slice(0, 3);
   if (items.length < 2) return null;
   // Each tile fans out different photos: skip products a cheaper tile already shows.
@@ -35,33 +41,36 @@ export function ShopByPrice({ tiers }: { tiers: (HomeCollection & { max: number 
       <div className="max-w-page px-margin mx-auto">
         <SectionHeading id="price-title" kicker="budget mein best" title="Shop by" accent="price" note="gifts sorted, wallet happy" />
         <Reveal>
-        <ul role="list" className="stagger mt-8 grid gap-4 md:grid-cols-3 md:gap-6">
+        <ul role="list" className="stagger mt-8 grid gap-4 md:gap-6 lg:grid-cols-3">
           {items.map((tier, index) => (
             <li key={tier.handle}>
               <Link
                 to={`/collections/${tier.handle}`}
                 prefetch="intent"
                 data-cursor="Shop"
-                className={`price-tile group relative flex h-full min-h-[13rem] overflow-hidden rounded-[1.75rem] p-6 md:min-h-[17rem] md:p-7 ${TONES[index % TONES.length]}`}
+                className={`price-tile group relative grid h-full grid-cols-[1fr_auto] items-center gap-4 overflow-hidden rounded-[1.75rem] p-6 md:p-7 ${TONES[index % TONES.length]}`}
               >
-                <span className="relative z-10 flex flex-col justify-between">
+                <span className="relative z-10 flex h-full flex-col justify-between gap-6">
                   <span>
                     <span className="block text-xs font-bold tracking-[0.2em] uppercase opacity-80">Under</span>
-                    <span className="font-heading block text-[3.1rem] leading-none font-extrabold tracking-tight md:text-[3.7rem]">
+                    <span className="font-heading block text-[3.1rem] leading-none font-extrabold tracking-tight md:text-[3.7rem] lg:text-[2.9rem] xl:text-[3.3rem]">
                       <span className="sr-only">₹{tier.max.toLocaleString("en-IN")}</span>
                       <span aria-hidden="true">
                         ₹<CountUp value={tier.max} />
                       </span>
                     </span>
                   </span>
-                  <span className="mt-6 inline-flex items-center gap-2 text-sm font-bold">
+                  <span className="text-sm font-semibold opacity-85">
+                    {tier.products.length >= 8 ? "8+" : tier.products.length} finds{freeDelivery ? ", free delivery" : ""}
+                  </span>
+                  <span className="inline-flex items-center gap-2 text-sm font-bold">
                     Shop now
                     <span className="grid size-8 place-items-center rounded-full bg-white/15 transition-transform duration-500 group-hover:translate-x-1 group-hover:-rotate-45">
                       <Icon name="arrow-right" size={16} />
                     </span>
                   </span>
                 </span>
-                <span aria-hidden="true" className="price-fan absolute end-5 bottom-5 h-[7rem] w-[7rem] md:h-[8rem] md:w-[8rem]">
+                <span aria-hidden="true" className="price-fan relative me-3 h-[8.5rem] w-[8.5rem] md:h-[9.5rem] md:w-[9.5rem] lg:h-[7.5rem] lg:w-[7.5rem] xl:h-[8.5rem] xl:w-[8.5rem]">
                   {fans[index].map((product, i) =>
                     product.featuredImage ? (
                       <img
