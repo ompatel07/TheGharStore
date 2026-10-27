@@ -25,7 +25,8 @@ import {
   type GalleryItem,
 } from "~/components/product/ProductGallery";
 import { BuyTogether, DeliveryCard, ShareRow } from "~/components/product/PdpExtras";
-import { RecentlyViewed, ReviewsBlock, SectionTabs, WhyLoveIt } from "~/components/product/PdpPlus";
+import { RecentlyViewed, SectionTabs, WhyLoveIt } from "~/components/product/PdpPlus";
+import { Reviews } from "~/components/product/Reviews";
 import { TrustStrip } from "~/components/home/TrustStrip";
 import { ProductStory, StoryNav } from "~/components/product/ProductStory";
 import { ProductRail } from "~/components/home/ProductRail";
@@ -489,7 +490,13 @@ function ProductPage({
         collection={collection ?? null}
       />
 
-      <ReviewsBlock rating={rating} title={product.title} supportEmail={site?.storeProfile?.supportEmail ?? null} />
+      <Reviews
+        productId={product.id}
+        productHandle={product.handle}
+        title={product.title}
+        rating={rating}
+        supportEmail={site?.storeProfile?.supportEmail ?? null}
+      />
 
       {badges.length > 0 ? (
         <div className="max-w-page px-margin mx-auto mt-10">

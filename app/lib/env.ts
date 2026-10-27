@@ -9,6 +9,10 @@ export type Env = {
   PUBLIC_CUSTOMER_ACCOUNT_API_CLIENT_ID?: string;
   SESSION_SECRET?: string;
   SHOP_ID?: string;
+  /** Judge.me private API token (server only). Enables on-site reviews. */
+  JUDGEME_PRIVATE_TOKEN?: string;
+  /** Optional: myshopify domain for Judge.me if PUBLIC_STORE_DOMAIN is a custom domain. */
+  JUDGEME_SHOP_DOMAIN?: string;
 };
 
 export const envContext = createContext<Env>();

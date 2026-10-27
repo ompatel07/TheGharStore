@@ -288,3 +288,23 @@ they can be shown here:
 - Judge.me → Import reviews: import from your own listing (or upload the CSV export from your seller account).
 - Keep the source visible (e.g. "Verified buyer on Amazon").
 - Never import from other sellers' listings or AliExpress / supplier pages: those reviews aren't about your products.
+
+## Judge.me → on-site reviews (one-time, 3 minutes)
+
+Judge.me is installed. The product page shows its reviews in the store's own design and has a **Write a review**
+form that sends straight to Judge.me. To switch that on, give the site your Judge.me **private** API token:
+
+1. Judge.me admin → **Settings → Integrations → Developers / API** → copy the **Private API token**.
+   Treat it like a password; never paste it in chat or commit it.
+2. **Live site:** Shopify admin → Sales channels → **Hydrogen** → The Ghar Store → **Storefront settings →
+   Environment variables** → add `JUDGEME_PRIVATE_TOKEN` = the token (mark it secret) for Production and Preview.
+   Redeploy (merge any PR or click "Redeploy").
+3. **Local dev (optional):** add the same line to `.env` (already git-ignored).
+
+Then in Judge.me:
+- **Review request emails:** on, sent a few days after delivery. These produce "Verified buyer" reviews.
+- **Auto-publish:** your choice. Form reviews arrive in Judge.me and appear on the site once published.
+- **Import:** reviews from your own Amazon/Flipkart/Meesho listings (see above).
+
+Star ratings on product cards come from the `reviews.rating` / `reviews.rating_count` product fields that Judge.me
+keeps in sync. They're already enabled for the storefront.
