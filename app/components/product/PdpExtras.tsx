@@ -15,9 +15,42 @@ import type { StorePromises } from "~/lib/site-content";
  * out in the visitor's browser from the store's own delivery window (server
  * HTML shows the plain range, so there is no hydration mismatch).
  */
+const PIN_KEY = "ghar:pincode";
+const PIN_PATTERN = /^[1-9][0-9]{5}$/;
+
 export function DeliveryCard({ promises, badges }: { promises: StorePromises; badges: TrustBadge[] }) {
   const [estimate, setEstimate] = useState<string | null>(null);
-  useEffect(() => setEstimate(deliveryEstimate(promises)), [promises]);
+  const [pin, setPin] = useState("");
+  const [savedPin, setSavedPin] = useState<string | null>(null);
+  const [pinError, setPinError] = useState(false);
+  useEffect(() => {
+    setEstimate(deliveryEstimate(promises));
+    try {
+      const stored = window.localStorage.getItem(PIN_KEY);
+      if (stored && PIN_PATTERN.test(stored)) {
+        setSavedPin(stored);
+        setPin(stored);
+      }
+    } catch {
+      // Storage blocked: the visitor can still type a pincode.
+    }
+  }, [promises]);
+
+  const checkPin = (event: React.FormEvent) => {
+    event.preventDefault();
+    const value = pin.trim();
+    if (!PIN_PATTERN.test(value)) {
+      setPinError(true);
+      return;
+    }
+    setPinError(false);
+    setSavedPin(value);
+    try {
+      window.localStorage.setItem(PIN_KEY, value);
+    } catch {
+      // Not remembered; fine.
+    }
+  };
   const range = deliveryRangeText(promises);
   const rest = badges.filter((badge) => badge.id !== "shipping" && badge.id !== "support");
   const shipping = badges.find((badge) => badge.id === "shipping");
@@ -44,9 +77,58 @@ export function DeliveryCard({ promises, badges }: { promises: StorePromises; ba
             </p>
             <p className="text-on-surface-secondary mt-0.5 leading-snug">
               {promises.dispatchNote ?? shipping.text}
-              {estimate ? " Estimated; remote pincodes can take longer." : ""}
             </p>
           </div>
+        </div>
+      ) : null}
+      {shipping && estimate ? (
+        <div className="border-t border-[var(--color-border)] px-4 py-3">
+          {savedPin ? (
+            <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.88rem]">
+              <Icon name="map-pin" size={16} className="text-terracotta-deep" />
+              <span className="text-on-surface">
+                Estimated delivery to <strong>{savedPin}</strong>: <strong className="text-burgundy">{estimate}</strong>
+              </span>
+              <button
+                type="button"
+                onClick={() => setSavedPin(null)}
+                className="text-on-surface-secondary ms-auto text-xs font-bold underline underline-offset-2"
+              >
+                Change
+              </button>
+            </p>
+          ) : (
+            <form onSubmit={checkPin} className="flex items-center gap-2" noValidate>
+              <label htmlFor="pdp-pincode" className="sr-only">
+                Your pincode
+              </label>
+              <span className="text-terracotta-deep">
+                <Icon name="map-pin" size={18} />
+              </span>
+              <input
+                id="pdp-pincode"
+                inputMode="numeric"
+                autoComplete="postal-code"
+                maxLength={6}
+                placeholder="Enter pincode for delivery date"
+                value={pin}
+                onChange={(event) => setPin(event.target.value.replace(/\D/g, ""))}
+                aria-invalid={pinError || undefined}
+                aria-describedby={pinError ? "pdp-pincode-error" : undefined}
+                className="text-on-surface min-w-0 flex-1 !rounded-full !border-[var(--color-border)] !bg-[var(--color-cream)] !px-4 !py-2 text-sm"
+              />
+              <button type="submit" className="btn btn-dark !min-h-10 !px-4 !text-sm">
+                Check
+              </button>
+            </form>
+          )}
+          {pinError ? (
+            <p id="pdp-pincode-error" className="text-critical mt-1.5 text-xs font-semibold">
+              Please enter a valid 6-digit pincode.
+            </p>
+          ) : (
+            <p className="text-on-surface-secondary mt-1.5 text-xs">Estimate from our usual delivery time; remote areas can take longer.</p>
+          )}
         </div>
       ) : null}
       {rest.length > 0 ? (

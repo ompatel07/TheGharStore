@@ -79,7 +79,7 @@ export function trustBadges(
     id: "secure",
     icon: "shield",
     title: "Secure checkout",
-    text: "Encrypted payments by Shopify. UPI, cards and net banking.",
+    text: "Payments are encrypted and processed by Shopify.",
   });
 
   if (profile?.supportPhone || profile?.whatsappNumber || profile?.supportEmail) {
@@ -145,7 +145,7 @@ export function storeFaqs(
   if (promises.codAvailable) {
     faqs.push({
       question: "Can I pay with Cash on Delivery?",
-      answer: `Yes. Choose Cash on Delivery at checkout. ${promises.codNote ?? ""} You can also pay online by UPI, card or net banking.`.trim(),
+      answer: `Yes. Choose Cash on Delivery at checkout. ${promises.codNote ?? ""} Or pay online with any method shown at checkout.`.trim(),
     });
   }
   if (promises.returnsWindowDays) {

@@ -199,13 +199,16 @@ export function ProductCard({
       <div className="pcard-media">
         {primaryImage ? (
           <>
-            <img
-              src={shopifyImageUrl(primaryImage.url, { width: 60 })}
-              alt=""
-              aria-hidden="true"
-              className="pcard-backdrop"
-              loading="lazy"
-            />
+            {/* Blurred fill only for photos that don't fill the square tile. */}
+            {isNearSquare(primaryImage) ? null : (
+              <img
+                src={shopifyImageUrl(primaryImage.url, { width: 60 })}
+                alt=""
+                aria-hidden="true"
+                className="pcard-backdrop"
+                loading="lazy"
+              />
+            )}
             <img
               ref={imageRef}
               src={shopifyImageUrl(primaryImage.url, { width: 520 })}

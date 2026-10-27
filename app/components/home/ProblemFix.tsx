@@ -77,7 +77,7 @@ export function ProblemFix({ pairs }: { pairs: Pair[] }) {
         />
 
         {/* Desktop: tabs + panel */}
-        <div className="mt-14 hidden grid-cols-[1fr_1.05fr] items-center gap-16 lg:grid">
+        <div className="mt-12 hidden grid-cols-[0.9fr_1.1fr] items-start gap-14 lg:grid">
           <div
             role="tablist"
             aria-orientation="vertical"
@@ -102,14 +102,14 @@ export function ProblemFix({ pairs }: { pairs: Pair[] }) {
                   onClick={() => select(index)}
                   onKeyDown={onKeyDown}
                   className={`fix-tab group relative py-5 text-start transition-colors ${
-                    selected ? "text-on-surface" : "text-on-surface/45 hover:text-on-surface/80"
+                    selected ? "text-on-surface" : "text-on-surface/60 hover:text-on-surface"
                   }`}
                 >
                   <span className="flex items-baseline gap-5">
                     <span className="w-7 shrink-0 text-sm font-bold tabular-nums">
                       {String(index + 1).padStart(2, "0")}
                     </span>
-                    <span className="ed-display text-[clamp(1.5rem,1rem+1.2vw,2.15rem)] leading-tight">
+                    <span className="font-heading text-[clamp(1.15rem,0.9rem+0.7vw,1.5rem)] leading-snug font-bold tracking-tight">
                       {pair.problem.problem}
                     </span>
                   </span>
@@ -131,7 +131,7 @@ export function ProblemFix({ pairs }: { pairs: Pair[] }) {
             id={`${baseId}-panel`}
             role="tabpanel"
             aria-labelledby={`${baseId}-tab-${active}`}
-            className="relative"
+            className="sticky top-28"
           >
             <FixPanel key={current.product.id} pair={current} />
           </div>
@@ -172,7 +172,8 @@ function FixPanel({ pair }: { pair: Pair }) {
           <span className="icon-chip [--chip-size:3rem]">
             <Icon name={problem.icon} size={24} />
           </span>
-          <p className="ed-display ed-italic text-on-surface mt-6 text-[1.6rem] leading-snug">{problem.fix}</p>
+          <p className="text-on-surface-secondary mt-5 text-sm font-semibold">{problem.problem}</p>
+          <p className="font-heading text-on-surface mt-1 text-[1.6rem] leading-snug font-extrabold tracking-tight">{problem.fix}</p>
         </div>
         <div>
           <p className="text-on-surface-secondary text-sm font-semibold">{product.title}</p>

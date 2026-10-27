@@ -1358,30 +1358,73 @@
     opacity: 1;
     transform: none;
   }
-  .ways-float {
-    z-index: 3;
-    inline-size: 0;
-    block-size: 0;
-  }
-  .ways-float-card {
-    position: absolute;
-    inset-inline-start: 1.5rem;
-    inset-block-start: -9rem;
-    inline-size: 14rem;
-    padding: 0.6rem;
-    border-radius: 1.25rem;
-    background: var(--color-cream);
-    color: var(--color-chocolate);
-    box-shadow: 0 30px 60px -24px rgb(56 44 42 / 0.55);
+  .ways-photo {
     opacity: 0;
-    transform: scale(0.6) rotate(-8deg);
+    transform: scale(1.08);
     transition:
-      opacity 250ms var(--ease-ui),
-      transform 450ms var(--ease-spring);
+      opacity 500ms var(--ease-ui),
+      transform 1.1s var(--ease-ui);
   }
-  .ways-float-card[data-on="true"] {
+  .ways-photo[data-on="true"] {
     opacity: 1;
     transform: none;
+  }
+  .ways-frame {
+    transform: rotate(-2.5deg);
+    transition: transform 700ms var(--ease-spring);
+  }
+  .ways[data-active="true"] .ways-frame {
+    transform: rotate(1.5deg) translateY(-6px);
+  }
+
+  /* ─── Festive coverflow carousel ──────────────────────────────────────── */
+  .cf-stage {
+    perspective: 1600px;
+  }
+  .cf-slide {
+    position: absolute;
+    inset-inline-start: 50%;
+    inset-block-start: 0;
+    inline-size: 16.5rem;
+    margin-inline-start: -8.25rem;
+    transform: translateX(calc(var(--d, 0) * 74%)) translateZ(calc(var(--ad, 0) * -140px))
+      rotateY(calc(var(--d, 0) * -24deg));
+    opacity: calc(1 - var(--ad, 0) * 0.3);
+    filter: brightness(calc(1 - var(--ad, 0) * 0.22));
+    z-index: calc(10 - var(--ad, 0));
+    cursor: pointer;
+    transition:
+      transform 850ms var(--ease-ui),
+      opacity 600ms var(--ease-ui),
+      filter 600ms var(--ease-ui);
+  }
+  .cf-slide[data-center="true"] {
+    cursor: auto;
+  }
+  @media (min-width: 48rem) {
+    .cf-slide {
+      inline-size: 19.5rem;
+      margin-inline-start: -9.75rem;
+    }
+  }
+  .cf-card {
+    padding: 0.8rem 0.8rem 1rem;
+    border-radius: 1.75rem;
+    background: rgb(255 248 239 / 0.06);
+    border: 1px solid rgb(255 255 255 / 0.1);
+    transition:
+      background-color 600ms var(--ease-ui),
+      box-shadow 600ms var(--ease-ui);
+  }
+  .cf-slide[data-center="true"] .cf-card {
+    background: rgb(255 248 239 / 0.1);
+    box-shadow: 0 40px 90px -30px rgb(239 119 86 / 0.55);
+  }
+
+  /* Skip rendering far-below-the-fold sections until they approach (speed). */
+  .cv-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 900px;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -1411,12 +1454,15 @@
     .faq-item[open] .faq-answer {
       animation: none !important;
     }
+    .cf-slide,
+    .cf-card,
     .switch-photo,
     .switch-dark,
     .switch-glow,
     .switch-products > li,
     .ways-word,
-    .ways-float-card,
+    .ways-photo,
+    .ways-frame,
     .sh-armed .sh-words .w > span,
     .sh-armed .sh-fade,
     .pcard-media,

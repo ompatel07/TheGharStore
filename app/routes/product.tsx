@@ -25,6 +25,8 @@ import {
   type GalleryItem,
 } from "~/components/product/ProductGallery";
 import { BuyTogether, DeliveryCard, ShareRow } from "~/components/product/PdpExtras";
+import { RecentlyViewed, ReviewsBlock, SectionTabs, WhyLoveIt } from "~/components/product/PdpPlus";
+import { TrustStrip } from "~/components/home/TrustStrip";
 import { ProductStory, StoryNav } from "~/components/product/ProductStory";
 import { ProductRail } from "~/components/home/ProductRail";
 import {
@@ -309,6 +311,20 @@ function ProductPage({
   const rootData = useRouteLoaderData<typeof rootLoader>("root");
   const site = rootData?.siteContent;
   const galleryItems = useGalleryItems(product, selectedVariant);
+  const galleryImages = useMemo(
+    () => galleryItems.flatMap((item) => (item.kind === "image" ? [item.image] : [])),
+    [galleryItems],
+  );
+  const badges = site ? trustBadges(site.storePromises, site.policies, site.storeProfile) : [];
+  const seen = useMemo(
+    () => ({
+      handle: product.handle,
+      title: product.title,
+      image: product.featuredImage?.url ?? null,
+      price: product.priceRange.minVariantPrice,
+    }),
+    [product.handle, product.title, product.featuredImage?.url, product.priceRange.minVariantPrice],
+  );
   const [buttonInView, setButtonInView] = useState(true);
   const onButtonVisibility = useCallback(
     (visible: boolean) => setButtonInView(visible),
@@ -422,10 +438,7 @@ function ProductPage({
             />
 
             {site ? (
-              <DeliveryCard
-                promises={site.storePromises}
-                badges={trustBadges(site.storePromises, site.policies, site.storeProfile)}
-              />
+              <DeliveryCard promises={site.storePromises} badges={badges} />
             ) : null}
 
             <ShareRow title={product.title} url={`${origin}/products/${product.handle}`} />
@@ -456,6 +469,8 @@ function ProductPage({
         </div>
       ) : null}
 
+      <WhyLoveIt highlights={content.highlights} images={galleryImages.slice(1)} title={product.title} />
+
       <ProductStory
         title={product.title}
         descriptionHtml={product.descriptionHtml}
@@ -467,6 +482,14 @@ function ProductPage({
         collection={collection ?? null}
       />
 
+      <ReviewsBlock rating={rating} title={product.title} supportEmail={site?.storeProfile?.supportEmail ?? null} />
+
+      {badges.length > 0 ? (
+        <div className="max-w-page px-margin mx-auto mt-10">
+          <TrustStrip badges={badges} />
+        </div>
+      ) : null}
+
       {related.length >= 3 ? (
         <ProductRail
           id="related-title"
@@ -476,6 +499,24 @@ function ProductPage({
           viewAll={collection ? { to: `/collections/${collection.handle}`, label: `More from ${collection.title}` } : undefined}
         />
       ) : null}
+
+      <RecentlyViewed current={seen} />
+
+      <SectionTabs
+        visible={!buttonInView}
+        title={product.title}
+        image={product.featuredImage ?? null}
+        price={price}
+        addable={canAddToCart(product, options)}
+        sections={[
+          ...(content.highlights.length > 0 && galleryImages.length > 2 ? [{ id: "overview", label: "Overview" }] : []),
+          ...(product.descriptionHtml.replace(/<[^>]*>/g, "").trim() ? [{ id: "story", label: "The story" }] : []),
+          ...(content.howToUse.length > 0 ? [{ id: "how-to-use", label: "How to use" }] : []),
+          ...(content.specifications.length > 0 || content.inTheBox.length > 0 || content.care ? [{ id: "details", label: "Details" }] : []),
+          { id: "reviews", label: "Reviews" },
+          ...(content.faqs.length > 0 ? [{ id: "faqs", label: "FAQs" }] : []),
+        ]}
+      />
 
       <StickyBuyBar
         visible={!buttonInView}

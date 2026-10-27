@@ -2,7 +2,7 @@ import { useRouteLoaderData } from "react-router";
 
 import { BestsellerTabs } from "~/components/home/BestsellerTabs";
 import { CategoryBubbles } from "~/components/home/CategoryBubbles";
-import { EditScroller } from "~/components/home/EditScroller";
+import { FestiveCarousel } from "~/components/home/FestiveCarousel";
 import { FeatureBanners } from "~/components/home/FeatureBanners";
 import { FlipTheSwitch } from "~/components/home/FlipTheSwitch";
 import { HomeFaq } from "~/components/home/HomeFaq";
@@ -78,17 +78,17 @@ export default function Home({ loaderData }: Route.ComponentProps) {
       </div>
       <CategoryBubbles collections={categories} priceTiers={priceTiers} />
       <BestsellerTabs all={all} categories={categories} />
-      <WaysToGhar ways={ways} />
-      <ShopByPrice tiers={priceTiers} />
+      <WaysToGhar ways={ways} freeDelivery={site?.storePromises.freeShippingAll ?? false} />
+      <ShopByPrice tiers={priceTiers} freeDelivery={site?.storePromises.freeShippingAll ?? false} />
       <FeatureBanners features={features} />
       <ProductRibbon products={all} />
       <FlipTheSwitch image={hero.background} products={lighting} festive={isFestive} />
       {festive ? (
-        <EditScroller collection={festive} kicker="Roshni ka tyohaar" title="The Diwali" accent="Edit" festive={isFestive} />
+        <FestiveCarousel collection={festive} festive={isFestive} />
       ) : null}
       <ProblemFix pairs={problems} />
       {spotlight ? <ProductSpotlight spotlight={spotlight} /> : null}
-      <HomeFaq faqs={faqs} badges={badges} />
+      <HomeFaq faqs={faqs} profile={site?.storeProfile ?? null} />
       {site ? <TrustSection badges={badges} policies={site.policies} profile={site.storeProfile} /> : null}
     </main>
   );

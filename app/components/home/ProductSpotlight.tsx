@@ -235,19 +235,17 @@ function SpotlightStory({ spotlight }: { spotlight: Spotlight }) {
           aria-hidden="true"
           className="bg-gold absolute top-2 bottom-2 left-[1.375rem] w-0.5 origin-top max-lg:hidden"
         />
-        <ol className="relative grid gap-6 lg:gap-[12vh] lg:py-[6vh]">
+        <ol className="relative grid gap-5 lg:gap-[7vh] lg:py-[4vh] lg:ps-14">
           {steps.map((step, index) => (
             <li
               key={step.title}
               data-step
-              className="spotlight-step flex gap-5 lg:opacity-55 lg:transition-opacity lg:duration-500 lg:[&.is-active]:opacity-100"
+              className="spotlight-step relative flex gap-5 rounded-[1.5rem] border border-[var(--color-border)] bg-white p-5 shadow-[var(--shadow-sm)] transition-[transform,box-shadow,border-color] duration-500 md:p-6 lg:[&.is-active]:translate-x-3 lg:[&.is-active]:border-[var(--color-terracotta-deep)] lg:[&.is-active]:shadow-[var(--shadow-lg)]"
             >
-              <span className="bg-surface relative z-10 shrink-0 py-1">
-                <span className="ed-display ed-italic text-burgundy/35 block w-12 text-5xl leading-none transition-colors duration-500 lg:[.is-active_&]:text-[var(--color-burgundy)]">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
+              <span className="bg-peach-soft text-terracotta-deep font-heading relative z-10 grid size-12 shrink-0 place-items-center rounded-full text-lg font-extrabold transition-colors duration-500 lg:[.is-active_&]:bg-[var(--color-terracotta-deep)] lg:[.is-active_&]:text-white">
+                {index + 1}
               </span>
-              <div className="pt-1.5">
+              <div className="pt-1">
                 <h3 className="ed-display ed-sm text-on-surface">
                   {step.title}
                 </h3>

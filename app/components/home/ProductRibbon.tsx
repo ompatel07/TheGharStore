@@ -24,7 +24,7 @@ export function ProductRibbon({ products, title = "Smart finds. Better homes." }
   return (
     <>
     <Wave className="text-burgundy -mb-px" />
-    <section aria-label="Browse the store" className="ribbon bg-burgundy relative overflow-hidden py-14 md:py-20">
+    <section aria-label="Browse the store" className="ribbon cv-auto bg-burgundy relative overflow-hidden py-14 md:py-20">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(50%_60%_at_50%_50%,rgb(239_119_86/0.35),transparent_70%)]"

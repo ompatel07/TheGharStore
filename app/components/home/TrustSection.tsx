@@ -3,6 +3,7 @@ import { Link } from "react-router";
 
 import { Icon } from "~/components/ui/Icon";
 import { Reveal } from "~/components/ui/Reveal";
+import { Wave } from "~/components/ui/Wave";
 import type { TrustBadge } from "~/lib/promises";
 import type { PolicyLink, StoreProfile } from "~/lib/site-content";
 
@@ -23,7 +24,9 @@ export function TrustSection({
   const phoneHref = profile?.supportPhone ? `tel:${profile.supportPhone.replace(/[^\d+]/g, "")}` : null;
 
   return (
-    <section aria-labelledby="trust-title" className="bg-burgundy-deep text-cream curve-top relative overflow-hidden">
+    <>
+    <Wave className="text-burgundy-deep -mb-px" />
+    <section aria-labelledby="trust-title" className="cv-auto bg-burgundy-deep text-cream relative overflow-hidden">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(50%_80%_at_100%_0%,rgb(239_119_86/0.25),transparent_70%)]"
@@ -54,19 +57,18 @@ export function TrustSection({
           ) : null}
         </Reveal>
 
+        <Reveal>
         <ul
           role="list"
-          className={`mt-14 grid border-t border-white/15 sm:grid-cols-2 ${badges.length >= 5 ? "lg:grid-cols-5" : badges.length === 4 ? "lg:grid-cols-4" : "lg:grid-cols-3"}`}
+          className={`stagger mt-12 grid gap-4 sm:grid-cols-2 ${badges.length >= 5 ? "lg:grid-cols-5" : badges.length === 4 ? "lg:grid-cols-4" : "lg:grid-cols-3"}`}
         >
           {badges.map((badge, index) => (
-            <Reveal
-              as="li"
+            <li
               key={badge.id}
-              delay={index * 90}
-              className="border-b border-white/15 py-8 sm:pe-8 lg:border-b-0 lg:border-s lg:px-7 lg:first:border-s-0 lg:first:ps-0"
+              className="trust-card rounded-[1.5rem] border border-white/10 bg-white/[0.06] p-6 transition-[transform,background-color] duration-500 hover:-translate-y-1.5 hover:bg-white/10"
             >
               <span
-                className="trust-icon bg-cream/10 text-peach grid size-14 place-items-center rounded-full"
+                className="trust-icon from-peach to-terracotta-deep text-chocolate grid size-14 place-items-center rounded-2xl bg-gradient-to-br shadow-[0_14px_30px_-12px_rgb(239_119_86/0.7)]"
                 style={{ "--i": index } as CSSProperties}
               >
                 <Icon name={badge.icon} size={28} />
@@ -80,9 +82,10 @@ export function TrustSection({
                   <Icon name="arrow-right" size={16} />
                 </Link>
               ) : null}
-            </Reveal>
+            </li>
           ))}
         </ul>
+        </Reveal>
 
         {policies.length > 0 ? (
           <p className="text-cream/60 mt-10 text-sm">
@@ -100,5 +103,6 @@ export function TrustSection({
         ) : null}
       </div>
     </section>
+    </>
   );
 }
